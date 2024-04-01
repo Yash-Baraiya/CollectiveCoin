@@ -1,0 +1,2 @@
+# CollectiveCoin
+Final Project
