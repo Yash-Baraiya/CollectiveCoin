@@ -2,6 +2,6 @@
 /node_modules
 
 #Secret file
-.env*
+.env
 
 /fronend
