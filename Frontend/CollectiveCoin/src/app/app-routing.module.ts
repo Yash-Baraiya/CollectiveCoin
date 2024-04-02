@@ -10,6 +10,7 @@ import { MembersComponent } from './members/members.component';
 import { RouteGuard } from './route.guard';
 import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.component';
 import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
+import { BudgetComponent } from './budget/budget.component';
 
 const routes: Routes = [
   {
@@ -56,6 +57,11 @@ const routes: Routes = [
   {
     path: 'resetpassword/:token',
     component: ResetpasswordComponent,
+  },
+  {
+    path: 'Budget',
+    component: BudgetComponent,
+    canActivate: [RouteGuard],
   },
 ];
 

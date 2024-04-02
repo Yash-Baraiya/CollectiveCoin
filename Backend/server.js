@@ -24,13 +24,14 @@ app.use(express.json());
 app.listen(8000, () => {
   console.log("hello from server side");
 });
-mongoose
-  .connect(
-    "mongodb+srv://yashbaraiya:wJIOo3aKyRn9ONHz@cluster0.wxpmbr6.mongodb.net/CollectiveCoin?retryWrites=true&w=majority&appName=Cluster0"
-  )
-  .then(() => {
-    console.log("db connected succesfully !");
-  });
+
+const DB = process.env.DATABASE.replace(
+  "<PASSWORD>",
+  process.env.DATABASE_PASSWORD
+);
+mongoose.connect(DB).then(() => {
+  console.log("db connected succesfully !");
+});
 
 app.use("/api/v1/CollectiveCoin/user", userRouter);
 app.use("/api/v1/CollectiveCoin/user/incomes", incomeRouter);
