@@ -4,4 +4,4 @@
 #Secret file
 .env*
 
-frontend/
+/fronend
