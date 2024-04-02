@@ -1,0 +1,378 @@
+<div id="root">
+  <div class="sc-ipEyDJ inODki App">
+    <div class="sc-iveFHk gxwcQv"></div>
+    <div class="sc-bcXHqe lekOns">
+      <app-sidebar></app-sidebar>
+      <main>
+        <div class="sc-kDvujY nbQqU">
+          <div class="sc-gswNZR jriFEe">
+            <h1>Expenses</h1>
+            <h2 class="total-income">
+              Total Expense:
+              <span style="color: red">${{ expenseservice.totalexpense }}</span>
+            </h2>
+            <div class="income-content">
+              <div class="form-container">
+                <form
+                  class="sc-jrcTuL ezQrzZ"
+                  [formGroup]="expenseservice.expenseForm"
+                >
+                  <div class="input-control">
+                    <input
+                      type="text"
+                      name="title"
+                      placeholder="Expense Title"
+                      value=""
+                      formControlName="title"
+                    />
+                    <div
+                      *ngIf="
+                        expenseservice.expenseForm.get('title').invalid &&
+                        (expenseservice.expenseForm.get('title').dirty ||
+                          expenseservice.expenseForm.get('title').touched)
+                      "
+                      class="text-danger"
+                    >
+                      <div
+                        *ngIf="
+                          expenseservice.expenseForm.controls.title.errors
+                            ?.required
+                        "
+                      >
+                        Title is required
+                      </div>
+                    </div>
+                  </div>
+                  <div class="input-control">
+                    <input
+                      type="text"
+                      name="amount"
+                      placeholder="Expense Amount"
+                      value=""
+                      formControlName="amount"
+                    />
+                    <div
+                      *ngIf="
+                        expenseservice.expenseForm.get('amount').invalid &&
+                        (expenseservice.expenseForm.get('amount').dirty ||
+                          expenseservice.expenseForm.get('amount').touched)
+                      "
+                      class="text-danger"
+                    >
+                      <div
+                        *ngIf="
+                          expenseservice.expenseForm.controls.amount.errors
+                            ?.required
+                        "
+                      >
+                        amount is required
+                      </div>
+                      <div
+                        *ngIf="
+                          expenseservice.expenseForm.controls.amount.errors
+                            ?.pattern
+                        "
+                      >
+                        amount must be a number
+                      </div>
+                    </div>
+                  </div>
+                  <div class="input-control">
+                    <div class="input-group">
+                      <input
+                        type="text"
+                        placeholder="Enter A Date"
+                        class="form-control bs-datepicker-body"
+                        bsDatepicker
+                        formControlName="date"
+                      />
+                      <div class="input-group-append">
+                        <span class="input-group-text">
+                          <i class="bi bi-calendar-date-fill"></i>
+                        </span>
+                      </div>
+                    </div>
+                    <div
+                      *ngIf="
+                        expenseservice.expenseForm.get('date').invalid &&
+                        (expenseservice.expenseForm.get('date').dirty ||
+                          expenseservice.expenseForm.get('date').touched)
+                      "
+                      class="text-danger"
+                    >
+                      <div
+                        *ngIf="
+                          expenseservice.expenseForm.controls.date.errors
+                            ?.required
+                        "
+                      >
+                        date is required
+                      </div>
+                    </div>
+                  </div>
+                  <div class="selects input-control">
+                    <select
+                      required=""
+                      name="category"
+                      id="category"
+                      formControlName="category"
+                    >
+                      <option value="" disabled="">Select Option</option>
+                      <option value="education">Education</option>
+                      <option value="groceries">Groceries</option>
+                      <option value="health">Health</option>
+                      <option value="subscriptions">Subscriptions</option>
+                      <option value="takeaways">Takeaways</option>
+                      <option value="clothing">Clothing</option>
+                      <option value="travelling">Travelling</option>
+                      <option value="other">Other</option>
+                    </select>
+                    <div
+                      *ngIf="
+                        expenseservice.expenseForm.get('category').invalid &&
+                        (expenseservice.expenseForm.get('category').dirty ||
+                          expenseservice.expenseForm.get('category').touched)
+                      "
+                      class="text-danger"
+                    >
+                      <div
+                        *ngIf="
+                          expenseservice.expenseForm.controls.category.errors
+                            ?.required
+                        "
+                      >
+                        category is required
+                      </div>
+                    </div>
+                  </div>
+                  <div class="input-control">
+                    <textarea
+                      name="description"
+                      placeholder="Add A Reference"
+                      id="description"
+                      cols="30"
+                      rows="4"
+                      formControlName="description"
+                    ></textarea>
+                    <div
+                      *ngIf="
+                        expenseservice.expenseForm.get('description').invalid &&
+                        (expenseservice.expenseForm.get('description').dirty ||
+                          expenseservice.expenseForm.get('description').touched)
+                      "
+                      class="text-danger"
+                    >
+                      <div
+                        *ngIf="
+                          expenseservice.expenseForm.controls.description.errors
+                            ?.required
+                        "
+                      >
+                        description is required
+                      </div>
+                      <div
+                        *ngIf="
+                          expenseservice.expenseForm.controls.description.errors
+                            ?.maxlength
+                        "
+                      >
+                        description length must be less then 20
+                      </div>
+                    </div>
+                  </div>
+                  <div class="submit-btn">
+                    <button
+                      class="sc-gKPRtg hqswlf"
+                      style="
+                        background-color: rgb(228, 18, 204);
+                        padding: 0.8rem 1.6rem;
+                        border-radius: 30px;
+                      "
+                      (click)="saveadd()"
+                    >
+                      <i class="fa-solid fa-plus"></i>Add Expense
+                    </button>
+                  </div>
+                </form>
+              </div>
+              <div class="incomes">
+                <div
+                  *ngFor="let i of expenseservice.data"
+                  class="income-item"
+                  style="
+                    background: #fcf6f9;
+                    border: 2px solid #ffffff;
+                    box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
+                    border-radius: 20px;
+                    padding: 1rem;
+                    margin-bottom: 1rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                    width: 100%;
+                    color: #222260;
+                  "
+                >
+                  <div
+                    class="icon"
+                    style="
+                      width: 80px;
+                      height: 80px;
+                      border-radius: 20px;
+                      background: #f5f5f5;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      border: 2px solid #ffffff;
+                    "
+                  >
+                    <i
+                      class="fas fa-money-bill-alt"
+                      style="font-size: 2.6rem"
+                    ></i>
+                  </div>
+                  <div
+                    class="content"
+                    style="
+                      flex: 1;
+                      display: flex;
+                      flex-direction: column;
+                      gap: 0.2rem;
+                    "
+                  >
+                    <h5
+                      style="
+                        font-size: 1.3rem;
+                        padding-left: 2rem;
+                        position: relative;
+                      "
+                    >
+                      {{ i.title }}
+                      <span
+                        style="
+                          content: '';
+                          position: absolute;
+                          left: 0;
+                          top: 50%;
+                          transform: translateY(-50%);
+                          width: 0.8rem;
+                          height: 0.8rem;
+                          border-radius: 50%;
+                          background: #ff6b6b;
+                        "
+                      ></span>
+                    </h5>
+                    <div
+                      class="inner-content"
+                      style="
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                      "
+                    >
+                      <div
+                        class="text"
+                        style="display: flex; align-items: center; gap: 1.5rem"
+                      >
+                        <p
+                          style="
+                            display: flex;
+                            align-items: center;
+                            gap: 0.5rem;
+                            color: var(--primary-color);
+                            opacity: 0.8;
+                          "
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            class="bi bi-currency-dollar"
+                            viewBox="0 0 16 16"
+                          >
+                            <path
+                              d="M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.47c-.166-1.6-1.54-2.748-3.54-2.875V1H7.591v1.233c-1.939.23-3.27 1.472-3.27 3.156 0 1.454.966 2.483 2.661 2.917l.61.162v4.031c-1.149-.17-1.94-.8-2.131-1.718zm3.391-3.836c-1.043-.263-1.6-.825-1.6-1.616 0-.944.704-1.641 1.8-1.828v3.495l-.2-.05zm1.591 1.872c1.287.323 1.852.859 1.852 1.769 0 1.097-.826 1.828-2.2 1.939V8.73z"
+                            />
+                          </svg>
+                          {{ i.amount }}
+                        </p>
+                        <p
+                          style="
+                            display: flex;
+                            align-items: center;
+                            gap: 0.5rem;
+                            color: var(--primary-color);
+                            opacity: 0.8;
+                          "
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            class="bi bi-calendar-event-fill"
+                            viewBox="0 0 16 16"
+                          >
+                            <path
+                              d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4zM16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2m-3.5-7h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5"
+                            />
+                          </svg>
+                          {{ i.date }}
+                        </p>
+                        <p>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            class="bi bi-chat-dots"
+                            viewBox="0 0 16 16"
+                          >
+                            <path
+                              d="M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2"
+                            />
+                            <path
+                              d="m2.165 15.803.02-.004c1.83-.363 2.948-.842 3.468-1.105A9 9 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.4 10.4 0 0 1-.524 2.318l-.003.011a11 11 0 0 1-.244.637c-.079.186.074.394.273.362a22 22 0 0 0 .693-.125m.8-3.108a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6-3.004 6-7 6a8 8 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a11 11 0 0 0 .398-2"
+                            />
+                          </svg>
+                          {{ i.category }}
+                        </p>
+                      </div>
+                      <div class="btn-con">
+                        <button
+                          style="
+                            padding: 1rem;
+                            border-radius: 80%;
+                            background: #222260;
+                            color: #fcf6f9;
+                            border: none;
+                          "
+                          [id]="i.id"
+                          (click)="expenseservice.deleteExpense(i.id)"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            class="bi bi-trash3"
+                            viewBox="0 0 16 16"
+                          >
+                            <path
+                              d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>

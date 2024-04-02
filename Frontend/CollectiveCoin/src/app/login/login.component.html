@@ -1,0 +1,268 @@
+<section class="h-100 gradient-form" style="background-color: #eee">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-xl-10">
+        <div class="card rounded-3 text-black">
+          <div class="row g-0">
+            <div class="col-lg-6">
+              <div class="card-body p-md-5 mx-md-4">
+                <div class="text-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="70"
+                    height="60"
+                    fill="currentColor"
+                    class="bi bi-coin"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      d="M5.5 9.511c.076.954.83 1.697 2.182 1.785V12h.6v-.709c1.4-.098 2.218-.846 2.218-1.932 0-.987-.626-1.496-1.745-1.76l-.473-.112V5.57c.6.068.982.396 1.074.85h1.052c-.076-.919-.864-1.638-2.126-1.716V4h-.6v.719c-1.195.117-2.01.836-2.01 1.853 0 .9.606 1.472 1.613 1.707l.397.098v2.034c-.615-.093-1.022-.43-1.114-.9zm2.177-2.166c-.59-.137-.91-.416-.91-.836 0-.47.345-.822.915-.925v1.76h-.005zm.692 1.193c.717.166 1.048.435 1.048.91 0 .542-.412.914-1.135.982V8.518z"
+                    />
+                    <path
+                      d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"
+                    />
+                    <path
+                      d="M8 13.5a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11m0 .5A6 6 0 1 0 8 2a6 6 0 0 0 0 12"
+                    />
+                  </svg>
+                  <h4 class="mt-1 mb-5 pb-1">CollectiveCoin Team</h4>
+                </div>
+
+                <form [formGroup]="loginForm">
+                  <p>Please login to your account</p>
+
+                  <div class="form-outline mb-4">
+                    <input
+                      type="email"
+                      id="form2Example11"
+                      class="form-control"
+                      placeholder="email address"
+                      formControlName="email"
+                    />
+                    <label class="form-label" for="form2Example11">Email</label>
+                    <div
+                      *ngIf="
+                        loginForm.get('email').invalid &&
+                        (loginForm.get('email').dirty ||
+                          loginForm.get('email').touched)
+                      "
+                      class="text-danger"
+                    >
+                      <div *ngIf="loginForm.controls.email.errors?.required">
+                        Email is required
+                      </div>
+                      <div
+                        *ngIf="
+                          loginForm.controls.email.errors?.email &&
+                          loginForm.controls.email.touched
+                        "
+                      >
+                        please provide valid email
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <input
+                      type="password"
+                      id="form2Example22"
+                      class="form-control"
+                      formControlName="password"
+                    />
+                    <label
+                      class="form-label"
+                      for="form2Example22"
+                      placeholder="*******"
+                      >Password</label
+                    >
+                    <div
+                      *ngIf="
+                        loginForm.get('password').invalid &&
+                        (loginForm.get('password').dirty ||
+                          loginForm.get('password').touched)
+                      "
+                      class="text-danger"
+                    >
+                      <div *ngIf="loginForm.controls.password.errors?.required">
+                        Password is required
+                      </div>
+                      <div
+                        *ngIf="
+                          loginForm.controls.password.errors?.minlength &&
+                          loginForm.controls.password.touched
+                        "
+                      >
+                        Password is must be 8 character long
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-outline mb-4">
+                    <input
+                      type="text"
+                      id="form2Example11"
+                      class="form-control"
+                      placeholder="family code"
+                      formControlName="familycode"
+                      required
+                    />
+                    <label class="form-label" for="form2Example11"
+                      >family code</label
+                    >
+                    <div
+                      *ngIf="
+                        loginForm.get('familycode').invalid &&
+                        (loginForm.get('familycode').dirty ||
+                          loginForm.get('familycode').touched)
+                      "
+                      class="text-danger"
+                    >
+                      <div
+                        *ngIf="loginForm.controls.familycode.errors?.required"
+                      >
+                        family code is required
+                      </div>
+                      <div
+                        *ngIf="
+                          loginForm.controls.familycode.errors?.minlength &&
+                          loginForm.controls.familycode.touched
+                        "
+                      >
+                        FamilyCode is must be 5 character long
+                      </div>
+                      <div
+                        *ngIf="
+                          loginForm.controls.familycode.errors?.maxlength &&
+                          loginForm.controls.familycode.touched
+                        "
+                      >
+                        FamilyCode is must be 5 character long
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="text-center pt-1 mb-5 pb-1">
+                    <button
+                      style="width: 400px; border-radius: 20px"
+                      class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3"
+                      type="button"
+                      (click)="save()"
+                    >
+                      Log in
+                    </button>
+                    <div class="text-center">
+                      <a class="text-muted" (click)="openbox()"
+                        >Forgot password?</a
+                      >
+                    </div>
+                  </div>
+
+                  <div
+                    class="d-flex align-items-center justify-content-center pb-4"
+                  >
+                    <p class="mb-0 me-2">Don't have an account?</p>
+                    <button
+                      style="border: 20px; border-radius: 10px"
+                      type="button"
+                      class="btn btn-outline-danger"
+                      routerLink="/signup"
+                    >
+                      Create new
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
+              <div class="text-white px-3 py-4 p-md-5 mx-md-4">
+                <h4 class="mb-4">We are more than just a company</h4>
+                <p class="small mb-0">
+                  Simplify your finances. Track expenses, manage budgets, and
+                  collaborate effortlessly. Take control of your financial
+                  future with ease
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+  style="margin-top: 16%"
+>
+  <div class="modal-dialog gradient-custom-2">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">
+          Forgot Password ?
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="closebox()"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="forgotpasswordForm">
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label"
+              >Enter Email:</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="recipient-name"
+              formControlName="email"
+            />
+            <div
+              *ngIf="
+                forgotpasswordForm.get('email').invalid &&
+                (forgotpasswordForm.get('email').dirty ||
+                  forgotpasswordForm.get('email').touched)
+              "
+              class="text-danger"
+            >
+              <div *ngIf="forgotpasswordForm.controls.email.errors?.required">
+                Email is required
+              </div>
+              <div
+                *ngIf="
+                  forgotpasswordForm.controls.email.errors?.email &&
+                  forgotpasswordForm.controls.email.touched
+                "
+              >
+                please provide valid email
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          (click)="closebox()"
+        >
+          Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="forgotpassword()"
+        >
+          send
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
