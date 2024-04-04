@@ -6,5 +6,5 @@
 /out-tsc
 /bazel-out
 
+config.env
 #Secret file
-*.env
