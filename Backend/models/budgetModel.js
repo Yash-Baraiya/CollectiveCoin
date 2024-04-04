@@ -24,6 +24,10 @@ const budgetSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    type: {
+      type: String,
+      default: "budget",
+    },
     description: {
       type: String,
       required: true,

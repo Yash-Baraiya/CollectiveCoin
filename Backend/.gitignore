@@ -1,7 +1,10 @@
 # Node
 /node_modules
 
-#Secret file
-.env
+/dist
+/tmp
+/out-tsc
+/bazel-out
 
-/fronend
+#Secret file
+*.env

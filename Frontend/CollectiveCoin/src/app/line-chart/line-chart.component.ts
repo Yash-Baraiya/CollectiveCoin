@@ -25,13 +25,16 @@ export class LineChartComponent implements OnInit {
 
   async createChart() {
     // Generate labels for the chart
-    const labels = this.getDaysInMonth(3, 2024).map((date) =>
+    const labels = this.getDaysInMonth(2, 2024).map((date) =>
       date.toLocaleDateString('en-US')
     );
+    console.log(labels);
 
     // Get the data for incomes and expenses
-    const incomeValues = this.getIncomesForMonth(3, 2024);
-    const expenseValues = this.getExpensesForMonth(3, 2024);
+    const incomeValues = this.getIncomesForMonth(2, 2024);
+    console.log('income values', incomeValues);
+    const expenseValues = this.getExpensesForMonth(2, 2024);
+    console.log('expense values :', expenseValues);
 
     // Create chart
     var canvas = document.getElementById('myChart') as HTMLCanvasElement;

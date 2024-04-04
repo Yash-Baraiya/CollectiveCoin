@@ -2,7 +2,7 @@ const Expense = require("../models/expenseModel");
 const User = require("./../models/userModel");
 const jwt = require("jsonwebtoken");
 const Budget = require("./../models/budgetModel");
-const Income = require("./../models/incomeModel");
+const { UnorderedBulkOperation } = require("mongodb");
 
 exports.addBudget = async (req, res) => {
   const { title, amount, category, description, date } = req.body;
@@ -16,7 +16,7 @@ exports.addBudget = async (req, res) => {
 
   const user = await User.findById(userId);
 
-  const budget = await Expense.create({
+  const budget = await Budget.create({
     title,
     amount,
     category,
@@ -60,12 +60,66 @@ exports.getBudget = async (req, res) => {
 
     const Admin = await User.findOne({ _id: userId });
     const familycode = Admin.familycode;
+    let expcategoryAmounts = {};
+    const expenses = (await Expense.find({ familycode: familycode })).map(
+      (expense) => ({
+        category: expense.category,
+        amount: expense.amount,
+      })
+    );
+    // Iterate through the expenses array
+    expenses.forEach((expense) => {
+      let category = expense.category;
+      let amount = expense.amount;
+
+      // If category already exists in the categoryAmounts object, add the amount
+      if (expcategoryAmounts[category]) {
+        expcategoryAmounts[category] += amount;
+      } else {
+        // Otherwise, create a new entry for the category
+        expcategoryAmounts[category] = amount;
+      }
+    });
+
     const budgets = await Budget.find({ familycode: familycode }).sort({
       createdAt: -1,
     });
+    let budgetcategoryamounts = {};
+
+    budgets.forEach((budget) => {
+      let category = budget.category;
+      let amount = budget.amount;
+
+      if (budgetcategoryamounts[category]) {
+        budgetcategoryamounts[category] += amount;
+      } else {
+        budgetcategoryamounts[category] = amount;
+      }
+    });
+
+    let overbudget = [];
+    let underbudget = [];
+    for (let category in budgetcategoryamounts) {
+      if (expcategoryAmounts[category] > budgetcategoryamounts[category]) {
+        overbudget.push({
+          category: category,
+          amount:
+            expcategoryAmounts[category] - budgetcategoryamounts[category],
+        });
+      } else {
+        underbudget.push({
+          category: category,
+          amount:
+            budgetcategoryamounts[category] - expcategoryAmounts[category],
+        });
+      }
+    }
+
     res.status(200).json({
       status: "success",
       budgets,
+      overbudget,
+      underbudget,
     });
   } catch (error) {
     res.status(500).json({
@@ -87,7 +141,6 @@ exports.deleteBudget = async (req, res, next) => {
     const user = await User.findById(userId);
     console.log(user.name);
     const budget = await Expense.findById(req.params.budgetId);
-    //console.log(expense.addedBy);
 
     // Check if both user and expense exist
     if (!user || !budget) {

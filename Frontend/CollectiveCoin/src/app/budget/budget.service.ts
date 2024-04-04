@@ -1,0 +1,153 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import BudgetResponse from './budget.interface';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class BudgetService {
+  budgetForm: FormGroup;
+  date: Date = new Date();
+  data: any = [];
+  amounts: any = [];
+  totalIncome: number = 0;
+  amountsvalue: Array<number> = [];
+  overbudget: Array<any> = [];
+  underbudget: Array<any> = [];
+  constructor(private http: HttpClient, private router: Router) {
+    this.budgetForm = new FormGroup({
+      title: new FormControl('', [Validators.required]),
+      amount: new FormControl('', [
+        Validators.required,
+        Validators.pattern('^[0-9]+$'),
+      ]),
+      category: new FormControl('', [Validators.required]),
+      description: new FormControl('', [
+        Validators.required,
+        Validators.maxLength(20),
+      ]),
+      date: new FormControl('', [Validators.required]),
+    });
+  }
+
+  ngOnInit(): void {
+    this.getBudgets();
+  }
+  addBudget() {
+    let bodyData = this.budgetForm.value;
+    console.log(bodyData);
+    this.http
+      .post(
+        'http://localhost:8000/api/v1/CollectiveCoin/user/budget/add-budget',
+        bodyData
+      )
+      .subscribe(
+        (resultData) => {
+          try {
+            console.log(resultData);
+            alert('budget created successfully');
+            this.getBudgets();
+            this.budgetForm.reset();
+          } catch (error) {
+            console.log(error);
+            this.budgetForm.reset();
+          }
+        },
+        (error) => {
+          if (error.error.message) {
+            alert(error.error.message);
+            this.budgetForm.reset();
+          } else {
+            console.log(error);
+            alert('somthing went wrong');
+          }
+        }
+      );
+  }
+  getBudgets() {
+    this.http
+      .get(
+        'http://localhost:8000/api/v1/CollectiveCoin/user/budget/get-budgets'
+      )
+      .subscribe(
+        (resultData: BudgetResponse) => {
+          try {
+            console.log(resultData);
+            this.data = resultData.budgets.map((budget: any) => ({
+              title: budget.title,
+              category: budget.category,
+              amount: budget.amount,
+              date: budget.date,
+              id: budget._id,
+            }));
+            this.overbudget = resultData.overbudget;
+            this.underbudget = resultData.underbudget;
+
+            console.log(this.overbudget, this.underbudget);
+
+            this.amounts = resultData.budgets
+              .map((budget) => ({
+                amount: budget.amount[0],
+                date: budget.date,
+              }))
+              .sort((a, b) => {
+                const dateA = new Date(a.date);
+                const dateB = new Date(b.date);
+
+                return dateA.getTime() - dateB.getTime();
+              });
+            this.data = this.data.sort((a, b) => {
+              const dateA = new Date(a.date);
+              const dateB = new Date(b.date);
+
+              return dateB.getTime() - dateA.getTime();
+            });
+            this.amountsvalue = this.amounts.map((obj) => obj.amount);
+          } catch (error) {
+            console.log(error);
+          }
+        },
+        (error) => {
+          if (error.error.messege) {
+            alert(error.error.messege);
+          } else {
+            alert('there was problem loading this page please login again ');
+            this.router.navigate(['/login']);
+          }
+          if (error.error.messege === 'please login first') {
+            this.router.navigate(['/login']);
+          }
+        }
+      );
+  }
+
+  deleteBudget(id) {
+    console.log(id);
+    this.http
+      .delete(
+        `http://localhost:8000/api/v1/CollectiveCoin/user/budget/delete-budget/${id}`
+      )
+      .subscribe(
+        (resultData) => {
+          try {
+            if (confirm('are you sure you want to delete this budget'))
+              console.log(resultData);
+            alert('income deleted successfully');
+            this.getBudgets();
+          } catch (error) {
+            console.log(error);
+          }
+        },
+        (error) => {
+          console.log(error);
+          if (error.error.message) {
+            alert(error.error.message);
+          } else {
+            alert('somthing went wrong please try again after some time');
+          }
+        }
+      );
+  }
+}
