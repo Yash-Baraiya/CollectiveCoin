@@ -88,33 +88,39 @@ export class LoginComponent implements OnInit {
   }
 
   forgotpassword() {
-    let bodyData = this.forgotpasswordForm.value;
-    this.http
-      .post(
-        'http://localhost:8000/api/v1/CollectiveCoin/user/forgotpassword',
-        bodyData
-      )
-      .subscribe(
-        (resultData) => {
-          console.log(resultData);
-          this.data = resultData;
-          this.closebox();
-          alert(this.data.messege);
-        },
-        (error) => {
-          console.log(error);
+    if (this.forgotpasswordForm.valid) {
+      let bodyData = this.forgotpasswordForm.value;
+      this.http
+        .post(
+          'http://localhost:8000/api/v1/CollectiveCoin/user/forgotpassword',
+          bodyData
+        )
+        .subscribe(
+          (resultData) => {
+            console.log(resultData);
+            this.data = resultData;
+            const token = this.data.resetToken;
+            this.closebox();
+            this.router.navigate([`/resetpassword/${token}`]);
+            alert(this.data.messege);
+          },
+          (error) => {
+            console.log(error);
 
-          if (error.error.messege) {
-            this.closebox();
-            alert(error.error.messege);
-          } else {
-            this.closebox();
-            alert(
-              'there was a problem sending the mail please try agian after some time'
-            );
+            if (error.error.messege) {
+              this.closebox();
+              alert(error.error.messege);
+            } else {
+              this.closebox();
+              alert(
+                'there was a problem sending the mail please try agian after some time'
+              );
+            }
           }
-        }
-      );
+        );
+    } else {
+      alert('please fill the form properly');
+    }
   }
 
   save() {

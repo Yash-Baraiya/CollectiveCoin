@@ -13,7 +13,6 @@ exports.addIncome = async (req, res) => {
   const userId = decodedtoken.id;
 
   const user = await User.findById(userId);
-  console.log(user.familycode);
 
   if (user.isEarning === false) {
     return res.status(403).json({
@@ -75,20 +74,28 @@ exports.getIncomes = async (req, res) => {
       const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
       const userId = decodedToken.id;
 
+      let monthlyincome = [];
       const admin = await User.findOne({ _id: userId });
       const familyCode = admin.familycode;
-
-      console.log(familyCode);
-      const incomes = await Income.find({ familycode: familyCode }).sort({
+      let incomes = await Income.find({ familycode: familyCode }).sort({
         createdAt: -1,
       });
-      for (let i = 0; i < incomes.length; i++) {
-        totalincome = totalincome + incomes[i].amount[0];
+
+      const currentMonth = new Date().getMonth() + 1;
+      for (let income of incomes) {
+        let incMonth = income.date.getMonth() + 1;
+        if (incMonth === currentMonth) {
+          monthlyincome.push(income);
+        }
       }
-      console.log(totalincome);
+      for (let i = 0; i < monthlyincome.length; i++) {
+        totalincome = totalincome + monthlyincome[i].amount[0];
+      }
+
       return res.status(200).json({
         status: "success",
         incomes,
+        monthlyincome,
         totalincome,
       });
     } catch (error) {

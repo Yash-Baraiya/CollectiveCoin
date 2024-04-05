@@ -9,6 +9,9 @@ import { ExpenseService } from '../expense/expense.service';
   styleUrls: ['./line-chart.component.css'],
 })
 export class LineChartComponent implements OnInit {
+  incomevalues = [];
+  expensevalues = [];
+
   constructor(
     private incomeservice: IncomeService,
     private expenseservice: ExpenseService
@@ -16,25 +19,26 @@ export class LineChartComponent implements OnInit {
     Chart.register(...registerables);
   }
 
-  async ngOnInit() {
-    await this.incomeservice.getIncome();
-    await this.expenseservice.getExpense();
+  ngOnInit() {
+    this.incomeservice.getIncome();
+    this.expenseservice.getExpense();
 
-    await this.createChart();
+    this.createChart();
   }
 
   async createChart() {
     // Generate labels for the chart
-    const labels = this.getDaysInMonth(2, 2024).map((date) =>
-      date.toLocaleDateString('en-US')
-    );
+    const labels = this.getDaysInMonth(
+      new Date().getMonth(),
+      new Date().getFullYear()
+    ).map((date) => date.toLocaleDateString('en-US'));
     console.log(labels);
 
     // Get the data for incomes and expenses
-    const incomeValues = this.getIncomesForMonth(2, 2024);
-    console.log('income values', incomeValues);
-    const expenseValues = this.getExpensesForMonth(2, 2024);
-    console.log('expense values :', expenseValues);
+    // const incomeValues = this.getIncomesForMonth(2, 2024);
+    // console.log('income values', incomeValues);
+    // const expenseValues = this.getExpensesForMonth(2, 2024);
+    // console.log('expense values :', expenseValues);
 
     // Create chart
     var canvas = document.getElementById('myChart') as HTMLCanvasElement;
@@ -46,14 +50,14 @@ export class LineChartComponent implements OnInit {
         datasets: [
           {
             label: 'Incomes',
-            data: incomeValues,
+            data: this.incomevalues,
             fill: false,
             borderColor: 'rgb(75, 192, 192)',
             tension: 0.1,
           },
           {
             label: 'Expenses',
-            data: expenseValues,
+            data: this.expensevalues,
             fill: false,
             borderColor: 'rgb(255, 99, 132)',
             tension: 0.1,
@@ -76,33 +80,33 @@ export class LineChartComponent implements OnInit {
     return days;
   }
 
-  getIncomesForMonth(month: number, year: number): number[] {
-    const incomes = this.incomeservice.amounts;
-    const daysInMonth = this.getDaysInMonth(month, year);
-    return daysInMonth.map((day) => {
-      const incomeEntry = incomes.find((entry) =>
-        this.isSameDay(entry.date, day)
-      );
-      return incomeEntry ? incomeEntry.amount : 0;
-    });
-  }
+  // getIncomesForMonth(month: number, year: number): number[] {
+  //   const incomes = this.incomeservice.amounts;
+  //   const daysInMonth = this.getDaysInMonth(month, year);
+  //   return daysInMonth.map((day) => {
+  //     const incomeEntry = incomes.find((entry) =>
+  //       this.isSameDay(entry.date, day)
+  //     );
+  //     return incomeEntry ? incomeEntry.amount : 0;
+  //   });
+  // }
 
-  getExpensesForMonth(month: number, year: number): number[] {
-    const expenses = this.expenseservice.amounts;
-    const daysInMonth = this.getDaysInMonth(month, year);
-    return daysInMonth.map((day) => {
-      const expenseEntry = expenses.find((entry) =>
-        this.isSameDay(entry.date, day)
-      );
-      return expenseEntry ? expenseEntry.amount : 0;
-    });
-  }
+  // getExpensesForMonth(month: number, year: number): number[] {
+  //   const expenses = this.expenseservice.amounts;
+  //   const daysInMonth = this.getDaysInMonth(month, year);
+  //   return daysInMonth.map((day) => {
+  //     const expenseEntry = expenses.find((entry) =>
+  //       this.isSameDay(entry.date, day)
+  //     );
+  //     return expenseEntry ? expenseEntry.amount : 0;
+  //   });
+  // }
 
-  isSameDay(date1: Date, date2: Date): boolean {
-    return (
-      date1.getFullYear() === date2.getFullYear() &&
-      date1.getMonth() === date2.getMonth() &&
-      date1.getDate() === date2.getDate()
-    );
-  }
+  // isSameDay(date1: Date, date2: Date): boolean {
+  //   return (
+  //     date1.getFullYear() === date2.getFullYear() &&
+  //     date1.getMonth() === date2.getMonth() &&
+  //     date1.getDate() === date2.getDate()
+  //   );
+  // }
 }

@@ -34,7 +34,7 @@ const budgetSchema = new mongoose.Schema(
       maxLength: 20,
       trim: true,
     },
-    CreatedBy: {
+    createdBy: {
       type: String,
     },
     familycode: {

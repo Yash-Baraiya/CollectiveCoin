@@ -14,8 +14,7 @@ exports.addBudget = async (req, res) => {
 
   const userId = decodedtoken.id;
 
-  const user = await User.findById(userId);
-
+  const user = await User.findById({ _id: userId });
   const budget = await Budget.create({
     title,
     amount,
@@ -51,6 +50,7 @@ exports.addBudget = async (req, res) => {
 
 exports.getBudget = async (req, res) => {
   try {
+    let monthlybudget = [];
     const auth = req.headers.authorization;
 
     const token = auth.split(" ")[1];
@@ -65,10 +65,19 @@ exports.getBudget = async (req, res) => {
       (expense) => ({
         category: expense.category,
         amount: expense.amount,
+        date: expense.date,
       })
     );
+    let monthlyexpense = [];
+    const currentMonth = new Date().getMonth() + 1;
+    for (let expense of expenses) {
+      let expMonth = expense.date.getMonth() + 1;
+      if (expMonth === currentMonth) {
+        monthlyexpense.push(expense);
+      }
+    }
     // Iterate through the expenses array
-    expenses.forEach((expense) => {
+    monthlyexpense.forEach((expense) => {
       let category = expense.category;
       let amount = expense.amount;
 
@@ -84,9 +93,16 @@ exports.getBudget = async (req, res) => {
     const budgets = await Budget.find({ familycode: familycode }).sort({
       createdAt: -1,
     });
+
+    for (let budget of budgets) {
+      let budMonth = budget.date.getMonth() + 1;
+      if (budMonth === currentMonth) {
+        monthlybudget.push(budget);
+      }
+    }
     let budgetcategoryamounts = {};
 
-    budgets.forEach((budget) => {
+    monthlybudget.forEach((budget) => {
       let category = budget.category;
       let amount = budget.amount;
 
@@ -114,14 +130,16 @@ exports.getBudget = async (req, res) => {
         });
       }
     }
-
+    console.log(monthlybudget);
     res.status(200).json({
       status: "success",
       budgets,
       overbudget,
       underbudget,
+      monthlybudget,
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       status: "failed",
       message: error.message,
@@ -138,9 +156,9 @@ exports.deleteBudget = async (req, res, next) => {
     const decodedtoken = jwt.decode(token);
 
     const userId = decodedtoken.id;
-    const user = await User.findById(userId);
+    const user = await User.findById({ _id: userId });
     console.log(user.name);
-    const budget = await Expense.findById(req.params.budgetId);
+    const budget = await Budget.findById(req.params.budgetId);
 
     // Check if both user and expense exist
     if (!user || !budget) {

@@ -48,6 +48,7 @@ exports.addExpense = async (req, res) => {
 exports.getExpense = async (req, res) => {
   try {
     let totalexpense = 0;
+    let monthlyexpense = [];
     const auth = req.headers.authorization;
 
     const token = auth.split(" ")[1];
@@ -61,13 +62,22 @@ exports.getExpense = async (req, res) => {
       createdAt: -1,
     });
     console.log(expenses);
-    for (let i = 0; i < expenses.length; i++) {
-      totalexpense = totalexpense + expenses[i].amount;
+
+    const currentMonth = new Date().getMonth() + 1;
+    for (let expense of expenses) {
+      let expMonth = expense.date.getMonth() + 1;
+      if (expMonth === currentMonth) {
+        monthlyexpense.push(expense);
+      }
+    }
+    for (let i = 0; i < monthlyexpense.length; i++) {
+      totalexpense = totalexpense + monthlyexpense[i].amount;
     }
     res.status(200).json({
       status: "success",
       expenses,
       totalexpense,
+      monthlyexpense,
     });
   } catch (error) {
     res.status(500).json({ message: "Server Error" });

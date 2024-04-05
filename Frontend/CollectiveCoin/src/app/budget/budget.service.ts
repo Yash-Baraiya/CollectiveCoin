@@ -75,7 +75,7 @@ export class BudgetService {
         (resultData: BudgetResponse) => {
           try {
             console.log(resultData);
-            this.data = resultData.budgets.map((budget: any) => ({
+            this.data = resultData.monthlybudget.map((budget: any) => ({
               title: budget.title,
               category: budget.category,
               amount: budget.amount,
@@ -87,7 +87,7 @@ export class BudgetService {
 
             console.log(this.overbudget, this.underbudget);
 
-            this.amounts = resultData.budgets
+            this.amounts = resultData.monthlybudget
               .map((budget) => ({
                 amount: budget.amount[0],
                 date: budget.date,
@@ -124,30 +124,30 @@ export class BudgetService {
   }
 
   deleteBudget(id) {
-    console.log(id);
-    this.http
-      .delete(
-        `http://localhost:8000/api/v1/CollectiveCoin/user/budget/delete-budget/${id}`
-      )
-      .subscribe(
-        (resultData) => {
-          try {
-            if (confirm('are you sure you want to delete this budget'))
+    if (confirm('are you sure you want to delete this budget')) {
+      this.http
+        .delete(
+          `http://localhost:8000/api/v1/CollectiveCoin/user/budget/delete-budget/${id}`
+        )
+        .subscribe(
+          (resultData) => {
+            try {
               console.log(resultData);
-            alert('income deleted successfully');
-            this.getBudgets();
-          } catch (error) {
+              alert('income deleted successfully');
+              this.getBudgets();
+            } catch (error) {
+              console.log(error);
+            }
+          },
+          (error) => {
             console.log(error);
+            if (error.error.message) {
+              alert(error.error.message);
+            } else {
+              alert('somthing went wrong please try again after some time');
+            }
           }
-        },
-        (error) => {
-          console.log(error);
-          if (error.error.message) {
-            alert(error.error.message);
-          } else {
-            alert('somthing went wrong please try again after some time');
-          }
-        }
-      );
+        );
+    }
   }
 }

@@ -3,6 +3,7 @@ interface BudgetResponse {
   budgets: Array<any>;
   overbudget: Array<any>;
   underbudget: Array<any>;
+  monthlybudget: Array<any>;
 }
 
 export default BudgetResponse;

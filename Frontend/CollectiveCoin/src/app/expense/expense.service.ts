@@ -72,7 +72,7 @@ export class ExpenseService {
         (resultData: ExpenseResponse) => {
           try {
             console.log(resultData);
-            this.data = resultData.expenses.map((expense) => ({
+            this.data = resultData.monthlyexpense.map((expense) => ({
               title: expense.title,
               amount: expense.amount,
               category: expense.category,
@@ -80,7 +80,7 @@ export class ExpenseService {
               type: 'expense',
               id: expense._id,
             }));
-            this.amounts = resultData.expenses
+            this.amounts = resultData.monthlyexpense
               .map((expense) => ({
                 amount: expense.amount,
                 date: expense.date,
@@ -118,30 +118,30 @@ export class ExpenseService {
       );
   }
   deleteExpense(id) {
-    console.log(id);
-    this.http
-      .delete(
-        `http://localhost:8000/api/v1/CollectiveCoin/user/expenses/delete-expense/${id}`
-      )
-      .subscribe(
-        (resultData) => {
-          try {
-            if (confirm('are you sure you want to delete this expense'))
+    if (confirm('are you sure you want to delete this expense')) {
+      this.http
+        .delete(
+          `http://localhost:8000/api/v1/CollectiveCoin/user/expenses/delete-expense/${id}`
+        )
+        .subscribe(
+          (resultData) => {
+            try {
               console.log(resultData);
-            alert('expense deleted successfully');
-            this.getExpense();
-          } catch (error) {
+              alert('expense deleted successfully');
+              this.getExpense();
+            } catch (error) {
+              console.log(error);
+            }
+          },
+          (error) => {
             console.log(error);
+            if (error.error.message) {
+              alert(error.error.message);
+            } else {
+              alert('somthing went wrong please try again after some time');
+            }
           }
-        },
-        (error) => {
-          console.log(error);
-          if (error.error.message) {
-            alert(error.error.message);
-          } else {
-            alert('somthing went wrong please try again after some time');
-          }
-        }
-      );
+        );
+    }
   }
 }
