@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, Input } from '@angular/core';
 import ExpenseResponse from './expense.interface';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -11,7 +11,7 @@ export class ExpenseService {
   expenseForm: FormGroup;
   date: Date = new Date();
   data: any = [];
-  amounts: any = [];
+  expamounts: any = [];
   amountsvalue: Array<number> = [];
   totalexpense: number = 0;
 
@@ -80,7 +80,7 @@ export class ExpenseService {
               type: 'expense',
               id: expense._id,
             }));
-            this.amounts = resultData.monthlyexpense
+            this.expamounts = resultData.monthlyexpense
               .map((expense) => ({
                 amount: expense.amount,
                 date: expense.date,
@@ -99,7 +99,7 @@ export class ExpenseService {
               return dateB.getTime() - dateA.getTime();
             });
             console.log(this.totalexpense);
-            this.amountsvalue = this.amounts.map((obj) => obj.amount);
+            this.amountsvalue = this.expamounts.map((obj) => obj.amount);
           } catch (error) {
             console.log(error);
           }

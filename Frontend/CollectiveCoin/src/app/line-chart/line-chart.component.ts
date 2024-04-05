@@ -9,8 +9,8 @@ import { ExpenseService } from '../expense/expense.service';
   styleUrls: ['./line-chart.component.css'],
 })
 export class LineChartComponent implements OnInit {
-  incomevalues = [];
-  expensevalues = [];
+  incomeamounts = [];
+  expenseamounts = [];
 
   constructor(
     private incomeservice: IncomeService,
@@ -29,18 +29,18 @@ export class LineChartComponent implements OnInit {
   async createChart() {
     // Generate labels for the chart
     const labels = this.getDaysInMonth(
-      new Date().getMonth(),
+      new Date().getMonth() + 1,
       new Date().getFullYear()
     ).map((date) => date.toLocaleDateString('en-US'));
-    console.log(labels);
 
-    // Get the data for incomes and expenses
-    // const incomeValues = this.getIncomesForMonth(2, 2024);
-    // console.log('income values', incomeValues);
-    // const expenseValues = this.getExpensesForMonth(2, 2024);
-    // console.log('expense values :', expenseValues);
-
-    // Create chart
+    // labels.forEach((label) => {
+    //   if (label === this.incomeservice.incamounts.date) {
+    //     this.incomeamounts.push(this.incomeservice.incamounts.amount);
+    //   } else {
+    //     this.incomeamounts.push(0);
+    //   }
+    // });
+    //console.log(this.incomeamounts);
     var canvas = document.getElementById('myChart') as HTMLCanvasElement;
     var ctx = canvas.getContext('2d');
     var myChart = new Chart(ctx, {
@@ -50,14 +50,14 @@ export class LineChartComponent implements OnInit {
         datasets: [
           {
             label: 'Incomes',
-            data: this.incomevalues,
+            data: this.incomeservice.amountsvalue,
             fill: false,
             borderColor: 'rgb(75, 192, 192)',
             tension: 0.1,
           },
           {
             label: 'Expenses',
-            data: this.expensevalues,
+            data: this.expenseservice.amountsvalue,
             fill: false,
             borderColor: 'rgb(255, 99, 132)',
             tension: 0.1,
@@ -79,34 +79,4 @@ export class LineChartComponent implements OnInit {
     }
     return days;
   }
-
-  // getIncomesForMonth(month: number, year: number): number[] {
-  //   const incomes = this.incomeservice.amounts;
-  //   const daysInMonth = this.getDaysInMonth(month, year);
-  //   return daysInMonth.map((day) => {
-  //     const incomeEntry = incomes.find((entry) =>
-  //       this.isSameDay(entry.date, day)
-  //     );
-  //     return incomeEntry ? incomeEntry.amount : 0;
-  //   });
-  // }
-
-  // getExpensesForMonth(month: number, year: number): number[] {
-  //   const expenses = this.expenseservice.amounts;
-  //   const daysInMonth = this.getDaysInMonth(month, year);
-  //   return daysInMonth.map((day) => {
-  //     const expenseEntry = expenses.find((entry) =>
-  //       this.isSameDay(entry.date, day)
-  //     );
-  //     return expenseEntry ? expenseEntry.amount : 0;
-  //   });
-  // }
-
-  // isSameDay(date1: Date, date2: Date): boolean {
-  //   return (
-  //     date1.getFullYear() === date2.getFullYear() &&
-  //     date1.getMonth() === date2.getMonth() &&
-  //     date1.getDate() === date2.getDate()
-  //   );
-  // }
 }

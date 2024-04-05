@@ -3,8 +3,7 @@ import IncomeResponse from './income.interface';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { LoginDataService } from '../shared/login-data.service';
-import { totalIncomeService } from '../shared/totalincome.service';
+import { Input } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +12,7 @@ export class IncomeService {
   incomeForm: FormGroup;
   date: Date = new Date();
   data: any = [];
-  amounts: any = [];
+  incamounts: any = [];
   totalIncome: number = 0;
   amountsvalue: Array<number> = [];
 
@@ -85,10 +84,15 @@ export class IncomeService {
             }));
             this.totalIncome = resultData.totalincome;
 
-            this.amounts = resultData.monthlyincome
+            this.incamounts = resultData.monthlyincome
               .map((income) => ({
                 amount: income.amount[0],
-                date: income.date,
+                date: income.date.toLocaleDateString('en-US'),
+                // .toString()
+                // .slice(0, 10)
+                // .split('-')
+                // .reverse()
+                // .join('/'),
               }))
               .sort((a, b) => {
                 const dateA = new Date(a.date);
@@ -96,13 +100,14 @@ export class IncomeService {
 
                 return dateA.getTime() - dateB.getTime();
               });
+            console.log('coming from getincome', this.incamounts);
             this.data = this.data.sort((a, b) => {
               const dateA = new Date(a.date);
               const dateB = new Date(b.date);
 
               return dateB.getTime() - dateA.getTime();
             });
-            this.amountsvalue = this.amounts.map((obj) => obj.amount);
+            this.amountsvalue = this.incamounts.map((obj) => obj.amount);
           } catch (error) {
             console.log(error);
           }

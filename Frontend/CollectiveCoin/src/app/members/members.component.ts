@@ -27,22 +27,30 @@ export class MembersComponent implements OnInit {
     console.log('button is clicked');
     document.getElementById('exampleModal').style.display = 'block';
     document.getElementById('exampleModal').style.opacity = '1';
+    document.getElementById('overlay').style.display = 'block';
   }
   closebox() {
     console.log('button is clicked');
     document.getElementById('exampleModal').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
   }
   openbox2() {
     console.log('button is clicked');
     document.getElementById('exampleModal2').style.display = 'block';
     document.getElementById('exampleModal2').style.opacity = '1';
+    document.getElementById('overlay').style.display = 'block';
   }
   closebox2() {
     console.log('button is clicked');
     document.getElementById('exampleModal2').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
   }
   confirmdelete() {
-    if (confirm('are you sure you want to delete you whole family?')) {
+    if (
+      confirm(
+        'are you sure you want to delete you whole family? All Your Data will be erazed'
+      )
+    ) {
       this.deletefamily();
     }
   }
@@ -82,29 +90,33 @@ export class MembersComponent implements OnInit {
   }
 
   deleteMember(id) {
-    this.http
-      .patch(
-        `http://localhost:8000/api/v1/CollectiveCoin/user/delete-member/${id}`,
-        {}
-      )
-      .subscribe(
-        (resultData) => {
-          try {
-            console.log(resultData);
+    if (
+      confirm('are you sure you want to remove this member from your family')
+    ) {
+      this.http
+        .patch(
+          `http://localhost:8000/api/v1/CollectiveCoin/user/delete-member/${id}`,
+          {}
+        )
+        .subscribe(
+          (resultData) => {
+            try {
+              console.log(resultData);
 
-            alert('member removed successfuly');
-            this.getMemebers();
-          } catch (error) {
-            console.log(error);
+              alert('member removed successfuly');
+              this.getMemebers();
+            } catch (error) {
+              console.log(error);
+            }
+          },
+          (error) => {
+            if (error.error.message) {
+              console.log(error.error.message);
+              alert(error.error.message);
+            }
           }
-        },
-        (error) => {
-          if (error.error.message) {
-            console.log(error.error.message);
-            alert(error.error.message);
-          }
-        }
-      );
+        );
+    }
   }
 
   addmember() {
