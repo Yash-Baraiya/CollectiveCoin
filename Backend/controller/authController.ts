@@ -1,23 +1,35 @@
-const express = require("express");
-const crypto = require("crypto");
+import express, { NextFunction, Request, Response } from "express";
+import crypto from "crypto";
 const { promisify } = require("util");
-const jwt = require("jsonwebtoken");
-const User = require("./../models/userModel");
-const sendEmail = require("./../email");
+import jwt, { JwtPayload } from "jsonwebtoken";
+import User from "../models/userModel";
+import sendEmail from "../email";
+import { ObjectId } from "mongoose";
 
-const signToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
+declare global {
+  namespace Express {
+    interface Request {
+      user?: any;
+      data?: any;
+    }
+  }
+}
+
+const signToken = (id: string) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET || "defaultSecret$Yash@123$", {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 };
 
-const createSendToken = (user, statusCode, res) => {
+const createSendToken = (user: any, statusCode: any, res: Response) => {
   const token = signToken(user._id);
+  const jwtExpiresIn = process.env.JWT_COOKIE_EXPIRES_IN
+    ? parseInt(process.env.JWT_COOKIE_EXPIRES_IN)
+    : 7; //bydefault 7 days if expitation time is not set
   const cookieOptions = {
-    expires: new Date(
-      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
-    ),
+    expires: new Date(Date.now() + jwtExpiresIn * 24 * 60 * 60 * 1000),
     httpOnly: true,
+    secure: false,
   };
   // Set secure cookie option in production
   if (process.env.NODE_ENV === "production") {
@@ -36,7 +48,7 @@ const createSendToken = (user, statusCode, res) => {
   });
 };
 
-exports.signUp = async (req, res, next) => {
+export const signUp = async (req: Request, res: Response) => {
   try {
     // Check if user already exists
     const existingUser = await User.findOne({ email: req.body.email });
@@ -71,13 +83,13 @@ exports.signUp = async (req, res, next) => {
 
     const message = `Welcome to Collective Coin family! Enjoy your accountings.`;
     await sendEmail({
-      email: req.body.email,
+      to: req.body.email,
       subject: "Welcome to CollectiveCoin",
-      message,
+      text: message,
     });
     // Create and send JWT token
     createSendToken(newUser, 201, res);
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error in signUp:", error);
     res.status(400).json({
       status: "failed",
@@ -86,19 +98,20 @@ exports.signUp = async (req, res, next) => {
   }
 };
 
-exports.signIn = async (req, res, next) => {
+export const signIn = async (req: Request, res: Response) => {
   try {
     const { email, password, familycode } = req.body;
+    if (!email || !password || !familycode) {
+      throw new Error("Please provide email, password, and family code.");
+    }
     const existingFamilycode = await User.findOne({
       familycode: req.body.familycode,
     });
 
     // Check if email, password, and family code are provided
-    if (!email || !password || !familycode) {
-      throw new Error("Please provide email, password, and family code.");
-    }
     let admin = await User.findOne({ familycode });
     let user = await User.findOne({ email }).select("+password");
+
     if (!user) {
       throw new Error("there is no account with this email.create a new one");
     }
@@ -127,6 +140,9 @@ exports.signIn = async (req, res, next) => {
         { new: true }
       );
     }
+    if (!user) {
+      throw new Error("user not found");
+    }
     if (user.familycode === null) {
       user = await User.findOneAndUpdate(
         { email },
@@ -142,7 +158,7 @@ exports.signIn = async (req, res, next) => {
       // Create and send JWT token
       createSendToken(user, 200, res);
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error in signIn:", error);
     res.status(400).json({
       status: "failed",
@@ -151,7 +167,11 @@ exports.signIn = async (req, res, next) => {
   }
 };
 
-exports.protect = async (req, res, next) => {
+export const protect = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     // Check for JWT token in request headers
     let token;
@@ -176,10 +196,11 @@ exports.protect = async (req, res, next) => {
       throw new Error("User recently changed password! Please log in again.");
     }
     // Grant access to protected route
+
     req.user = currentUser;
     res.locals.user = currentUser;
     next();
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error in protect middleware:", error);
     next(
       res.status(401).json({
@@ -190,11 +211,21 @@ exports.protect = async (req, res, next) => {
   }
 };
 
-exports.restrictTo = async (req, res, next) => {
+export const restrictTo = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     // Fetch the user by ID
+    if (!req.headers.authorization) {
+      throw new Error("token not found");
+    }
     const token = req.headers.authorization.split(" ")[1];
-    const decodedToken = jwt.decode(token);
+    const decodedToken = jwt.decode(token) as JwtPayload;
+    if (!decodedToken) {
+      throw new Error("token not Found");
+    }
     const user = await User.findById(decodedToken.id);
     // Check if the user is allowed to perform the action
     if (!user || user.isEarning === false) {
@@ -205,7 +236,7 @@ exports.restrictTo = async (req, res, next) => {
     }
     // If the user is allowed, continue to the next middleware
     next();
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error in restrictTo middleware:", error);
     res.status(500).json({
       status: "failed",
@@ -214,7 +245,11 @@ exports.restrictTo = async (req, res, next) => {
   }
 };
 
-exports.forgotPassword = async (req, res, next) => {
+export const forgotPassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     // 1) Get user based on POSTed email
     const email = req.body.email;
@@ -232,9 +267,9 @@ exports.forgotPassword = async (req, res, next) => {
     const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\nIf you didn't forget your password, please ignore this email!`;
     try {
       await sendEmail({
-        email: email,
+        to: email,
         subject: "reset Your password(valid for 10 minutes)",
-        message,
+        text: message,
       });
 
       res.status(200).json({
@@ -249,7 +284,7 @@ exports.forgotPassword = async (req, res, next) => {
 
       throw new Error("There was an error sending the email. Try again later!");
     }
-  } catch (error) {
+  } catch (error: any) {
     console.log(error);
     res.status(200).json({
       status: "failed",
@@ -258,7 +293,7 @@ exports.forgotPassword = async (req, res, next) => {
   }
 };
 
-exports.resetPassword = async (req, res, next) => {
+export const resetPassword = async (req: Request, res: Response) => {
   try {
     // 1) Get user based on the token
     const hashedToken = crypto
@@ -273,7 +308,7 @@ exports.resetPassword = async (req, res, next) => {
 
     // 2) If token has not expired, and there is user, set the new password
     if (!user) {
-      throw new Error("Token is invalid or has expired", 400);
+      throw new Error("Token is invalid or has expired");
     }
     user.password = req.body.password;
     user.passwordConfirm = req.body.passwordConfirm;
@@ -284,7 +319,7 @@ exports.resetPassword = async (req, res, next) => {
     // 3) Update changedPasswordAt property for the user
     // 4) Log the user in, send JWT
     createSendToken(user, 200, res);
-  } catch (error) {
+  } catch (error: any) {
     res.status(200).json({
       status: "failed",
       messege: "internal server error",
@@ -292,17 +327,20 @@ exports.resetPassword = async (req, res, next) => {
   }
 };
 
-exports.updatePassword = async (req, res, next) => {
+export const updatePassword = async (req: Request, res: Response) => {
   try {
     // 1) Get user from collection
     console.log("this route is getting called");
     const user = await User.findById(req.user.id).select("+password");
+    if (!user) {
+      throw new Error("user not found");
+    }
 
     console.log(req.data); // 2) Check if POSTed current password is correct
     if (
       !(await user.correctPassword(req.body.passwordCurrent, user.password))
     ) {
-      throw new Error("Your current password is wrong.", 401);
+      throw new Error("Your current password is wrong.");
     }
 
     // 3) If so, update password
@@ -321,16 +359,28 @@ exports.updatePassword = async (req, res, next) => {
   }
 };
 
-exports.restrictToAdd = async (req, res, next) => {
+export const restrictToAdd = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const auth = req.headers.authorization;
+    if (!auth) {
+      throw new Error("not authorized");
+    }
 
     const token = auth.split(" ")[1];
-    const decodedtoken = jwt.decode(token);
+    const decodedtoken = jwt.decode(token) as JwtPayload;
+    if (!decodedtoken) {
+      throw new Error("Token not found");
+    }
 
     const userId = decodedtoken.id;
     const user = await User.findById(userId);
-
+    if (!user) {
+      throw new Error("not authorized");
+    }
     if (user.role === "user") {
       res.status(401).json({
         status: "failed",
@@ -338,7 +388,7 @@ exports.restrictToAdd = async (req, res, next) => {
       });
     }
     next();
-  } catch (error) {
+  } catch (error: any) {
     console.log(error);
     res.status(400).json({
       status: "failed",

@@ -1,26 +1,31 @@
-const express = require("express");
-const User = require("./../models/userModel");
-const sendEmail = require("./../email");
-const jwt = require("jsonwebtoken");
-const crypto = require("crypto");
-const { error } = require("console");
-const multer = require("multer");
-const multerStorage = multer.memoryStorage();
-const Income = require("./../models/incomeModel");
-const Expense = require("./../models/expenseModel");
-const Budget = require("./../models/budgetModel");
-const sharp = require("sharp");
+import User from "../models/userModel";
+import jwt, { JwtPayload } from "jsonwebtoken";
+import sendEmail from "../email";
 
-exports.addUser = async (req, res, next) => {
+import Income from "../models/incomeModel";
+import Expense from "../models/expenseModel";
+import Budget from "../models/budgetModel";
+import { Request, Response } from "express";
+
+export const addUser = async (req: Request, res: Response) => {
   const email1 = req.body.email;
   const auth = req.headers.authorization;
+  if (!auth) {
+    throw new Error("Not Authorized");
+  }
 
   const token = auth.split(" ")[1];
-  const decodedtoken = jwt.decode(token);
-
+  const decodedtoken = jwt.decode(token) as JwtPayload;
+  if (!decodedtoken) {
+    throw new Error("token not found");
+  }
   const userId = decodedtoken.id;
 
   const Admin = await User.findOne({ _id: userId });
+
+  if (!Admin) {
+    throw new Error("user not found");
+  }
   const familycode = Admin.familycode;
 
   console.log(familycode);
@@ -42,14 +47,14 @@ exports.addUser = async (req, res, next) => {
         from: Admin.email,
         to: email1,
         subject: "login request to Collective Coin",
-        message,
+        text: message,
       });
 
       res.status(200).json({
         status: "success",
         messege: "your request sent via email",
       });
-    } catch (error) {
+    } catch (error: any) {
       res.status(400).json({
         status: "failed",
         messege: error.message,
@@ -67,16 +72,16 @@ exports.addUser = async (req, res, next) => {
     try {
       await sendEmail({
         from: Admin.email,
-        email: email1,
+        to: email1,
         subject: "sign up request to Collective Coin",
-        message,
+        text: message,
       });
 
       res.status(200).json({
         status: "success",
         messege: "your request sent via email",
       });
-    } catch (error) {
+    } catch (error: any) {
       res.status(400).json({
         status: "failed",
         messege: error.message,
@@ -85,16 +90,24 @@ exports.addUser = async (req, res, next) => {
   }
 };
 
-exports.getMembers = async (req, res, next) => {
+export const getMembers = async (req: Request, res: Response) => {
   try {
     const auth = req.headers.authorization;
+    if (!auth) {
+      throw new Error("not Authorized");
+    }
 
     const token = auth.split(" ")[1];
-    const decodedtoken = jwt.decode(token);
-
+    const decodedtoken = jwt.decode(token) as JwtPayload;
+    if (!decodedtoken) {
+      throw new Error("token not found");
+    }
     const userId = decodedtoken.id;
 
     const user = await User.findById(userId);
+    if (!user) {
+      throw new Error("user not found");
+    }
     const familycode = await user.familycode;
 
     const members = await User.find({ familycode: familycode });
@@ -112,16 +125,24 @@ exports.getMembers = async (req, res, next) => {
   }
 };
 
-exports.deleteuser = async (req, res, next) => {
+export const deleteuser = async (req: Request, res: Response) => {
   try {
     const auth = req.headers.authorization;
+    if (!auth) {
+      throw new Error("not Authorized");
+    }
 
     const token = auth.split(" ")[1];
-    const decodedtoken = jwt.decode(token);
-
+    const decodedtoken = jwt.decode(token) as JwtPayload;
+    if (!decodedtoken) {
+      throw new Error("token not found");
+    }
     const AdminId = decodedtoken.id;
 
     const user = await User.findById(AdminId);
+    if (!user) {
+      throw new Error("user not found");
+    }
     if (user.role !== "admin") {
       throw new Error("You are not allowed to remove anyone");
     }
@@ -140,7 +161,7 @@ exports.deleteuser = async (req, res, next) => {
       message: "user removed successfully",
       member,
     });
-  } catch (error) {
+  } catch (error: any) {
     res.status(400).json({
       status: "failed",
       message: error.message,
@@ -148,16 +169,23 @@ exports.deleteuser = async (req, res, next) => {
   }
 };
 
-exports.deletefamily = async (req, res, next) => {
+export const deletefamily = async (req: Request, res: Response) => {
   try {
     const auth = req.headers.authorization;
-
+    if (!auth) {
+      throw new Error("Not Authorized");
+    }
     const token = auth.split(" ")[1];
-    const decodedtoken = jwt.decode(token);
-
+    const decodedtoken = jwt.decode(token) as JwtPayload;
+    if (!decodedtoken) {
+      throw new Error("token not found");
+    }
     const AdminId = decodedtoken.id;
 
     const user = await User.findById(AdminId);
+    if (!user) {
+      throw new Error("user not found");
+    }
     const familyCode = user.familycode;
     if (user.role !== "admin") {
       throw new Error("You are not allowed to remove anyone");
@@ -170,7 +198,7 @@ exports.deletefamily = async (req, res, next) => {
       status: "success",
       messege: "family deleted succesfully",
     });
-  } catch (error) {
+  } catch (error: any) {
     res.status(400).json({
       status: "faied",
       message: error.message,
@@ -178,16 +206,24 @@ exports.deletefamily = async (req, res, next) => {
   }
 };
 
-exports.uploadImage = async (req, res, next) => {
+export const uploadImage = async (req: Request, res: Response) => {
   try {
     const auth = req.headers.authorization;
+    if (!auth) {
+      throw new Error("not Authorized");
+    }
 
     const token = auth.split(" ")[1];
-    const decodedtoken = jwt.decode(token);
-
+    const decodedtoken = jwt.decode(token) as JwtPayload;
+    if (!decodedtoken) {
+      throw new Error("token not found");
+    }
     const userId = decodedtoken.id;
 
     const user = await User.findById(userId);
+    if (!user) {
+      throw new Error("user not found");
+    }
     let file = req.file;
 
     if (!file) {
@@ -195,6 +231,7 @@ exports.uploadImage = async (req, res, next) => {
         status: "failed",
         message: "please upload file",
       });
+      throw new Error("please upload file");
     }
     console.log(file);
     let filetype = file.mimetype.split("/")[1];
@@ -212,7 +249,7 @@ exports.uploadImage = async (req, res, next) => {
       message: "image uploaded successfully",
       updatedUser,
     });
-  } catch (error) {
+  } catch (error: any) {
     res.status(400).json({
       status: "failed",
       message: error.message,

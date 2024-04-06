@@ -1,6 +1,7 @@
-const mongoose = require("mongoose");
+import { Document, Schema, model } from "mongoose";
+import { IncomeIn } from "../interface/incomeInterface";
 
-const budgetSchema = new mongoose.Schema(
+const IncomeSchema = new Schema<IncomeIn>(
   {
     title: {
       type: String,
@@ -9,10 +10,14 @@ const budgetSchema = new mongoose.Schema(
       maxLength: 50,
     },
     amount: {
-      type: Number,
+      type: [Number],
       required: true,
       maxLength: 20,
       trim: true,
+    },
+    type: {
+      type: String,
+      default: "income",
     },
     date: {
       type: Date,
@@ -24,17 +29,13 @@ const budgetSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    type: {
-      type: String,
-      default: "budget",
-    },
     description: {
       type: String,
       required: true,
       maxLength: 20,
       trim: true,
     },
-    createdBy: {
+    addedBy: {
       type: String,
     },
     familycode: {
@@ -44,4 +45,5 @@ const budgetSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Budget", budgetSchema);
+const Income = model<IncomeIn>("Income", IncomeSchema);
+export default Income;

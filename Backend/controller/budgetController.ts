@@ -1,20 +1,36 @@
-const Expense = require("../models/expenseModel");
-const User = require("./../models/userModel");
-const jwt = require("jsonwebtoken");
-const Budget = require("./../models/budgetModel");
-const { UnorderedBulkOperation } = require("mongodb");
+import Expense from "../models/expenseModel";
+import { ExpenseIn } from "../interface/expenseInterface";
+import User from "../models/userModel";
+import jwt, { JwtPayload } from "jsonwebtoken";
+import Budget from "../models/budgetModel";
+import { BudgetIn } from "../interface/budgetInterface";
+import { Request, Response, NextFunction } from "express";
+import { AnyArray } from "mongoose";
 
-exports.addBudget = async (req, res) => {
+//type RequiredUserFields = Pick<ExpenseIn, 'category' | 'amount' | 'date'>;
+
+export const addBudget = async (req: Request, res: Response) => {
   const { title, amount, category, description, date } = req.body;
 
   const auth = req.headers.authorization;
+  if (!auth) {
+    throw new Error("not authorized");
+  }
 
   const token = auth.split(" ")[1];
-  const decodedtoken = jwt.decode(token);
-
+  const decodedtoken = jwt.decode(token) as JwtPayload;
+  if (!decodedtoken) {
+    throw new Error("token not found");
+  }
   const userId = decodedtoken.id;
+  if (!decodedtoken) {
+    throw new Error("token not found");
+  }
 
   const user = await User.findById({ _id: userId });
+  if (!user) {
+    throw new Error("user not found");
+  }
   const budget = await Budget.create({
     title,
     amount,
@@ -29,7 +45,7 @@ exports.addBudget = async (req, res) => {
     if (!title || !category || !description || !date) {
       return res.status(400).json({ message: "All fields are required!" });
     }
-    if (amount <= 0 || !amount === "number") {
+    if (amount <= 0 || amount === "number") {
       return res
         .status(400)
         .json({ message: "Amount must be a positive number!" });
@@ -40,7 +56,7 @@ exports.addBudget = async (req, res) => {
       message: "Budget Added",
       budget,
     });
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({
       status: "failed",
       message: error.message,
@@ -48,27 +64,40 @@ exports.addBudget = async (req, res) => {
   }
 };
 
-exports.getBudget = async (req, res) => {
+export const getBudget = async (req: Request, res: Response) => {
   try {
-    let monthlybudget = [];
+    let monthlybudget: Array<BudgetIn> = [];
+    let expcategoryAmounts: { [key: string]: number } = {};
+    let budgetcategoryamounts: { [key: string]: number } = {};
+
     const auth = req.headers.authorization;
+    if (!auth) {
+      throw new Error("not authorized");
+    }
 
     const token = auth.split(" ")[1];
-    const decodedtoken = jwt.decode(token);
-
+    const decodedtoken = jwt.decode(token) as JwtPayload;
+    if (!decodedtoken) {
+      throw new Error("token not found");
+    }
     const userId = decodedtoken.id;
+    if (!decodedtoken) {
+      throw new Error("token not found");
+    }
 
     const Admin = await User.findOne({ _id: userId });
+    if (!Admin) {
+      throw new Error("user not found");
+    }
     const familycode = Admin.familycode;
-    let expcategoryAmounts = {};
-    const expenses = (await Expense.find({ familycode: familycode })).map(
-      (expense) => ({
-        category: expense.category,
-        amount: expense.amount,
-        date: expense.date,
-      })
-    );
-    let monthlyexpense = [];
+    const expenses: Array<any> = (
+      await Expense.find({ familycode: familycode })
+    ).map((expense) => ({
+      category: expense.category,
+      amount: expense.amount,
+      date: expense.date,
+    }));
+    let monthlyexpense: Array<any> = [];
     const currentMonth = new Date().getMonth() + 1;
     for (let expense of expenses) {
       let expMonth = expense.date.getMonth() + 1;
@@ -100,7 +129,6 @@ exports.getBudget = async (req, res) => {
         monthlybudget.push(budget);
       }
     }
-    let budgetcategoryamounts = {};
 
     monthlybudget.forEach((budget) => {
       let category = budget.category;
@@ -113,8 +141,8 @@ exports.getBudget = async (req, res) => {
       }
     });
 
-    let overbudget = [];
-    let underbudget = [];
+    let overbudget: Array<object> = [];
+    let underbudget: Array<object> = [];
     for (let category in budgetcategoryamounts) {
       if (expcategoryAmounts[category] > budgetcategoryamounts[category]) {
         overbudget.push({
@@ -138,7 +166,7 @@ exports.getBudget = async (req, res) => {
       underbudget,
       monthlybudget,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.log(error);
     res.status(500).json({
       status: "failed",
@@ -147,16 +175,28 @@ exports.getBudget = async (req, res) => {
   }
 };
 
-exports.deleteBudget = async (req, res, next) => {
+export const deleteBudget = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     // Find user and expense based on their IDs
     const auth = req.headers.authorization;
+    if (!auth) {
+      throw new Error("not authorized");
+    }
 
     const token = auth.split(" ")[1];
-    const decodedtoken = jwt.decode(token);
-
+    const decodedtoken = jwt.decode(token) as JwtPayload;
+    if (!decodedtoken) {
+      throw new Error("token not found");
+    }
     const userId = decodedtoken.id;
     const user = await User.findById({ _id: userId });
+    if (!user) {
+      throw new Error("user not found");
+    }
     console.log(user.name);
     const budget = await Budget.findById(req.params.budgetId);
 
@@ -168,10 +208,10 @@ exports.deleteBudget = async (req, res, next) => {
     }
 
     // Check if the user is the one who added the expense
-    if (user.name !== budget.createdBy) {
+    if (user.name !== budget.CreatedBy) {
       return res.status(403).json({
         status: "failed",
-        message: `This budget is added by ${budget.createdBy}. You are not allowed to delete it`,
+        message: `This budget is added by ${budget.CreatedBy}. You are not allowed to delete it`,
       });
     }
 
@@ -180,7 +220,7 @@ exports.deleteBudget = async (req, res, next) => {
 
     // Send success response
     res.status(200).json({ status: "success", message: "budget Deleted" });
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
     res.status(500).json({
       status: "failed",

@@ -1,6 +1,7 @@
-const mongoose = require("mongoose");
+import { Document, Schema, model } from "mongoose";
+import { ExpenseIn } from "../interface/expenseInterface";
 
-const ExpenseSchema = new mongoose.Schema(
+const ExpenseSchema = new Schema<ExpenseIn>(
   {
     title: {
       type: String,
@@ -44,4 +45,5 @@ const ExpenseSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Expense", ExpenseSchema);
+const Expense = model<ExpenseIn>("Expense", ExpenseSchema);
+export default Expense;

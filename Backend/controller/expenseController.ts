@@ -1,19 +1,27 @@
-const Expense = require("../models/expenseModel");
-const User = require("./../models/userModel");
-const jwt = require("jsonwebtoken");
+import Expense from "../models/expenseModel";
+import { ExpenseIn } from "../interface/expenseInterface";
+import User from "../models/userModel";
+import jwt, { JwtPayload } from "jsonwebtoken";
+import { NextFunction, Request, Response } from "express";
 
-exports.addExpense = async (req, res) => {
+export const addExpense = async (req: Request, res: Response) => {
   const { title, amount, category, description, date } = req.body;
 
   const auth = req.headers.authorization;
-
+  if (!auth) {
+    throw new Error("not authorized");
+  }
   const token = auth.split(" ")[1];
-  const decodedtoken = jwt.decode(token);
-
+  const decodedtoken = jwt.decode(token) as JwtPayload;
+  if (!decodedtoken) {
+    throw new Error("token not found");
+  }
   const userId = decodedtoken.id;
 
   const user = await User.findById(userId);
-
+  if (!user) {
+    throw new Error("user not found");
+  }
   const expense = await Expense.create({
     title,
     amount,
@@ -29,7 +37,7 @@ exports.addExpense = async (req, res) => {
     if (!title || !category || !description || !date) {
       return res.status(400).json({ message: "All fields are required!" });
     }
-    if (amount <= 0 || !amount === "number") {
+    if (amount <= 0 || amount === "number") {
       return res
         .status(400)
         .json({ message: "Amount must be a positive number!" });
@@ -45,18 +53,25 @@ exports.addExpense = async (req, res) => {
   }
 };
 
-exports.getExpense = async (req, res) => {
+export const getExpense = async (req: Request, res: Response) => {
   try {
-    let totalexpense = 0;
-    let monthlyexpense = [];
+    let totalexpense: number = 0;
+    let monthlyexpense: Array<ExpenseIn> = [];
     const auth = req.headers.authorization;
-
+    if (!auth) {
+      throw new Error("not authorized");
+    }
     const token = auth.split(" ")[1];
-    const decodedtoken = jwt.decode(token);
-
+    const decodedtoken = jwt.decode(token) as JwtPayload;
+    if (!decodedtoken) {
+      throw new Error("token not found");
+    }
     const userId = decodedtoken.id;
 
     const Admin = await User.findOne({ _id: userId });
+    if (!Admin) {
+      throw new Error("user not found");
+    }
     const familycode = Admin.familycode;
     const expenses = await Expense.find({ familycode: familycode }).sort({
       createdAt: -1,
@@ -84,18 +99,32 @@ exports.getExpense = async (req, res) => {
   }
 };
 
-exports.deleteExpense = async (req, res, next) => {
+export const deleteExpense = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     // Find user and expense based on their IDs
     const auth = req.headers.authorization;
-
+    if (!auth) {
+      throw new Error("not authorized");
+    }
     const token = auth.split(" ")[1];
-    const decodedtoken = jwt.decode(token);
-
+    const decodedtoken = jwt.decode(token) as JwtPayload;
+    if (!decodedtoken) {
+      throw new Error("token not found");
+    }
     const userId = decodedtoken.id;
     const user = await User.findById(userId);
+    if (!user) {
+      throw new Error("user not found");
+    }
     console.log(user.name);
     const expense = await Expense.findById(req.params.expenseId);
+    if (!expense) {
+      throw new Error("Expense not found");
+    }
     console.log(expense.addedBy);
 
     // Check if both user and expense exist

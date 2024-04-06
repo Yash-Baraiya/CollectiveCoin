@@ -255,75 +255,20 @@
   </div>
 </div>
 
-<div
-  class="modal fade"
-  id="exampleModal"
-  tabindex="-1"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
-  style="margin-top: 20%; margin-left: 35%"
->
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">New message</h1>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body">
-        <form [formGroup]="memberrform">
-          <div class="mb-3">
-            <label for="recipient-name" class="col-form-label"
-              >Enter Email:</label
-            >
-            <input
-              type="text"
-              class="form-control"
-              id="recipient-name"
-              formControlName="email"
-            />
-            <div
-              *ngIf="
-                memberrform.get('email').invalid &&
-                (memberrform.get('email').dirty ||
-                  memberrform.get('email').touched)
-              "
-              class="text-danger"
-            >
-              <div *ngIf="memberrform.controls.email.errors?.required">
-                Email is required
-              </div>
-              <div
-                *ngIf="
-                  memberrform.controls.email.errors?.email &&
-                  memberrform.controls.email.touched
-                "
-              >
-                please provide valid email
-              </div>
-            </div>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          data-bs-dismiss="modal"
-          (click)="closebox()"
-        >
-          Close
-        </button>
-        <button type="button" class="btn btn-primary" (click)="addmember()">
-          Add Member
-        </button>
-      </div>
-    </div>
-  </div>
+<div id="contactForm2">
+  <h1>Keep in touch!</h1>
+  <small style="color: #222260"
+    >Admin will get back to you as quickly as possible</small
+  >
+
+  <form>
+    <input placeholder="Email" type="email" required />
+
+    <button class="formBtn" (click)="addmember()">Add</button>
+    <button class="formBtn" (click)="closebox()" style="margin-left: 10px">
+      close
+    </button>
+  </form>
 </div>
 
 <div id="contactForm">
