@@ -24,24 +24,20 @@ export class MembersComponent implements OnInit {
   }
 
   openbox() {
-    console.log('button is clicked');
-    document.getElementById('exampleModal').style.display = 'block';
-    document.getElementById('exampleModal').style.opacity = '1';
+    document.getElementById('contactForm2').style.display = 'block';
+    document.getElementById('contactForm2').style.opacity = '1';
     document.getElementById('overlay').style.display = 'block';
   }
   closebox() {
-    console.log('button is clicked');
-    document.getElementById('exampleModal').style.display = 'none';
+    document.getElementById('contactForm2').style.display = 'none';
     document.getElementById('overlay').style.display = 'none';
   }
   openbox2() {
-    console.log('button is clicked');
     document.getElementById('contactForm').style.display = 'block';
     document.getElementById('contactForm').style.opacity = '1';
-    //document.getElementById('overlay').style.display = 'block';
+    document.getElementById('overlay').style.display = 'block';
   }
   closebox2() {
-    console.log('button is clicked');
     document.getElementById('contactForm').style.display = 'none';
     document.getElementById('overlay').style.display = 'none';
   }
