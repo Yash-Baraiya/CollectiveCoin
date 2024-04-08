@@ -11,6 +11,10 @@ import { ExpenseService } from '../expense/expense.service';
 export class LineChartComponent implements OnInit {
   incomeamounts = [];
   expenseamounts = [];
+  labels = this.getDaysInMonth(
+    new Date().getMonth() + 1,
+    new Date().getFullYear()
+  ).map((date) => date);
 
   constructor(
     private incomeservice: IncomeService,
@@ -22,42 +26,64 @@ export class LineChartComponent implements OnInit {
   ngOnInit() {
     this.incomeservice.getIncome();
     this.expenseservice.getExpense();
+    this.fetchIncomeData();
+    this.fetchExpenseData();
 
+    console.log('coming from line chart ', this.incomeamounts);
+    console.log('coming from line chart ', this.expenseamounts);
     this.createChart();
+  }
+  fetchIncomeData() {
+    this.labels.forEach((label) => {
+      let value: boolean;
+      for (let i = 0; i < this.incomeservice.incamounts.length; i++) {
+        if (this.incomeservice.incamounts[i].date === label) {
+          this.incomeamounts.push(this.incomeservice.incamounts[i].amount);
+          value = true;
+          break;
+        }
+      }
+      if (!value) {
+        this.incomeamounts.push(0);
+      }
+    });
+  }
+  fetchExpenseData() {
+    this.labels.forEach((label) => {
+      let value: boolean;
+      for (let i = 0; i < this.expenseservice.expamounts.length; i++) {
+        if (this.expenseservice.expamounts[i].date === label) {
+          this.expenseamounts.push(this.expenseservice.expamounts[i].amount);
+          value = true;
+          break;
+        }
+      }
+      if (!value) {
+        this.expenseamounts.push(0);
+      }
+    });
   }
 
   async createChart() {
     // Generate labels for the chart
-    const labels = this.getDaysInMonth(
-      new Date().getMonth() + 1,
-      new Date().getFullYear()
-    ).map((date) => date.toLocaleDateString('en-US'));
 
-    // labels.forEach((label) => {
-    //   if (label === this.incomeservice.incamounts.date) {
-    //     this.incomeamounts.push(this.incomeservice.incamounts.amount);
-    //   } else {
-    //     this.incomeamounts.push(0);
-    //   }
-    // });
-    //console.log(this.incomeamounts);
     var canvas = document.getElementById('myChart') as HTMLCanvasElement;
     var ctx = canvas.getContext('2d');
     var myChart = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: labels,
+        labels: this.labels,
         datasets: [
           {
             label: 'Incomes',
-            data: this.incomeservice.amountsvalue,
+            data: this.incomeamounts,
             fill: false,
             borderColor: 'rgb(75, 192, 192)',
             tension: 0.1,
           },
           {
             label: 'Expenses',
-            data: this.expenseservice.amountsvalue,
+            data: this.expenseamounts,
             fill: false,
             borderColor: 'rgb(255, 99, 132)',
             tension: 0.1,
@@ -70,11 +96,18 @@ export class LineChartComponent implements OnInit {
     });
   }
 
-  getDaysInMonth(month: number, year: number): Date[] {
+  getDaysInMonth(month: number, year: number): string[] {
     const date = new Date(year, month - 1, 1);
-    const days = [];
+    const days: string[] = [];
+
     while (date.getMonth() === month - 1) {
-      days.push(new Date(date));
+      const day = date.getDate();
+      const formattedDay = day < 10 ? '0' + day : day;
+      const formattedMonth = month < 10 ? '0' + month : month;
+      const formattedYear = date.getFullYear();
+
+      const formattedDate = `${formattedDay}/${formattedMonth}/${formattedYear}`;
+      days.push(formattedDate);
       date.setDate(date.getDate() + 1);
     }
     return days;

@@ -194,7 +194,7 @@
                   </div>
                 </form>
               </div>
-              <div class="incomes">
+              <div class="incomes" (dblclick)="openbox4()">
                 <div
                   *ngFor="let i of expenseservice.data"
                   class="income-item"
@@ -245,6 +245,7 @@
                         padding-left: 2rem;
                         position: relative;
                       "
+                      id="title"
                     >
                       {{ i.title }}
                       <span
@@ -281,6 +282,7 @@
                             color: var(--primary-color);
                             opacity: 0.8;
                           "
+                          id="amount"
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -304,6 +306,7 @@
                             color: var(--primary-color);
                             opacity: 0.8;
                           "
+                          id="date"
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -319,7 +322,7 @@
                           </svg>
                           {{ i.date }}
                         </p>
-                        <p>
+                        <p id="category">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="16"
@@ -375,3 +378,19 @@
     </div>
   </div>
 </div>
+
+<div id="contactForm">
+  <h1>{{ title }}</h1>
+
+  <ul style="color: #222260">
+    <li>amount :{{ amount }}</li>
+    <li>category : {{ category }}</li>
+    <li>date : {{ date }}</li>
+    <li>description : {{ description }}</li>
+  </ul>
+  <button class="formBtn" style="margin-left: 10px" (click)="closebox4()">
+    close
+  </button>
+</div>
+
+<div id="overlay" class="overlay"></div>

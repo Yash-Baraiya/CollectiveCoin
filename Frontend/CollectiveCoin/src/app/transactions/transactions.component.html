@@ -46,6 +46,7 @@
             width: 100%;
             color: #222260;
           "
+          (dblclick)="openbox5()"
         >
           <div
             class="icon"
@@ -204,3 +205,21 @@
     </div>
   </div>
 </div>
+
+<div id="contactForm">
+  <h1>Keep in touch!</h1>
+
+  <ul style="color: #222260">
+    <li>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Est, dolorem?
+    </li>
+    <li>Lorem ipsum dolor, sit amet consectetur adipisicing elit.</li>
+    <li>Lorem ipsum dolor sit amet consectetur.</li>
+    <li>Lorem ipsum dolor sit amet consectetur.</li>
+  </ul>
+  <button class="formBtn" style="margin-left: 10px" (click)="closebox5()">
+    close
+  </button>
+</div>
+
+<div id="overlay" class="overlay"></div>

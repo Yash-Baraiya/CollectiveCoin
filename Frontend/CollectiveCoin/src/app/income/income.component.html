@@ -194,7 +194,7 @@
                   </div>
                 </form>
               </div>
-              <div class="incomes">
+              <div class="incomes" (dblclick)="openbox3()">
                 <div
                   *ngFor="let i of incomeservice.data"
                   class="income-item"
@@ -225,10 +225,7 @@
                       border: 2px solid #ffffff;
                     "
                   >
-                    <i
-                      class="fas fa-money-bill-alt"
-                      style="font-size: 2.6rem"
-                    ></i>
+                  <img [src]="'./../../assets/' + photo" alt="" />
                   </div>
                   <div
                     class="content"
@@ -347,6 +344,7 @@
                             color: #fcf6f9;
                             border: none;
                           "
+                          class="btnbtn"
                           [id]="i.id"
                           (click)="incomeservice.deleteIncome(i.id)"
                         >
@@ -375,3 +373,21 @@
     </div>
   </div>
 </div>
+
+<div id="contactForm">
+  <h1>Keep in touch!</h1>
+
+  <ul style="color: #222260">
+    <li>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Est, dolorem?
+    </li>
+    <li>Lorem ipsum dolor, sit amet consectetur adipisicing elit.</li>
+    <li>Lorem ipsum dolor sit amet consectetur.</li>
+    <li>Lorem ipsum dolor sit amet consectetur.</li>
+  </ul>
+  <button class="formBtn" style="margin-left: 10px" (click)="closebox3()">
+    close
+  </button>
+</div>
+
+<div id="overlay" class="overlay"></div>

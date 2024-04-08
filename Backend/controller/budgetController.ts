@@ -165,6 +165,7 @@ export const getBudget = async (req: Request, res: Response) => {
       overbudget,
       underbudget,
       monthlybudget,
+      expcategoryAmounts,
     });
   } catch (error: any) {
     console.log(error);

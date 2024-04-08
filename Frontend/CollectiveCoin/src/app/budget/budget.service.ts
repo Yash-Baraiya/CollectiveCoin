@@ -16,6 +16,7 @@ export class BudgetService {
   amountsvalue: Array<number> = [];
   overbudget: Array<any> = [];
   underbudget: Array<any> = [];
+  expcategoryAmounts: object = {};
   constructor(private http: HttpClient, private router: Router) {
     this.budgetForm = new FormGroup({
       title: new FormControl('', [Validators.required]),
@@ -74,7 +75,6 @@ export class BudgetService {
       .subscribe(
         (resultData: BudgetResponse) => {
           try {
-            console.log(resultData);
             this.data = resultData.monthlybudget.map((budget: any) => ({
               title: budget.title,
               category: budget.category,
@@ -84,13 +84,13 @@ export class BudgetService {
             }));
             this.overbudget = resultData.overbudget;
             this.underbudget = resultData.underbudget;
-
-            console.log(this.overbudget, this.underbudget);
-
+            this.expcategoryAmounts = resultData.expcategoryAmounts;
+            console.log(this.expcategoryAmounts);
             this.amounts = resultData.monthlybudget
               .map((budget) => ({
-                amount: budget.amount[0],
+                amount: budget.amount,
                 date: budget.date,
+                category: budget.category,
               }))
               .sort((a, b) => {
                 const dateA = new Date(a.date);

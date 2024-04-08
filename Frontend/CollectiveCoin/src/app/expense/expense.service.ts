@@ -83,7 +83,12 @@ export class ExpenseService {
             this.expamounts = resultData.monthlyexpense
               .map((expense) => ({
                 amount: expense.amount,
-                date: expense.date,
+                date: expense.date
+                  .toString()
+                  .slice(0, 10)
+                  .split('-')
+                  .reverse()
+                  .join('/'),
               }))
               .sort((a, b) => {
                 const dateA = new Date(a.date);

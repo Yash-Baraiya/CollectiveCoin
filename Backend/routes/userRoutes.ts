@@ -17,15 +17,16 @@ import {
 } from "../controller/userController";
 
 import multer from "multer";
+import { v4 as uuidv4 } from "uuid";
 
 var path = require("path");
 var storage = multer.diskStorage({
   destination: function (req, file, callback) {
-    callback(null, "uploads");
+    callback(null, "C:/Users/AM/Desktop/CollectiveCoin/Frontend/CollectiveCoin/src/assets");
   },
 
   filename: function (req, file, callback) {
-    var fname = "user" + path.extname(file.originalname);
+    var fname = "user" + uuidv4() + path.extname(file.originalname);
 
     callback(null, fname);
   },

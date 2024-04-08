@@ -41,7 +41,6 @@ export const addIncome = async (req: Request, res: Response) => {
   console.log(income);
 
   try {
-    //validations
     if (!title || !category || !description || !date) {
       return res.status(400).json({ message: "All fields are required!" });
     }
@@ -68,6 +67,7 @@ export const addIncome = async (req: Request, res: Response) => {
 export const getIncomes = async (req: Request, res: Response) => {
   try {
     let totalincome = 0;
+
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("not authorized");

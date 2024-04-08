@@ -74,7 +74,6 @@ export class IncomeService {
       .subscribe(
         (resultData: IncomeResponse) => {
           try {
-            console.log(resultData);
             this.data = resultData.monthlyincome.map((income: any) => ({
               title: income.title,
               category: income.category,
@@ -87,12 +86,12 @@ export class IncomeService {
             this.incamounts = resultData.monthlyincome
               .map((income) => ({
                 amount: income.amount[0],
-                date: income.date.toLocaleDateString('en-US'),
-                // .toString()
-                // .slice(0, 10)
-                // .split('-')
-                // .reverse()
-                // .join('/'),
+                date: income.date
+                  .toString()
+                  .slice(0, 10)
+                  .split('-')
+                  .reverse()
+                  .join('/'),
               }))
               .sort((a, b) => {
                 const dateA = new Date(a.date);

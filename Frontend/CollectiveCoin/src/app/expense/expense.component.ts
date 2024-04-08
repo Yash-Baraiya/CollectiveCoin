@@ -12,6 +12,12 @@ import { Router } from '@angular/router';
   styleUrl: './expense.component.css',
 })
 export class ExpenseComponent implements OnInit {
+  title: string = '';
+  amount: any;
+  category: string = '';
+  date: any;
+  description: string;
+
   constructor(
     private http: HttpClient,
     public expenseservice: ExpenseService,
@@ -20,6 +26,16 @@ export class ExpenseComponent implements OnInit {
 
   ngOnInit(): void {
     this.expenseservice.getExpense();
+  }
+  openbox4() {
+    document.getElementById('contactForm').style.display = 'block';
+    document.getElementById('contactForm').style.opacity = '1';
+    document.getElementById('contactForm').style.display = 'overlay';
+    //const inc = this.expenseservice.data;
+  }
+  closebox4() {
+    document.getElementById('contactForm').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
   }
 
   saveadd() {

@@ -17,7 +17,9 @@ export class SidebarComponent implements OnInit {
   classStatus = false;
   data: any;
   name: string = '';
+  photo: any = '';
   myTheme = myTheme;
+
   constructor(
     private router: Router,
     public themeToggleService: ThemeToggleService,
@@ -40,8 +42,11 @@ export class SidebarComponent implements OnInit {
   ngOnInit(): void {
     this.data = this.loginDataService.getData();
     this.name = this.data.data.user.name;
+    this.photo = this.data.data.user.photo;
+    console.log('user photo string is', this.photo);
   }
 
+  imagePath = `./../../assets/${this.photo}`;
   SwitchMode() {
     if (this.myTheme === 'light') {
       this.myTheme = 'dark';

@@ -236,7 +236,7 @@ export const uploadImage = async (req: Request, res: Response) => {
     console.log(file);
     let filetype = file.mimetype.split("/")[1];
 
-    const photo = `${user.name}${file.filename}`;
+    const photo = `${file.filename}`;
     console.log(photo);
     const updatedUser = await User.findByIdAndUpdate(
       { _id: userId },

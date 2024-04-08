@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/uuid": "^9.0.8",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -23,6 +24,7 @@
     "nodemailer": "^6.9.12",
     "nodemon": "^3.1.0",
     "sharp": "^0.33.3",
+    "uuid": "^9.0.1",
     "validator": "^13.11.0"
   },
   "devDependencies": {

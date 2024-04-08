@@ -21,6 +21,7 @@ import { BudgetComponent } from './budget/budget.component';
 import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
 import { LineChartComponent } from './line-chart/line-chart.component';
 import { Chart } from 'chart.js';
+import { BarCartComponent } from './bar-cart/bar-cart.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { Chart } from 'chart.js';
     BudgetComponent,
     ResetpasswordComponent,
     LineChartComponent,
+    BarCartComponent,
   ],
   imports: [
     BrowserModule,

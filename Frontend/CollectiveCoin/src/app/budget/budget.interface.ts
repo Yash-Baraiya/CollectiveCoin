@@ -4,6 +4,7 @@ interface BudgetResponse {
   overbudget: Array<any>;
   underbudget: Array<any>;
   monthlybudget: Array<any>;
+  expcategoryAmounts: object;
 }
 
 export default BudgetResponse;
