@@ -4,7 +4,8 @@ const { promisify } = require("util");
 import jwt, { JwtPayload } from "jsonwebtoken";
 import User from "../models/userModel";
 import sendEmail from "../email";
-import { ObjectId } from "mongoose";
+import * as otpgenerator from "otp-generator";
+import { uploadImage } from "./userController";
 
 declare global {
   namespace Express {
@@ -72,6 +73,20 @@ export const signUp = async (req: Request, res: Response) => {
         "you can not login as admin because  you are not earning"
       );
     }
+    let file = req.body.photo;
+
+    if (!file) {
+      res.status(400).json({
+        status: "failed",
+        message: "please upload photo",
+      });
+      throw new Error("please upload photo");
+    }
+    console.log(file);
+    //let filetype = file.mimetype.split("/")[1];
+
+    const photo = `${file.filename}`;
+    console.log(photo);
     const newUser = await User.create({
       name: req.body.name,
       email: req.body.email,
@@ -79,8 +94,8 @@ export const signUp = async (req: Request, res: Response) => {
       isEarning: req.body.isEarning,
       role: req.body.role,
       familycode: req.body.familycode,
+      photo: photo,
     });
-
     const message = `Welcome to Collective Coin family! Enjoy your accountings.`;
     await sendEmail({
       to: req.body.email,
@@ -108,8 +123,7 @@ export const signIn = async (req: Request, res: Response) => {
       familycode: req.body.familycode,
     });
 
-    // Check if email, password, and family code are provided
-    let admin = await User.findOne({ familycode });
+    let admin = await User.find({ familycode });
     let user = await User.findOne({ email }).select("+password");
 
     if (!user) {
@@ -120,13 +134,18 @@ export const signIn = async (req: Request, res: Response) => {
     }
 
     if (admin !== null) {
-      for (let i = 0; i < admin.deleteduser.length; i++) {
-        if (user.id === admin.deleteduser[i]) {
-          throw new Error(
-            "you were removed from this family so you can not login using this family code"
-          );
+      admin.forEach((member) => {
+        for (let i = 0; i < member.deleteduser.length; i++) {
+          if (!user) {
+            throw new Error("user not found");
+          }
+          if (user.id === member.deleteduser[i]) {
+            throw new Error(
+              "you were removed from this family so you can not login using this family code"
+            );
+          }
         }
-      }
+      });
     }
 
     if (
@@ -139,14 +158,21 @@ export const signIn = async (req: Request, res: Response) => {
         { role: "admin" },
         { new: true }
       );
+    } else {
+      user = await User.findOneAndUpdate(
+        { email },
+        { familycode: req.body.familycode },
+        { new: true }
+      );
     }
+
     if (!user) {
       throw new Error("user not found");
     }
-    if (user.familycode === null) {
+    if (user.familycode === null && existingFamilycode) {
       user = await User.findOneAndUpdate(
         { email },
-        { familycode },
+        { familycode, role: "user" },
         { new: true }
       );
       createSendToken(user, 200, res);
@@ -261,10 +287,18 @@ export const forgotPassword = async (
     const resetToken = user.createPasswordResetToken();
     await user.save({ validateBeforeSave: false });
 
-    // 3) Send it to user's email
-    const resetURL = `localhost:4200/resetpassword`;
+    const otp = otpgenerator.generate(6, {
+      upperCaseAlphabets: false,
+      specialChars: false,
+    });
+    console.log(otp);
 
-    const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\nIf you didn't forget your password, please ignore this email!`;
+    user.forgotpasswordotp = otp;
+    await user.save({ validateBeforeSave: false });
+    // 3) Send it to user's email
+    const resetURL = `localhost:4200/resetpassword/${resetToken}`;
+
+    const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\nOTP : ${otp}\nIf you didn't forget your password, please ignore this email!`;
     try {
       await sendEmail({
         to: email,
@@ -274,12 +308,13 @@ export const forgotPassword = async (
 
       res.status(200).json({
         status: "success",
-        messege: "your request sent via email",
+        messege: "OTP sent successfully to your account",
         resetToken,
       });
     } catch (err) {
       user.passwordResetToken = undefined;
       user.passwordResetExpires = undefined;
+      user.forgotpasswordotp = undefined;
       await user.save({ validateBeforeSave: false });
 
       throw new Error("There was an error sending the email. Try again later!");
@@ -304,6 +339,7 @@ export const resetPassword = async (req: Request, res: Response) => {
     const user = await User.findOne({
       passwordResetToken: hashedToken,
       passwordResetExpires: { $gt: Date.now() },
+      forgotpasswordotp: req.body.otp,
     });
 
     // 2) If token has not expired, and there is user, set the new password
@@ -314,12 +350,13 @@ export const resetPassword = async (req: Request, res: Response) => {
     user.passwordConfirm = req.body.passwordConfirm;
     user.passwordResetToken = undefined;
     user.passwordResetExpires = undefined;
+    user.forgotpasswordotp = undefined;
     await user.save();
 
-    // 3) Update changedPasswordAt property for the user
     // 4) Log the user in, send JWT
     createSendToken(user, 200, res);
   } catch (error: any) {
+    console.log(error);
     res.status(200).json({
       status: "failed",
       messege: "internal server error",

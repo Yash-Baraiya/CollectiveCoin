@@ -141,7 +141,7 @@ export const deleteuser = async (req: Request, res: Response) => {
 
     const user = await User.findById(AdminId);
     if (!user) {
-      throw new Error("user not found");
+      throw new Error("user not  found");
     }
     if (user.role !== "admin") {
       throw new Error("You are not allowed to remove anyone");
@@ -149,8 +149,8 @@ export const deleteuser = async (req: Request, res: Response) => {
 
     const memberId = req.params.id;
     const member = await User.findById(memberId);
-    if (AdminId == memberId) {
-      await User.findByIdAndUpdate(memberId, { role: "user" });
+    if (AdminId === memberId) {
+      throw new Error("you can not delete yourself");
     }
 
     await User.findByIdAndUpdate(memberId, { familycode: null });

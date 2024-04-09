@@ -1,7 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 
 import { IncomeService } from './income.service';
 @Component({
@@ -10,12 +7,8 @@ import { IncomeService } from './income.service';
   styleUrl: './income.component.css',
 })
 export class IncomeComponent implements OnInit {
-  photo = "";
-  constructor(
-    private http: HttpClient,
-    public incomeservice: IncomeService,
-    private router: Router
-  ) {}
+  photo = '';
+  constructor(public incomeservice: IncomeService) {}
 
   ngOnInit(): void {
     this.incomeservice.getIncome();
@@ -24,8 +17,7 @@ export class IncomeComponent implements OnInit {
   openbox3() {
     document.getElementById('contactForm').style.display = 'block';
     document.getElementById('contactForm').style.opacity = '1';
-    document.getElementById('contactForm').style.display = 'overlay';
-    const inc = this.incomeservice.data;
+    document.getElementById('overlay').style.display = 'block';
   }
   closebox3() {
     document.getElementById('contactForm').style.display = 'none';

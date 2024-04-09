@@ -1,10 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { LoginDataService } from '../shared/login-data.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import ExpenseResponse from './expense.interface';
 import { ExpenseService } from './expense.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-expense',
@@ -18,11 +13,7 @@ export class ExpenseComponent implements OnInit {
   date: any;
   description: string;
 
-  constructor(
-    private http: HttpClient,
-    public expenseservice: ExpenseService,
-    private router: Router
-  ) {}
+  constructor(public expenseservice: ExpenseService) {}
 
   ngOnInit(): void {
     this.expenseservice.getExpense();
@@ -30,7 +21,7 @@ export class ExpenseComponent implements OnInit {
   openbox4() {
     document.getElementById('contactForm').style.display = 'block';
     document.getElementById('contactForm').style.opacity = '1';
-    document.getElementById('contactForm').style.display = 'overlay';
+    document.getElementById('overlay').style.display = 'block';
     //const inc = this.expenseservice.data;
   }
   closebox4() {

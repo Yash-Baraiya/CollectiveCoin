@@ -57,6 +57,7 @@ const userSchema = new Schema<UserIn>({
   passwordChangedAt: Date,
   passwordResetToken: String,
   passwordResetExpires: Date,
+  forgotpasswordotp: String,
 });
 
 userSchema.pre<UserIn>("save", async function (next) {
@@ -101,6 +102,7 @@ userSchema.methods.createPasswordResetToken = function (): string {
     .digest("hex");
 
   this.passwordResetExpires = new Date(Date.now() + 10 * 60 * 1000);
+  console.log(this.passwordResetExpires);
 
   return resetToken;
 };

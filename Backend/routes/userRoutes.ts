@@ -22,7 +22,10 @@ import { v4 as uuidv4 } from "uuid";
 var path = require("path");
 var storage = multer.diskStorage({
   destination: function (req, file, callback) {
-    callback(null, "C:/Users/AM/Desktop/CollectiveCoin/Frontend/CollectiveCoin/src/assets");
+    callback(
+      null,
+      "C:/Users/AM/Desktop/CollectiveCoin/Frontend/CollectiveCoin/src/assets"
+    );
   },
 
   filename: function (req, file, callback) {
@@ -34,7 +37,7 @@ var storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 const router = express.Router();
 
-router.post("/signup", signUp);
+router.post("/signup", upload.single("photo"), signUp);
 router.post("/login", signIn);
 router.post("/add-member", protect, restrictToAdd, addUser);
 router.get("/getmembers", protect, getMembers);
