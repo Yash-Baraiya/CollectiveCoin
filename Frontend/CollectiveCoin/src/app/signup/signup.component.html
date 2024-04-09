@@ -212,6 +212,30 @@
                         </div>
                       </div>
                     </div>
+                    <div class="form-outline mb-4">
+                      <input
+                        type="file"
+                        id="form2Example11"
+                        class="form-control"
+                        placeholder="name"
+                        formControlName="photo"
+                      />
+                      <label class="form-label" for="form2Example11"
+                        >Photo</label
+                      >
+                      <div
+                        *ngIf="
+                          signupForm.get('photo').invalid &&
+                          (signupForm.get('photo').dirty ||
+                            signupForm.get('photo').touched)
+                        "
+                        class="text-danger"
+                      >
+                        <div *ngIf="signupForm.controls.photo.errors?.required">
+                          photo is required
+                        </div>
+                      </div>
+                    </div>
 
                     <div class="text-center pt-1 mb-5 pb-1">
                       <button

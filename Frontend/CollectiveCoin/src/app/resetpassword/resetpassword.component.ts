@@ -30,6 +30,7 @@ export class ResetpasswordComponent {
         Validators.required,
         Validators.minLength(8),
       ]),
+      otp: new FormControl('', Validators.required),
     });
   }
 

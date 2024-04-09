@@ -10,10 +10,10 @@ export class TransactionService {
   alltransactions: Array<any> = [];
   incomedata: Array<any> = [];
   expensedata: Array<any> = [];
-  maxincome: number;
-  minincome: number;
-  maxexpense: number;
-  minexpense: number;
+  maxincome: number = 0;
+  minincome: number = 0;
+  maxexpense: number = 0;
+  minexpense: number = 0;
   data: any;
   recenthistory: Array<any> = [];
   constructor(private http: HttpClient, private router: Router) {}

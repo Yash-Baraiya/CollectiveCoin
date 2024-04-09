@@ -45,14 +45,14 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  openbox() {
-    console.log('button is clicked');
-    document.getElementById('exampleModal').style.display = 'block';
-    document.getElementById('exampleModal').style.opacity = '1';
+  openbox2() {
+    document.getElementById('contactForm').style.display = 'block';
+    document.getElementById('contactForm').style.opacity = '1';
+    document.getElementById('overlay').style.display = 'block';
   }
-  closebox() {
-    console.log('button is clicked');
-    document.getElementById('exampleModal').style.display = 'none';
+  closebox2() {
+    document.getElementById('contactForm').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
   }
   login() {
     let bodyData = this.loginForm.value;
@@ -100,7 +100,7 @@ export class LoginComponent implements OnInit {
             console.log(resultData);
             this.data = resultData;
             const token = this.data.resetToken;
-            this.closebox();
+            this.closebox2();
             this.router.navigate([`/resetpassword/${token}`]);
             alert(this.data.messege);
           },
@@ -108,10 +108,10 @@ export class LoginComponent implements OnInit {
             console.log(error);
 
             if (error.error.messege) {
-              this.closebox();
+              this.closebox2();
               alert(error.error.messege);
             } else {
-              this.closebox();
+              this.closebox2();
               alert(
                 'there was a problem sending the mail please try agian after some time'
               );

@@ -33,11 +33,13 @@ export class SignupComponent implements OnInit {
         Validators.minLength(5),
         Validators.maxLength(5),
       ]),
+      photo: new FormControl('', Validators.required),
     });
   }
 
   register() {
     const bodyData = this.signupForm.value;
+    const photo = this.signupForm.get('photo').value;
 
     this.http
       .post('http://localhost:8000/api/v1/CollectiveCoin/user/signup', bodyData)

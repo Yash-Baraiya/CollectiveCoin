@@ -150,7 +150,7 @@
                       Log in
                     </button>
                     <div class="text-center">
-                      <a class="text-muted" (click)="openbox()"
+                      <a class="text-muted" (click)="openbox2()"
                         >Forgot password?</a
                       >
                     </div>
@@ -189,80 +189,49 @@
   </div>
 </section>
 
-<div
-  class="modal fade"
-  id="exampleModal"
-  tabindex="-1"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
-  style="margin-top: 16%"
->
-  <div class="modal-dialog gradient-custom-2">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">
-          Forgot Password ?
-        </h1>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-          (click)="closebox()"
-        ></button>
+<div id="contactForm">
+  <h1 style="font-size: 30px">Forgot Your Password...!</h1>
+  <small style="color: #222260; font-size: 12px"
+    >please provide your email here</small
+  >
+
+  <form [formGroup]="forgotpasswordForm">
+    <input
+      class="formInput"
+      placeholder="Email"
+      type="email"
+      formControlName="email"
+    />
+    <div
+      *ngIf="
+        forgotpasswordForm.get('email').invalid &&
+        (forgotpasswordForm.get('email').dirty ||
+          forgotpasswordForm.get('email').touched)
+      "
+      class="text-danger"
+    >
+      <div *ngIf="forgotpasswordForm.controls.email.errors?.required">
+        Email is required
       </div>
-      <div class="modal-body">
-        <form [formGroup]="forgotpasswordForm">
-          <div class="mb-3">
-            <label for="recipient-name" class="col-form-label"
-              >Enter Email:</label
-            >
-            <input
-              type="text"
-              class="form-control"
-              id="recipient-name"
-              formControlName="email"
-            />
-            <div
-              *ngIf="
-                forgotpasswordForm.get('email').invalid &&
-                (forgotpasswordForm.get('email').dirty ||
-                  forgotpasswordForm.get('email').touched)
-              "
-              class="text-danger"
-            >
-              <div *ngIf="forgotpasswordForm.controls.email.errors?.required">
-                Email is required
-              </div>
-              <div
-                *ngIf="
-                  forgotpasswordForm.controls.email.errors?.email &&
-                  forgotpasswordForm.controls.email.touched
-                "
-              >
-                please provide valid email
-              </div>
-            </div>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          data-bs-dismiss="modal"
-          (click)="closebox()"
-        >
-          Close
-        </button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          (click)="forgotpassword()"
-        >
-          send
-        </button>
+      <div
+        *ngIf="
+          forgotpasswordForm.controls.email.errors?.email &&
+          forgotpasswordForm.controls.email.touched
+        "
+      >
+        please provide valid email
       </div>
     </div>
-  </div>
+    <button class="formBtn">send</button>
+    <button class="formBtn" (click)="closebox2()" style="margin-left: 10px">
+      close
+    </button>
+  </form>
 </div>
+
+<div
+  id="overlay"
+  class="overlay"
+  (click)="closebox2()"
+  (click)="closebox2()"
+></div>
