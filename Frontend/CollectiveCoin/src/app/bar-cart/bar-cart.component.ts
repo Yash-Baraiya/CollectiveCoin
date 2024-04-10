@@ -29,11 +29,10 @@ export class BarCartComponent {
   }
 
   ngOnInit() {
-    this.fetchBudgetData();
-    this.fetchExpenseData();
+    this.fetchData();
     this.createChart();
   }
-  fetchBudgetData() {
+  fetchData() {
     this.labels.forEach((label) => {
       let value: boolean;
       for (let i = 0; i < this.budgetservice.amounts.length; i++) {
@@ -47,8 +46,6 @@ export class BarCartComponent {
         this.budgetdata.push(0);
       }
     });
-  }
-  fetchExpenseData() {
     this.labels.forEach((label) => {
       let value: boolean;
 

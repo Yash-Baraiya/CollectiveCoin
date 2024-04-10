@@ -13,6 +13,7 @@ export interface UserIn extends Document {
   passwordResetToken?: string;
   passwordResetExpires?: Date;
   forgotpasswordotp?: string;
+  loggedInAt?: Date;
 
   correctPassword(
     candidatePassword: string,

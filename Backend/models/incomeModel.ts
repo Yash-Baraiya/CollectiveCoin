@@ -1,4 +1,4 @@
-import { Document, Schema, model } from "mongoose";
+import { Schema, model } from "mongoose";
 import { IncomeIn } from "../interface/incomeInterface";
 
 const IncomeSchema = new Schema<IncomeIn>(

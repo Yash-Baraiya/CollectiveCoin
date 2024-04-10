@@ -186,10 +186,12 @@ export const deletefamily = async (req: Request, res: Response) => {
     if (!user) {
       throw new Error("user not found");
     }
+    await findmember(user);
     const familyCode = user.familycode;
     if (user.role !== "admin") {
       throw new Error("You are not allowed to remove anyone");
     }
+
     await User.deleteMany({ familycode: familyCode });
     await Income.deleteMany({ familycode: familyCode });
     await Expense.deleteMany({ familycode: familyCode });
@@ -255,4 +257,19 @@ export const uploadImage = async (req: Request, res: Response) => {
       message: error.message,
     });
   }
+};
+
+const findmember = async function (user: any) {
+  const familyCode = user.familycode;
+  const members = await User.find({ familycode: familyCode });
+  members.forEach((member) => {
+    if (member.loggedInAt && user.loggedInAt) {
+      console.log(member, member.loggedInAt.getTime());
+      if (member.loggedInAt?.getTime() < user.loggedInAt?.getTime()) {
+        throw new Error(
+          " you are not the first admin you can not delete whole family"
+        );
+      }
+    }
+  });
 };

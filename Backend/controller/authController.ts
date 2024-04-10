@@ -4,8 +4,7 @@ const { promisify } = require("util");
 import jwt, { JwtPayload } from "jsonwebtoken";
 import User from "../models/userModel";
 import sendEmail from "../email";
-import * as otpgenerator from "otp-generator";
-import { uploadImage } from "./userController";
+import otpgenerator from "otp-generator";
 
 declare global {
   namespace Express {
@@ -96,6 +95,7 @@ export const signUp = async (req: Request, res: Response) => {
       role: req.body.role,
       familycode: req.body.familycode,
       photo: photo,
+      loggedInAt: Date.now(),
     });
     const message = `Welcome to Collective Coin family! Enjoy your accountings.`;
     await sendEmail({
