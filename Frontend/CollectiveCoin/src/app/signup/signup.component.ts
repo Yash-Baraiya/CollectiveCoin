@@ -33,16 +33,26 @@ export class SignupComponent implements OnInit {
         Validators.minLength(5),
         Validators.maxLength(5),
       ]),
-      photo: new FormControl('', Validators.required),
+      photo: new FormControl(null, Validators.required),
     });
   }
 
   register() {
-    const bodyData = this.signupForm.value;
-    const photo = this.signupForm.get('photo').value;
+    const formData = new FormData();
+
+    formData.append('name', this.signupForm.get('name').value);
+    formData.append('email', this.signupForm.get('email').value);
+    formData.append('password', this.signupForm.get('password').value);
+    formData.append('role', this.signupForm.get('role').value);
+    formData.append('isEarning', this.signupForm.get('isEarning').value);
+    formData.append('familycode', this.signupForm.get('familycode').value);
+
+    // Append the photo file separately
+    const photoFile = this.signupForm.get('photo').value;
+    formData.append('photo', photoFile);
 
     this.http
-      .post('http://localhost:8000/api/v1/CollectiveCoin/user/signup', bodyData)
+      .post('http://localhost:8000/api/v1/CollectiveCoin/user/signup', formData)
       .subscribe(
         (resultData: any) => {
           this.loginDataService.setData(resultData);
@@ -52,12 +62,21 @@ export class SignupComponent implements OnInit {
         (error) => {
           if (error.error.message) {
             console.log(error.error.message);
-            alert(error.error.message); // Adjust this message as needed
+            alert(error.error.message);
           } else {
-            alert('An error occurred. Please try again later.'); // General error message
+            alert('An error occurred. Please try again later.');
           }
         }
       );
+  }
+  onFileChange(event: any) {
+    if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
+      this.signupForm.get('photo').setValue(file);
+
+      // Reset the file input element by clearing its files property
+      event.target.value = ''; // This will clear the selected file from the input
+    }
   }
 
   save() {

@@ -9,13 +9,13 @@
             <h2 class="total-income">
               <span style="display: inline-block">
                 <p
+                  [@scroll]="save"
                   style="color: #222260"
                   *ngFor="let obj of budgetservice.overbudget"
                 >
-                  you are going over budget for<span style="color: red"
-                    >{{ obj.category }}
-                  </span>
-                  by <span style="color: red">{{ obj.amount }}$ </span>,
+                  you are going over budget for
+                  <span style="color: red">{{ obj.category }} </span> by
+                  <span style="color: red">{{ obj.amount }}$ </span>,
                 </p>
               </span>
             </h2>

@@ -46,7 +46,6 @@ export class SidebarComponent implements OnInit {
     console.log('user photo string is', this.photo);
   }
 
-  imagePath = `./../../assets/${this.photo}`;
   SwitchMode() {
     if (this.myTheme === 'light') {
       this.myTheme = 'dark';
@@ -56,18 +55,6 @@ export class SidebarComponent implements OnInit {
     }
     console.log(this.myTheme);
     return this.myTheme;
-  }
-  uploadimage() {
-    let bodydata = this.imageform.value;
-    this.http
-      .patch('localhost:8000/api/v1/CollectiveCoin/user/uploadimage', bodydata)
-      .subscribe((resultData) => {
-        try {
-          console.log(resultData);
-        } catch (error) {
-          console.log(error);
-        }
-      });
   }
   clearStorage() {
     localStorage.clear();

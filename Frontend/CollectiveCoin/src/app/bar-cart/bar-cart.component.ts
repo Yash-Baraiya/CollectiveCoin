@@ -29,12 +29,8 @@ export class BarCartComponent {
   }
 
   ngOnInit() {
-    this.budgetservice.getBudgets();
-    this.expenseservice.getExpense();
     this.fetchBudgetData();
     this.fetchExpenseData();
-    console.log('coming from bar-chart ', this.expensedata);
-    console.log('coming from bar-chart', this.budgetdata);
     this.createChart();
   }
   fetchBudgetData() {

@@ -1,11 +1,8 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Input } from '@angular/core';
 import { LoginDataService } from '../shared/login-data.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { BehaviorSubject } from 'rxjs';
-import { AnimateTimings } from '@angular/animations';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +14,7 @@ export class LoginComponent implements OnInit {
   email: string = '';
   password: string = '';
   forgotpasswordForm: FormGroup;
-  isLoggedin = new BehaviorSubject<boolean>(false);
+  //isLoggedin = new BehaviorSubject<boolean>(false);
   data: any;
 
   constructor(
@@ -63,7 +60,6 @@ export class LoginComponent implements OnInit {
         (resultData: any) => {
           if (resultData) {
             try {
-              this.isLoggedin.next(true);
               this.loginDataServeice.setData(resultData);
 
               alert('logged in successfully');

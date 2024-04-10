@@ -1,7 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { totalIncomeService } from '../shared/totalincome.service';
-
 import { HttpClient } from '@angular/common/http';
 import { IncomeService } from '../income/income.service';
 import { ExpenseService } from '../expense/expense.service';

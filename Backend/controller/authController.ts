@@ -56,6 +56,7 @@ export const signUp = async (req: Request, res: Response) => {
     const existingFamilycode = await User.findOne({
       familycode: req.body.familycode,
     });
+
     if (existingUser) {
       throw new Error(
         "User with this email already exists. Please use another email."
@@ -73,7 +74,7 @@ export const signUp = async (req: Request, res: Response) => {
         "you can not login as admin because  you are not earning"
       );
     }
-    let file = req.body.photo;
+    let file = req.file;
 
     if (!file) {
       res.status(400).json({
@@ -158,18 +159,19 @@ export const signIn = async (req: Request, res: Response) => {
         { role: "admin" },
         { new: true }
       );
-    } else {
+      createSendToken(user, 200, res);
+    } else if (
+      user.familycode === null &&
+      !existingFamilycode &&
+      user.role === "admin"
+    ) {
       user = await User.findOneAndUpdate(
         { email },
-        { familycode: req.body.familycode },
+        { familycode: familycode },
         { new: true }
       );
-    }
-
-    if (!user) {
-      throw new Error("user not found");
-    }
-    if (user.familycode === null && existingFamilycode) {
+      createSendToken(user, 200, res);
+    } else if (user.familycode === null && existingFamilycode) {
       user = await User.findOneAndUpdate(
         { email },
         { familycode, role: "user" },

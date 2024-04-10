@@ -9,8 +9,8 @@ import { ExpenseService } from '../expense/expense.service';
   styleUrls: ['./line-chart.component.css'],
 })
 export class LineChartComponent implements OnInit {
-  incomeamounts = [];
-  expenseamounts = [];
+  incomeamounts: Array<number> = [];
+  expenseamounts: Array<number> = [];
   labels = this.getDaysInMonth(
     new Date().getMonth() + 1,
     new Date().getFullYear()
@@ -24,13 +24,9 @@ export class LineChartComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.incomeservice.getIncome();
-    this.expenseservice.getExpense();
     this.fetchIncomeData();
     this.fetchExpenseData();
 
-    console.log('coming from line chart ', this.incomeamounts);
-    console.log('coming from line chart ', this.expenseamounts);
     this.createChart();
   }
   fetchIncomeData() {
@@ -44,9 +40,10 @@ export class LineChartComponent implements OnInit {
         }
       }
       if (!value) {
-        this.incomeamounts.push(0);
+        this.incomeamounts.push(null);
       }
     });
+    return this.incomeamounts;
   }
   fetchExpenseData() {
     this.labels.forEach((label) => {
@@ -59,14 +56,13 @@ export class LineChartComponent implements OnInit {
         }
       }
       if (!value) {
-        this.expenseamounts.push(0);
+        this.expenseamounts.push(null);
       }
     });
+    return this.expenseamounts;
   }
 
   async createChart() {
-    // Generate labels for the chart
-
     var canvas = document.getElementById('myChart') as HTMLCanvasElement;
     var ctx = canvas.getContext('2d');
     var myChart = new Chart(ctx, {
@@ -91,6 +87,8 @@ export class LineChartComponent implements OnInit {
         ],
       },
       options: {
+        spanGaps: true,
+        scales: {},
         responsive: true,
       },
     });
