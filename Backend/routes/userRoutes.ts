@@ -14,6 +14,7 @@ import {
   addUser,
   deletefamily,
   deleteuser,
+  sendmailAdmin,
 } from "../controller/userController";
 
 import multer from "multer";
@@ -47,5 +48,5 @@ router.post("/forgotpassword", forgotPassword);
 router.patch("/resetPassword/:token", resetPassword);
 
 router.patch("/uploadimage", protect, upload.single("photo"), uploadImage);
-
+router.post("/sendmail", protect, sendmailAdmin);
 export default router;

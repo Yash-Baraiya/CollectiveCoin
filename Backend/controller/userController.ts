@@ -273,3 +273,58 @@ const findmember = async function (user: any) {
     }
   });
 };
+
+export const sendmailAdmin = async (req: Request, res: Response) => {
+  try {
+    const auth = req.headers.authorization;
+    if (!auth) {
+      throw new Error("not Authorized");
+    }
+    const token = auth.split(" ")[1];
+    const decodedtoken = jwt.decode(token) as JwtPayload;
+    if (!decodedtoken) {
+      throw new Error("token not found");
+    }
+    const userId = decodedtoken.id;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error("user not found");
+    }
+    const email = req.body.email;
+    const admin = await User.findOne({ email: email });
+    console.log(admin);
+    if (!admin) {
+      throw new Error("admin with that email address in your family not found");
+    }
+
+    if (admin.role !== "admin") {
+      throw new Error("email you provided is not of admin");
+    }
+
+    try {
+      await sendEmail({
+        from: user.email,
+        to: email,
+        subject: "email request to email",
+        text: req.body.message,
+      });
+
+      res.status(200).json({
+        status: "success",
+        messege: "your request sent via email",
+      });
+    } catch (error: any) {
+      res.status(400).json({
+        status: "failed",
+        messege: error.message,
+      });
+    }
+  } catch (error: any) {
+    console.log(error);
+    res.status(400).json({
+      status: "failed",
+      message: error.message,
+    });
+  }
+};
