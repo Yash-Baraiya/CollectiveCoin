@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 import { ExpenseService } from '../expense/expense.service';
 import { BudgetService } from '../budget/budget.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-bar-cart',
@@ -17,7 +18,7 @@ export class BarCartComponent {
     'other',
     'education',
     'health',
-    'takeaways',
+    'shopping',
     'clothing',
     'travelling',
   ];
@@ -29,36 +30,44 @@ export class BarCartComponent {
   }
 
   ngOnInit() {
-    this.fetchData();
-    this.createChart();
-  }
-  fetchData() {
-    this.labels.forEach((label) => {
-      let value: boolean;
-      for (let i = 0; i < this.budgetservice.amounts.length; i++) {
-        if (this.budgetservice.amounts[i].category === label) {
-          this.budgetdata.push(this.budgetservice.amounts[i].amount);
-          value = true;
-          break;
-        }
-      }
-      if (!value) {
-        this.budgetdata.push(0);
-      }
+    this.fetchData().subscribe((resultData) => {
+      this.createChart();
     });
-    this.labels.forEach((label) => {
-      let value: boolean;
-
-      for (let amount in this.budgetservice.expcategoryAmounts) {
-        if (amount === label) {
-          this.expensedata.push(this.budgetservice.expcategoryAmounts[amount]);
-          value = true;
-          break;
+  }
+  fetchData(): Observable<any> {
+    return new Observable((obseraver) => {
+      this.labels.forEach((label) => {
+        let value: boolean;
+        for (let i = 0; i < this.budgetservice.amounts.length; i++) {
+          if (this.budgetservice.amounts[i].category === label) {
+            this.budgetdata.push(this.budgetservice.amounts[i].amount);
+            value = true;
+            break;
+          }
         }
-      }
-      if (!value) {
-        this.expensedata.push(0);
-      }
+        if (!value) {
+          this.budgetdata.push(0);
+        }
+      });
+      console.log(this.budgetdata, ':budgetdata');
+      this.labels.forEach((label) => {
+        let value: boolean;
+
+        for (let amount in this.budgetservice.expcategoryAmounts) {
+          if (amount === label) {
+            this.expensedata.push(
+              this.budgetservice.expcategoryAmounts[amount]
+            );
+            value = true;
+            break;
+          }
+        }
+        if (!value) {
+          this.expensedata.push(0);
+        }
+      });
+      console.log(this.expensedata, ': expesedata');
+      obseraver.next();
     });
   }
 

@@ -261,8 +261,8 @@
     >Admin will get back to you as quickly as possible</small
   >
 
-  <form>
-    <input placeholder="Email" type="email" required />
+  <form [formGroup]="memberrform">
+    <input placeholder="Email" formControlName="email" type="email" required />
 
     <button class="formBtn" (click)="addmember()">Add</button>
     <button class="formBtn" (click)="closebox()" style="margin-left: 10px">
@@ -277,10 +277,10 @@
     >Admin will get back to you as quickly as possible</small
   >
 
-  <form>
-    <input placeholder="Email" type="email" required />
-    <textarea placeholder="Comment"></textarea>
-    <button class="formBtn">send</button>
+  <form [formGroup]="emailform">
+    <input formControlName="email" placeholder="Email" type="email" required />
+    <textarea formControlName="message" placeholder="Comment"></textarea>
+    <button class="formBtn" (click)="emailAdmin()">send</button>
     <button class="formBtn" (click)="closebox2()" style="margin-left: 10px">
       close
     </button>

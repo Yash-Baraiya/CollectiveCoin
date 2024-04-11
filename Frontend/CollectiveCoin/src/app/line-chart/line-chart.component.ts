@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 import { IncomeService } from '../income/income.service';
 import { ExpenseService } from '../expense/expense.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-line-chart',
@@ -24,42 +25,43 @@ export class LineChartComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.fetchIncomeData();
-    this.fetchExpenseData();
+    this.fetchData().subscribe(() => {
+      this.createChart();
+    });
+  }
+  fetchData(): Observable<any> {
+    return new Observable((obseraver) => {
+      this.labels.forEach((label) => {
+        let value: boolean;
+        for (let i = 0; i < this.incomeservice.incamounts.length; i++) {
+          if (this.incomeservice.incamounts[i].date === label) {
+            this.incomeamounts.push(this.incomeservice.incamounts[i].amount);
+            value = true;
+            break;
+          }
+        }
+        if (!value) {
+          this.incomeamounts.push(null);
+        }
+      });
+      this.labels.forEach((label) => {
+        let value: boolean;
+        for (let i = 0; i < this.expenseservice.expamounts.length; i++) {
+          if (this.expenseservice.expamounts[i].date === label) {
+            this.expenseamounts.push(this.expenseservice.expamounts[i].amount);
+            value = true;
+            break;
+          }
+        }
+        if (!value) {
+          this.expenseamounts.push(null);
+        }
+      });
 
-    this.createChart();
-  }
-  fetchIncomeData() {
-    this.labels.forEach((label) => {
-      let value: boolean;
-      for (let i = 0; i < this.incomeservice.incamounts.length; i++) {
-        if (this.incomeservice.incamounts[i].date === label) {
-          this.incomeamounts.push(this.incomeservice.incamounts[i].amount);
-          value = true;
-          break;
-        }
-      }
-      if (!value) {
-        this.incomeamounts.push(null);
-      }
+      obseraver.next(this.incomeamounts);
+      obseraver.next(this.expenseamounts);
+      obseraver.complete();
     });
-    return this.incomeamounts;
-  }
-  fetchExpenseData() {
-    this.labels.forEach((label) => {
-      let value: boolean;
-      for (let i = 0; i < this.expenseservice.expamounts.length; i++) {
-        if (this.expenseservice.expamounts[i].date === label) {
-          this.expenseamounts.push(this.expenseservice.expamounts[i].amount);
-          value = true;
-          break;
-        }
-      }
-      if (!value) {
-        this.expenseamounts.push(null);
-      }
-    });
-    return this.expenseamounts;
   }
 
   async createChart() {

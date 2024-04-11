@@ -130,8 +130,7 @@
                       <option value="groceries">Groceries</option>
                       <option value="health">Health</option>
                       <option value="subscriptions">Subscriptions</option>
-                      <option value="takeaways">Takeaways</option>
-                      <option value="clothing">Clothing</option>
+                      <option value="shopping">Shopping</option>
                       <option value="travelling">Travelling</option>
                       <option value="other">Other</option>
                     </select>
@@ -184,7 +183,7 @@
                             ?.maxlength
                         "
                       >
-                        description length must be less then 20
+                        description length must be less then 40
                       </div>
                     </div>
                   </div>
@@ -198,7 +197,7 @@
                       "
                       (click)="save()"
                     >
-                      <i class="fa-solid fa-plus"></i>Add Income
+                      <i class="fa-solid fa-plus"></i>Add Budget
                     </button>
                   </div>
                 </form>
@@ -234,10 +233,36 @@
                       border: 2px solid #ffffff;
                     "
                   >
-                    <i
-                      class="fas fa-money-bill-alt"
-                      style="font-size: 2.6rem"
-                    ></i>
+                    <img
+                      *ngIf="i.category === 'education'"
+                      src="https://img.icons8.com/pulsar-line/48/education-fees-payment.png"
+                      alt="education-fees-payment"
+                    />
+                    <img
+                      *ngIf="i.category === 'groceries'"
+                      src="https://img.icons8.com/ios/50/ingredients.png"
+                      alt="ingredients"
+                    />
+                    <img
+                      *ngIf="i.category === 'subscriptions'"
+                      src="https://img.icons8.com/windows/32/netflix.png"
+                      alt="netflix"
+                    />
+                    <img
+                      *ngIf="i.category === 'health'"
+                      src="https://img.icons8.com/dotty/80/hospital.png"
+                      alt="hospital"
+                    />
+                    <img
+                      *ngIf="i.category === 'shopping'"
+                      src="https://img.icons8.com/external-tanah-basah-basic-outline-tanah-basah/24/external-line-travel-tanah-basah-basic-outline-tanah-basah-71.png"
+                      alt="external-line-travel-tanah-basah-basic-outline-tanah-basah-71"
+                    />
+                    <img
+                      *ngIf="i.category === 'travelling'"
+                      src="https://img.icons8.com/external-yogi-aprelliyanto-detailed-outline-yogi-aprelliyanto/64/external-traveling-activity-and-hobbies-yogi-aprelliyanto-detailed-outline-yogi-aprelliyanto.png"
+                      alt="external-traveling-activity-and-hobbies-yogi-aprelliyanto-detailed-outline-yogi-aprelliyanto"
+                    />
                   </div>
                   <div
                     class="content"

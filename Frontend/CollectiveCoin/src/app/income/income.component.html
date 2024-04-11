@@ -20,7 +20,7 @@
                     <input
                       type="text"
                       name="title"
-                      placeholder="Salary Title"
+                      placeholder="Income Title"
                       value=""
                       formControlName="title"
                     />
@@ -46,7 +46,7 @@
                     <input
                       type="text"
                       name="amount"
-                      placeholder="Salary Amount"
+                      placeholder="Income Amount"
                       value=""
                       formControlName="amount"
                     />
@@ -119,11 +119,10 @@
                       <option value="">Select Option</option>
                       <option value="salary">Salary</option>
                       <option value="freelancing">Freelancing</option>
-                      <option value="investments">Investiments</option>
+                      <option value="investments">Investments</option>
                       <option value="stocks">Stocks</option>
                       <option value="bitcoin">Bitcoin</option>
                       <option value="bank">Bank Transfer</option>
-                      <option value="youtube">Youtube</option>
                       <option value="other">Other</option>
                     </select>
                     <div
@@ -175,7 +174,7 @@
                             ?.maxlength
                         "
                       >
-                        description length must be less then 20
+                        description length must be less then 40
                       </div>
                     </div>
                   </div>
@@ -225,7 +224,36 @@
                       border: 2px solid #ffffff;
                     "
                   >
-                    <img [src]="'./../../assets/' + photo" alt="" />
+                    <img
+                      *ngIf="i.category === 'salary'"
+                      src="https://img.icons8.com/ios/50/money-yours.png"
+                      alt="money-yours"
+                    />
+                    <img
+                      *ngIf="i.category === 'investments'"
+                      src="https://img.icons8.com/ios/50/growing-money--v2.png"
+                      alt="growing-money--v2"
+                    />
+                    <img
+                      *ngIf="i.category === 'stocks'"
+                      src="https://img.icons8.com/windows/32/stocks-growth.png"
+                      alt="stocks-growth"
+                    />
+                    <img
+                      *ngIf="i.category === 'bank'"
+                      src="https://img.icons8.com/external-prettycons-lineal-prettycons/49/external-bank-transfer-business-and-finance-prettycons-lineal-prettycons-1.png"
+                      alt="external-bank-transfer-business-and-finance-prettycons-lineal-prettycons-1"
+                    />
+                    <img
+                      *ngIf="i.category === 'bitcoin'"
+                      src="https://img.icons8.com/external-black-fill-lafs/64/external-Bitcoin-Cash-cryptocurrency-black-fill-lafs.png"
+                      alt="external-Bitcoin-Cash-cryptocurrency-black-fill-lafs"
+                    />
+                    <img
+                      *ngIf="i.category === 'freelancing'"
+                      src="https://img.icons8.com/ios/50/home-office--v1.png"
+                      alt="home-office--v1"
+                    />
                   </div>
                   <div
                     class="content"

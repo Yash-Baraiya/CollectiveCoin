@@ -13,6 +13,7 @@ export class MembersComponent implements OnInit {
   data: any;
   allmembers = [];
   memberrform: FormGroup;
+  emailform: FormGroup;
   constructor(private router: Router, private http: HttpClient) {}
 
   ngOnInit(): void {
@@ -20,6 +21,15 @@ export class MembersComponent implements OnInit {
 
     this.memberrform = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
+    });
+
+    this.emailform = new FormGroup({
+      email: new FormControl('', [Validators.required, Validators.email]),
+      message: new FormControl('', [
+        Validators.required,
+        Validators.minLength(10),
+        Validators.maxLength(70),
+      ]),
     });
   }
 
@@ -138,6 +148,27 @@ export class MembersComponent implements OnInit {
         (resultData) => {
           alert('family data deleted successfully');
           this.router.navigate(['/login']);
+        },
+        (error) => {
+          if (error.error.message) {
+            console.log(error.error.message);
+            alert(error.error.message);
+          }
+        }
+      );
+  }
+
+  emailAdmin() {
+    let bodyData = this.emailform.value;
+    this.http
+      .post(
+        'http://localhost:8000/api/v1/CollectiveCoin/user/sendmail',
+        bodyData
+      )
+      .subscribe(
+        (resultData: any) => {
+          alert(resultData.messege);
+          this.closebox2();
         },
         (error) => {
           if (error.error.message) {
