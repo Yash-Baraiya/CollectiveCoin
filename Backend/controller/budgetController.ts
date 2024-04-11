@@ -18,6 +18,7 @@ export const addBudget = async (req: Request, res: Response) => {
   }
 
   const token = auth.split(" ")[1];
+
   const decodedtoken = jwt.decode(token) as JwtPayload;
   if (!decodedtoken) {
     throw new Error("token not found");
@@ -28,6 +29,7 @@ export const addBudget = async (req: Request, res: Response) => {
   }
 
   const user = await User.findById({ _id: userId });
+  console.log(user?.name);
   if (!user) {
     throw new Error("user not found");
   }
@@ -37,7 +39,7 @@ export const addBudget = async (req: Request, res: Response) => {
     category,
     description,
     date,
-    createdBy: user.name,
+    CreatedBy: user.name,
     familycode: user.familycode,
   });
 

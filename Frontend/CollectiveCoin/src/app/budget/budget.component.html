@@ -6,7 +6,10 @@
       <main>
         <div class="sc-pyfCe ibcpLe">
           <div class="sc-gswNZR jriFEe">
-            <h2 class="total-income">
+            <h2
+              class="total-income"
+              *ngIf="budgetservice.overbudget.length > 0"
+            >
               <span style="display: inline-block">
                 <p
                   [@scroll]="save"
@@ -263,6 +266,11 @@
                       *ngIf="i.category === 'travelling'"
                       src="https://img.icons8.com/external-yogi-aprelliyanto-detailed-outline-yogi-aprelliyanto/64/external-traveling-activity-and-hobbies-yogi-aprelliyanto-detailed-outline-yogi-aprelliyanto.png"
                       alt="external-traveling-activity-and-hobbies-yogi-aprelliyanto-detailed-outline-yogi-aprelliyanto"
+                    />
+                    <img
+                      *ngIf="i.category === 'other'"
+                      src="https://img.icons8.com/ios/50/more.png"
+                      alt="more"
                     />
                   </div>
                   <div

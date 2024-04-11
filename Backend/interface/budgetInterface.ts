@@ -6,6 +6,6 @@ export interface BudgetIn extends Document {
   date: Date;
   category: string;
   description: string;
-  CreatedBy?: string;
-  familycode?: string;
+  CreatedBy: string;
+  familycode: string;
 }
