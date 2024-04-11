@@ -46,7 +46,7 @@
             width: 100%;
             color: #222260;
           "
-          (dblclick)="openbox5()"
+          (dblclick)="openbox5(i.id)"
         >
           <div
             class="icon"
@@ -266,19 +266,19 @@
 </div>
 
 <div id="contactForm">
-  <h1>Keep in touch!</h1>
+  <h1 id="poptitle"></h1>
 
-  <ul style="color: #222260">
-    <li>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Est, dolorem?
-    </li>
-    <li>Lorem ipsum dolor, sit amet consectetur adipisicing elit.</li>
-    <li>Lorem ipsum dolor sit amet consectetur.</li>
-    <li>Lorem ipsum dolor sit amet consectetur.</li>
-  </ul>
+  <h3>Amount : <span style="color: #222260" id="popamount"> </span></h3>
+  <h3>Date : <span style="color: #222260" id="popdate"> </span></h3>
+  <h3>Category : <span style="color: #222260" id="popcategory"> </span></h3>
+  <h3>AddedBy : <span style="color: #222260" id="popaddedBy"> </span></h3>
+  <h3>
+    Description : <span style="color: #222260" id="popdescription"> </span>
+  </h3>
+
   <button class="formBtn" style="margin-left: 10px" (click)="closebox5()">
     close
   </button>
 </div>
 
-<div id="overlay" class="overlay"></div>
+<div id="overlay" class="overlay" (click)="closebox5()"></div>

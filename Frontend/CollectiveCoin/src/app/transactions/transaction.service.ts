@@ -32,6 +32,8 @@ export class TransactionService {
             date: income.date,
             id: income._id,
             type: 'income',
+            description: income.description,
+            addedBy: income.addedBy,
           }));
 
           this.expensedata = this.data.expenses.map((expense: any) => ({
@@ -41,6 +43,8 @@ export class TransactionService {
             date: expense.date,
             id: expense._id,
             type: 'expense',
+            description: expense.description,
+            addedBy: expense.addedBy,
           }));
 
           this.alltransactions = this.incomedata.concat(this.expensedata);

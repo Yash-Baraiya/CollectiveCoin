@@ -81,6 +81,8 @@ export class BudgetService {
               amount: budget.amount,
               date: budget.date,
               id: budget._id,
+              description: budget.description,
+              createdBy: budget.createdBy,
             }));
             this.overbudget = resultData.overbudget;
             this.underbudget = resultData.underbudget;

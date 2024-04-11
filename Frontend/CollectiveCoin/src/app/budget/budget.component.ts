@@ -30,7 +30,43 @@ import {
   ],
 })
 export class BudgetComponent implements OnInit {
+  budgetdatapop: any;
   constructor(public budgetservice: BudgetService) {}
+
+  openbox4(id: any) {
+    document.getElementById('contactForm').style.display = 'block';
+    document.getElementById('contactForm').style.opacity = '1';
+    document.getElementById('overlay').style.display = 'block';
+
+    this.budgetservice.data.forEach((budget) => {
+      if (budget.id === id) {
+        this.budgetdatapop = budget;
+      }
+    });
+    console.log(this.budgetdatapop);
+    document.getElementById('poptitle').innerText = this.budgetdatapop.title;
+    document.getElementById('popamount').innerText = this.budgetdatapop.amount;
+    document.getElementById('popdate').innerText = this.budgetdatapop.date;
+    document.getElementById('popcategory').innerText =
+      this.budgetdatapop.category;
+    document.getElementById('popaddedBy').innerText =
+      this.budgetdatapop.createdBy;
+    document.getElementById('popdescription').innerText =
+      this.budgetdatapop.description;
+  }
+  closebox4() {
+    document.getElementById('contactForm').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
+
+    this.budgetdatapop = {};
+    console.log(this.budgetdatapop);
+    document.getElementById('poptitle').innerText = '';
+    document.getElementById('popamount').innerText = '';
+    document.getElementById('popcategory').innerText = '';
+    document.getElementById('popdate').innerText = '';
+    document.getElementById('popaddedBy').innerText = '';
+    document.getElementById('popdescription').innerText = '';
+  }
 
   ngOnInit(): void {
     this.budgetservice.getBudgets();

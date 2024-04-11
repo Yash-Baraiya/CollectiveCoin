@@ -80,6 +80,8 @@ export class IncomeService {
               amount: income.amount,
               date: income.date,
               id: income._id,
+              description: income.description,
+              addedBy: income.addedBy,
             }));
             this.totalIncome = resultData.totalincome;
 

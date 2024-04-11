@@ -32,7 +32,7 @@ const ExpenseSchema = new Schema<ExpenseIn>(
     description: {
       type: String,
       required: true,
-      maxLength: 20,
+      maxLength: 50,
       trim: true,
     },
     addedBy: {

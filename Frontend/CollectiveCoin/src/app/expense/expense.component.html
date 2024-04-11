@@ -194,7 +194,7 @@
                   </div>
                 </form>
               </div>
-              <div class="incomes" (dblclick)="openbox4()">
+              <div class="incomes">
                 <div
                   *ngFor="let i of expenseservice.data"
                   class="income-item"
@@ -211,6 +211,7 @@
                     width: 100%;
                     color: #222260;
                   "
+                  (dblclick)="openbox4(i.id)"
                 >
                   <div
                     class="icon"
@@ -406,14 +407,16 @@
 </div>
 
 <div id="contactForm">
-  <h1>{{ title }}</h1>
+  <h1 id="poptitle"></h1>
 
-  <ul style="color: #222260">
-    <li>amount :{{ amount }}</li>
-    <li>category : {{ category }}</li>
-    <li>date : {{ date }}</li>
-    <li>description : {{ description }}</li>
-  </ul>
+  <h3>Amount : <span style="color: #222260" id="popamount"> </span></h3>
+  <h3>Date : <span style="color: #222260" id="popdate"> </span></h3>
+  <h3>Category : <span style="color: #222260" id="popcategory"> </span></h3>
+  <h3>AddedBy : <span style="color: #222260" id="popaddedBy"> </span></h3>
+  <h3>
+    Description : <span style="color: #222260" id="popdescription"> </span>
+  </h3>
+
   <button class="formBtn" style="margin-left: 10px" (click)="closebox4()">
     close
   </button>

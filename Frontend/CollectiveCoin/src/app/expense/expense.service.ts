@@ -79,6 +79,8 @@ export class ExpenseService {
               date: expense.date,
               type: 'expense',
               id: expense._id,
+              description: expense.description,
+              addedBy: expense.addedBy,
             }));
             this.expamounts = resultData.monthlyexpense
               .map((expense) => ({

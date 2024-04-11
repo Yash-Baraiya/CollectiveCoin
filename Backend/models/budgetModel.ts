@@ -31,7 +31,7 @@ const budgetSchema = new Schema<BudgetIn>(
     description: {
       type: String,
       required: true,
-      maxLength: 20,
+      maxLength: 50,
       trim: true,
     },
     CreatedBy: {
