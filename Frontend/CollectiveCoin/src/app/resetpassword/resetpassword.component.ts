@@ -49,22 +49,18 @@ export class ResetpasswordComponent {
         )
         .subscribe(
           (resultData: any) => {
-            if (resultData) {
-              try {
-                alert('password reseted successfully');
-                this.router.navigate(['/login']);
-              } catch (error) {
-                console.log(error);
-                alert(resultData.error.message);
-              }
+            if (resultData.status === 'success') {
+              alert('password reseted successfully');
+              this.router.navigate(['/login']);
+            } else {
+              alert(resultData.messege);
             }
           },
           (error) => {
             console.log(error);
-            if (error.error.message) {
-              console.log(error.error.message);
-              alert(error.error.message);
-              this.router.navigate(['/login']);
+            if (error.message) {
+              console.log(error.error.messege);
+              alert(error.messege);
             } else {
               alert('An error occurred. Please try again later.');
             }

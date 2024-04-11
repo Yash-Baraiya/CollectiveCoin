@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
-import { ExpenseService } from '../expense/expense.service';
 import { BudgetService } from '../budget/budget.service';
 import { Observable } from 'rxjs';
 
@@ -22,10 +21,7 @@ export class BarCartComponent {
     'clothing',
     'travelling',
   ];
-  constructor(
-    private budgetservice: BudgetService,
-    private expenseservice: ExpenseService
-  ) {
+  constructor(private budgetservice: BudgetService) {
     Chart.register(...registerables);
   }
 

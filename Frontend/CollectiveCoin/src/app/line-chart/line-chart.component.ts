@@ -90,7 +90,11 @@ export class LineChartComponent implements OnInit {
       },
       options: {
         spanGaps: true,
-        scales: {},
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
         responsive: true,
       },
     });

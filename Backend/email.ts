@@ -1,7 +1,7 @@
 import * as nodemailer from "nodemailer";
 import { MailOptions } from "nodemailer/lib/json-transport";
 
-const sendEmail = async (options :MailOptions) => {
+const sendEmail = async (options: MailOptions) => {
   try {
     // 1) Create a transporter
     const transporter = nodemailer.createTransport({
@@ -18,7 +18,6 @@ const sendEmail = async (options :MailOptions) => {
       to: options.to,
       subject: options.subject,
       text: options.text,
-      // html:
     };
 
     // 3) Actually send the email

@@ -300,7 +300,7 @@ export const forgotPassword = async (
     // 3) Send it to user's email
     const resetURL = `localhost:4200/resetpassword/${resetToken}`;
 
-    const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\nOTP : ${otp}\nIf you didn't forget your password, please ignore this email!`;
+    const message = `<p>Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: <a href= "${resetURL}">${resetURL}</a>.\nOTP : ${otp}\nIf you didn't forget your password, please ignore this email!</p>`;
     try {
       await sendEmail({
         to: email,
@@ -346,8 +346,12 @@ export const resetPassword = async (req: Request, res: Response) => {
 
     // 2) If token has not expired, and there is user, set the new password
     if (!user) {
-      throw new Error("Token is invalid or has expired");
+      throw new Error("Token is invalid or has expired or incorrect OTP");
     }
+    if (req.body.password !== req.body.passwordConfirm) {
+      throw new Error("password and confirm password must be same");
+    }
+
     user.password = req.body.password;
     user.passwordConfirm = req.body.passwordConfirm;
     user.passwordResetToken = undefined;
@@ -361,7 +365,7 @@ export const resetPassword = async (req: Request, res: Response) => {
     console.log(error);
     res.status(200).json({
       status: "failed",
-      messege: "internal server error",
+      messege: error.message,
     });
   }
 };

@@ -14,7 +14,6 @@ export class LoginComponent implements OnInit {
   email: string = '';
   password: string = '';
   forgotpasswordForm: FormGroup;
-  //isLoggedin = new BehaviorSubject<boolean>(false);
   data: any;
 
   constructor(
@@ -84,6 +83,7 @@ export class LoginComponent implements OnInit {
   }
 
   forgotpassword() {
+    console.log('button clicked');
     if (this.forgotpasswordForm.valid) {
       let bodyData = this.forgotpasswordForm.value;
       this.http
@@ -97,7 +97,7 @@ export class LoginComponent implements OnInit {
             this.data = resultData;
             const token = this.data.resetToken;
             this.closebox2();
-            this.router.navigate([`/resetpassword/${token}`]);
+            //this.router.navigate([`/resetpassword/${token}`]);
             alert(this.data.messege);
           },
           (error) => {
