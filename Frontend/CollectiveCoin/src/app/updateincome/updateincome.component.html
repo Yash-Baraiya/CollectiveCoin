@@ -1,0 +1,219 @@
+<div id="root">
+  <div class="sc-ipEyDJ inODki App">
+    <div class="sc-iveFHk gxwcQv"></div>
+    <div class="sc-bcXHqe lekOns">
+      <app-sidebar></app-sidebar>
+      <main>
+        <div class="sc-pyfCe ibcpLe">
+          <div class="sc-gswNZR jriFEe">
+            <div class="income-content">
+              <div class="form-container">
+                <form class="sc-iBYQkv amZsh" [formGroup]="updateIncomeForm">
+                  <div class="input-control">
+                    <input
+                      type="text"
+                      name="title"
+                      placeholder="Income Title"
+                      value="{{ incomeData.title }}"
+                      formControlName="title"
+                    />
+                    <div
+                      *ngIf="
+                        updateIncomeForm.get('title').invalid &&
+                        (updateIncomeForm.get('title').dirty ||
+                          updateIncomeForm.get('title').touched)
+                      "
+                      class="text-danger"
+                    >
+                      <div
+                        *ngIf="updateIncomeForm.controls.title.errors?.required"
+                      >
+                        Title is required
+                      </div>
+                    </div>
+                  </div>
+                  <div class="input-control">
+                    <input
+                      type="text"
+                      name="amount"
+                      placeholder="Income Amount"
+                      value="{{ incomeData.amount }}"
+                      formControlName="amount"
+                    />
+                    <div
+                      *ngIf="
+                        updateIncomeForm.get('amount').invalid &&
+                        (updateIncomeForm.get('amount').dirty ||
+                          updateIncomeForm.get('amount').touched)
+                      "
+                      class="text-danger"
+                    >
+                      <div
+                        *ngIf="
+                          updateIncomeForm.controls.amount.errors?.required
+                        "
+                      >
+                        amount is required
+                      </div>
+                      <div
+                        *ngIf="updateIncomeForm.controls.amount.errors?.pattern"
+                      >
+                        amount must be a number
+                      </div>
+                    </div>
+                  </div>
+                  <div class="input-control">
+                    <div class="input-group">
+                      <input
+                        type="text"
+                        placeholder="Enter A Date"
+                        class="form-control bs-datepicker-body"
+                        value="{{ incomeData.date }}"
+                        bsDatepicker
+                        formControlName="date"
+                      />
+                      <div class="input-group-append">
+                        <span class="input-group-text">
+                          <i class="bi bi-calendar-date-fill"></i>
+                        </span>
+                      </div>
+                    </div>
+                    <div
+                      *ngIf="
+                        updateIncomeForm.get('date').invalid &&
+                        (updateIncomeForm.get('date').dirty ||
+                          updateIncomeForm.get('date').touched)
+                      "
+                      class="text-danger"
+                    >
+                      <div
+                        *ngIf="updateIncomeForm.controls.date.errors?.required"
+                      >
+                        date is required
+                      </div>
+                    </div>
+                  </div>
+                  <div class="selects input-control">
+                    <select
+                      required=""
+                      name="category"
+                      id="category"
+                      formControlName="category"
+                    >
+                      <option value="">Select Option</option>
+                      <option value="salary">Salary</option>
+                      <option value="freelancing">Freelancing</option>
+                      <option value="investments">Investments</option>
+                      <option value="stocks">Stocks</option>
+                      <option value="bitcoin">Bitcoin</option>
+                      <option value="bank">Bank Transfer</option>
+                      <option value="other">Other</option>
+                    </select>
+                    <div
+                      *ngIf="
+                        updateIncomeForm.get('category').invalid &&
+                        (updateIncomeForm.get('category').dirty ||
+                          updateIncomeForm.get('category').touched)
+                      "
+                      class="text-danger"
+                    >
+                      <div
+                        *ngIf="
+                          updateIncomeForm.controls.category.errors?.required
+                        "
+                      >
+                        category is required
+                      </div>
+                    </div>
+                  </div>
+                  <div class="input-control">
+                    <textarea
+                      name="description"
+                      placeholder="Add A Reference"
+                      id="description"
+                      cols="30"
+                      rows="4"
+                      formControlName="description"
+                      >{{ incomeData.description }}</textarea
+                    >
+                    <div
+                      *ngIf="
+                        updateIncomeForm.get('description').invalid &&
+                        (updateIncomeForm.get('description').dirty ||
+                          updateIncomeForm.get('description').touched)
+                      "
+                      class="text-danger"
+                    >
+                      <div
+                        *ngIf="
+                          updateIncomeForm.controls.description.errors?.required
+                        "
+                      >
+                        description is required
+                      </div>
+                      <div
+                        *ngIf="
+                          updateIncomeForm.controls.description.errors
+                            ?.maxlength
+                        "
+                      >
+                        description length must be less then 40
+                      </div>
+                    </div>
+                  </div>
+                  <div class="submit-btn">
+                    <button
+                      class="sc-gKPRtg hqswlf"
+                      style="
+                        background-color: rgb(228, 18, 204);
+                        padding: 0.8rem 1.6rem;
+                        border-radius: 30px;
+                      "
+                      (click)="save()"
+                    >
+                      <i class="fa-solid fa-plus"></i>Upate Income
+                    </button>
+                  </div>
+                </form>
+              </div>
+              <div class="incomes">
+                <h1 id="poptitle">{{ incomeData.title }}</h1>
+
+                <h3>
+                  Amount :
+                  <span style="color: #222260" id="popamount"
+                    >{{ incomeData.amount }}
+                  </span>
+                </h3>
+                <h3>
+                  Date :
+                  <span style="color: #222260" id="popdate"
+                    >{{ incomeData.date }}
+                  </span>
+                </h3>
+                <h3>
+                  Category :
+                  <span style="color: #222260" id="popcategory"
+                    >{{ incomeData.category }}
+                  </span>
+                </h3>
+                <h3>
+                  AddedBy :
+                  <span style="color: #222260" id="popaddedBy">
+                    {{ incomeData.addedBy }}</span
+                  >
+                </h3>
+                <h3>
+                  Description :
+                  <span style="color: #222260" id="popdescription">
+                    {{ incomeData.description }}</span
+                  >
+                </h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>

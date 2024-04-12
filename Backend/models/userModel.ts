@@ -54,6 +54,9 @@ const userSchema = new Schema<UserIn>({
   deleteduser: {
     type: [String],
   },
+  permittedadmin: {
+    type: [String],
+  },
   passwordChangedAt: Date,
   passwordResetToken: String,
   passwordResetExpires: Date,

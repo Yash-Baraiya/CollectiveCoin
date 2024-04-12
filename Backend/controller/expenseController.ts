@@ -156,3 +156,60 @@ export const deleteExpense = async (
   // Call next middleware
   next();
 };
+
+export const updateExpense = async (req: Request, res: Response) => {
+  try {
+    const { title, amount, category, description, date } = req.body;
+
+    const auth = req.headers.authorization;
+    if (!auth) {
+      throw new Error("not authorized");
+    }
+    const token = auth.split(" ")[1];
+    const decodedtoken = jwt.decode(token) as JwtPayload;
+    if (!decodedtoken) {
+      throw new Error("token not found");
+    }
+    const userId = decodedtoken.id;
+    console.log(userId);
+
+    const user = await User.findById({ _id: userId });
+    if (!user) {
+      throw new Error("user not found");
+    }
+    console.log(req.params.expenseId);
+    let expense = await Expense.findById({ _id: req.params.expenseId });
+    if (!expense) {
+      throw new Error("income not found");
+    }
+    console.log(expense);
+    if (expense?.addedBy !== user.name) {
+      throw new Error(
+        `This income is added by ${expense.addedBy}. You are not allowed to delete it`
+      );
+    }
+    expense = await Expense.findByIdAndUpdate(
+      { _id: req.params.expenseId },
+      {
+        title: title,
+        amount: amount,
+        category: category,
+        description: description,
+        date: date,
+      },
+      { new: true }
+    );
+
+    res.status(200).json({
+      status: "success",
+      messasge: "income updated successfully",
+      expense,
+    });
+  } catch (error: any) {
+    console.log(error);
+    res.status(400).json({
+      status: "failed",
+      message: error.message,
+    });
+  }
+};

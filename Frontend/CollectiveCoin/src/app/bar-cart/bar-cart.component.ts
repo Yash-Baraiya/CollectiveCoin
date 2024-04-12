@@ -1,16 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, Output } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 import { BudgetService } from '../budget/budget.service';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-bar-cart',
+  selector: 'app-bar-chart',
   templateUrl: './bar-cart.component.html',
   styleUrl: './bar-cart.component.css',
 })
 export class BarCartComponent {
   budgetdata = [];
   expensedata = [];
+
   labels = [
     'groceries',
     'subscriptions',
@@ -26,10 +27,13 @@ export class BarCartComponent {
   }
 
   ngOnInit() {
-    this.fetchData().subscribe((resultData) => {
-      this.createChart();
+    this.budgetservice.getBudgets().subscribe(() => {
+      this.fetchData().subscribe(() => {
+        this.createChart();
+      });
     });
   }
+
   fetchData(): Observable<any> {
     return new Observable((obseraver) => {
       this.labels.forEach((label) => {
@@ -63,6 +67,7 @@ export class BarCartComponent {
         }
       });
       console.log(this.expensedata, ': expesedata');
+
       obseraver.next();
     });
   }

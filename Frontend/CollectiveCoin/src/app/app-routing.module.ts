@@ -8,9 +8,11 @@ import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { MembersComponent } from './members/members.component';
 import { RouteGuard } from './route.guard';
-import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.component';
 import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
 import { BudgetComponent } from './budget/budget.component';
+import { UpdateincomeComponent } from './updateincome/updateincome.component';
+import { UpdateexpenseComponent } from './updateexpense/updateexpense.component';
+import { UpdatebudgetComponent } from './updatebudget/updatebudget.component';
 
 const routes: Routes = [
   {
@@ -24,13 +26,33 @@ const routes: Routes = [
   },
   {
     path: 'Income',
-    component: IncomeComponent,
-    canActivate: [RouteGuard],
+    children: [
+      {
+        path: '',
+        component: IncomeComponent,
+        canActivate: [RouteGuard],
+      },
+      {
+        path: 'update-income/:id',
+        component: UpdateincomeComponent,
+        canActivate: [RouteGuard],
+      },
+    ],
   },
   {
     path: 'Expense',
-    component: ExpenseComponent,
-    canActivate: [RouteGuard],
+    children: [
+      {
+        path: '',
+        component: ExpenseComponent,
+        canActivate: [RouteGuard],
+      },
+      {
+        path: 'update-expense/:id',
+        component: UpdateexpenseComponent,
+        canActivate: [RouteGuard],
+      },
+    ],
   },
   {
     path: 'Transactions',
@@ -51,17 +73,23 @@ const routes: Routes = [
     canActivate: [RouteGuard],
   },
   {
-    path: 'forgotpassword',
-    component: ForgotpasswordComponent,
-  },
-  {
     path: 'resetpassword/:token',
     component: ResetpasswordComponent,
   },
   {
     path: 'Budget',
-    component: BudgetComponent,
-    canActivate: [RouteGuard],
+    children: [
+      {
+        path: '',
+        component: BudgetComponent,
+        canActivate: [RouteGuard],
+      },
+      {
+        path: 'update-budget/:id',
+        component: UpdatebudgetComponent,
+        canActivate: [RouteGuard],
+      },
+    ],
   },
 ];
 

@@ -66,7 +66,6 @@ export const signUp = async (req: Request, res: Response) => {
         "You are the first one to use that famly code so please login as Admin"
       );
     }
-    // Create new user
 
     if (req.body.role === "admin" && req.body.isEarning === "false") {
       throw new Error(
@@ -76,14 +75,8 @@ export const signUp = async (req: Request, res: Response) => {
     let file = req.file;
 
     if (!file) {
-      res.status(400).json({
-        status: "failed",
-        message: "please upload photo",
-      });
       throw new Error("please upload photo");
     }
-    console.log(file);
-    //let filetype = file.mimetype.split("/")[1];
 
     const photo = `${file.filename}`;
     console.log(photo);
@@ -439,3 +432,18 @@ export const restrictToAdd = async (
     });
   }
 };
+
+// const findpermittedadmin = async function (familyCode: string, email: string) {
+//   const members = await User.find({ familycode: familyCode });
+//   let value = false;
+//   console.log(members);
+
+//   members.forEach((member) => {
+//     for (let i = 0; i < member.permittedadmin.length; i++) {
+//       if (member.permittedadmin[i] === email) {
+//         value = true;
+//         break;
+//       }
+//     }
+//   });
+// };

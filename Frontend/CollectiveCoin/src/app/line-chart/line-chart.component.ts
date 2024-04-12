@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
 export class LineChartComponent implements OnInit {
   incomeamounts: Array<number> = [];
   expenseamounts: Array<number> = [];
+
   labels = this.getDaysInMonth(
     new Date().getMonth() + 1,
     new Date().getFullYear()
@@ -25,8 +26,12 @@ export class LineChartComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.fetchData().subscribe(() => {
-      this.createChart();
+    this.incomeservice.getIncome().subscribe(() => {
+      this.expenseservice.getExpense().subscribe(() => {
+        this.fetchData().subscribe(() => {
+          this.createChart();
+        });
+      });
     });
   }
   fetchData(): Observable<any> {
@@ -58,8 +63,7 @@ export class LineChartComponent implements OnInit {
         }
       });
 
-      obseraver.next(this.incomeamounts);
-      obseraver.next(this.expenseamounts);
+      obseraver.next();
       obseraver.complete();
     });
   }

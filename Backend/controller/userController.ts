@@ -28,9 +28,6 @@ export const addUser = async (req: Request, res: Response) => {
   }
   const familycode = Admin.familycode;
 
-  console.log(familycode);
-  console.log(Admin);
-
   if (!req.body.email) {
     throw new Error("please enter valid email address");
   }
@@ -39,7 +36,7 @@ export const addUser = async (req: Request, res: Response) => {
   if (user) {
     const loginURL = `localhost:4200/login`;
 
-    const message = `your admin is requesting to join with them on out Collective Coin family please join using following url ${loginURL}
+    const message = `your admin is requesting to join with them on our Collective app family please join using following url ${loginURL}
     please login with this family code : ${familycode}`;
 
     try {
@@ -61,6 +58,7 @@ export const addUser = async (req: Request, res: Response) => {
       });
     }
   } else {
+    console.log(Admin);
     const signupURL = `${req.protocol}:/
     /${req.get("host")}/api/v1/CollectiveCoin/user/signup`;
 

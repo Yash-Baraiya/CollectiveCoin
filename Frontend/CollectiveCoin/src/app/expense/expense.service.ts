@@ -3,6 +3,7 @@ import { Injectable, Input } from '@angular/core';
 import ExpenseResponse from './expense.interface';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -45,7 +46,9 @@ export class ExpenseService {
             console.log(resultData);
 
             alert('expense added successfully');
-            this.getExpense();
+            this.getExpense().subscribe(() => {
+              console.log('getting expense again');
+            });
             this.expenseForm.reset();
           } catch (error) {
             console.log(error);
@@ -63,66 +66,69 @@ export class ExpenseService {
       );
   }
 
-  getExpense() {
-    this.http
-      .get(
-        'http://localhost:8000/api/v1/CollectiveCoin/user/expenses/get-expenses'
-      )
-      .subscribe(
-        (resultData: ExpenseResponse) => {
-          try {
-            console.log(resultData);
-            this.data = resultData.monthlyexpense.map((expense) => ({
-              title: expense.title,
-              amount: expense.amount,
-              category: expense.category,
-              date: expense.date,
-              type: 'expense',
-              id: expense._id,
-              description: expense.description,
-              addedBy: expense.addedBy,
-            }));
-            this.expamounts = resultData.monthlyexpense
-              .map((expense) => ({
+  getExpense(): Observable<any> {
+    return new Observable((obseraver) => {
+      this.http
+        .get(
+          'http://localhost:8000/api/v1/CollectiveCoin/user/expenses/get-expenses'
+        )
+        .subscribe(
+          (resultData: ExpenseResponse) => {
+            try {
+              console.log(resultData);
+              this.data = resultData.monthlyexpense.map((expense) => ({
+                title: expense.title,
                 amount: expense.amount,
-                date: expense.date
-                  .toString()
-                  .slice(0, 10)
-                  .split('-')
-                  .reverse()
-                  .join('/'),
-              }))
-              .sort((a, b) => {
+                category: expense.category,
+                date: expense.date.split('T')[0],
+                type: 'expense',
+                id: expense._id,
+                description: expense.description,
+                addedBy: expense.addedBy,
+              }));
+              this.expamounts = resultData.monthlyexpense
+                .map((expense) => ({
+                  amount: expense.amount,
+                  date: expense.date
+                    .toString()
+                    .slice(0, 10)
+                    .split('-')
+                    .reverse()
+                    .join('/'),
+                }))
+                .sort((a, b) => {
+                  const dateA = new Date(a.date);
+                  const dateB = new Date(b.date);
+
+                  return dateA.getTime() - dateB.getTime();
+                });
+              this.totalexpense = resultData.totalexpense;
+              this.data = this.data.sort((a, b) => {
                 const dateA = new Date(a.date);
                 const dateB = new Date(b.date);
 
-                return dateA.getTime() - dateB.getTime();
+                return dateB.getTime() - dateA.getTime();
               });
-            this.totalexpense = resultData.totalexpense;
-            this.data = this.data.sort((a, b) => {
-              const dateA = new Date(a.date);
-              const dateB = new Date(b.date);
-
-              return dateB.getTime() - dateA.getTime();
-            });
-            console.log(this.totalexpense);
-            this.amountsvalue = this.expamounts.map((obj) => obj.amount);
-          } catch (error) {
-            console.log(error);
+              console.log(this.totalexpense);
+              this.amountsvalue = this.expamounts.map((obj) => obj.amount);
+              obseraver.next();
+            } catch (error) {
+              console.log(error);
+            }
+          },
+          (error) => {
+            if (error.error.messege) {
+              alert(error.error.messege);
+            } else {
+              alert('there was problem loading this page please login again ');
+              this.router.navigate(['/login']);
+            }
+            if (error.error.messege === 'please login first') {
+              this.router.navigate(['/login']);
+            }
           }
-        },
-        (error) => {
-          if (error.error.messege) {
-            alert(error.error.messege);
-          } else {
-            alert('there was problem loading this page please login again ');
-            this.router.navigate(['/login']);
-          }
-          if (error.error.messege === 'please login first') {
-            this.router.navigate(['/login']);
-          }
-        }
-      );
+        );
+    });
   }
   deleteExpense(id) {
     if (confirm('are you sure you want to delete this expense')) {

@@ -1,0 +1,225 @@
+<div id="root">
+  <div class="sc-ipEyDJ inODki App">
+    <div class="sc-iveFHk gxwcQv"></div>
+    <div class="sc-bcXHqe lekOns">
+      <app-sidebar></app-sidebar>
+      <main>
+        <div class="sc-pyfCe ibcpLe">
+          <div class="sc-gswNZR jriFEe">
+            <div class="income-content">
+              <div class="form-container">
+                <form class="sc-iBYQkv amZsh" [formGroup]="updateExpenseForm">
+                  <div class="input-control">
+                    <input
+                      type="text"
+                      name="title"
+                      placeholder="Income Title"
+                      value="{{ expenseData.title }}"
+                      formControlName="title"
+                    />
+                    <div
+                      *ngIf="
+                        updateExpenseForm.get('title').invalid &&
+                        (updateExpenseForm.get('title').dirty ||
+                          updateExpenseForm.get('title').touched)
+                      "
+                      class="text-danger"
+                    >
+                      <div
+                        *ngIf="
+                          updateExpenseForm.controls.title.errors?.required
+                        "
+                      >
+                        Title is required
+                      </div>
+                    </div>
+                  </div>
+                  <div class="input-control">
+                    <input
+                      type="text"
+                      name="amount"
+                      placeholder="Income Amount"
+                      value="{{ expenseData.amount }}"
+                      formControlName="amount"
+                    />
+                    <div
+                      *ngIf="
+                        updateExpenseForm.get('amount').invalid &&
+                        (updateExpenseForm.get('amount').dirty ||
+                          updateExpenseForm.get('amount').touched)
+                      "
+                      class="text-danger"
+                    >
+                      <div
+                        *ngIf="
+                          updateExpenseForm.controls.amount.errors?.required
+                        "
+                      >
+                        amount is required
+                      </div>
+                      <div
+                        *ngIf="
+                          updateExpenseForm.controls.amount.errors?.pattern
+                        "
+                      >
+                        amount must be a number
+                      </div>
+                    </div>
+                  </div>
+                  <div class="input-control">
+                    <div class="input-group">
+                      <input
+                        type="text"
+                        placeholder="Enter A Date"
+                        class="form-control bs-datepicker-body"
+                        value="{{ expenseData.date }}"
+                        bsDatepicker
+                        formControlName="date"
+                      />
+                      <div class="input-group-append">
+                        <span class="input-group-text">
+                          <i class="bi bi-calendar-date-fill"></i>
+                        </span>
+                      </div>
+                    </div>
+                    <div
+                      *ngIf="
+                        updateExpenseForm.get('date').invalid &&
+                        (updateExpenseForm.get('date').dirty ||
+                          updateExpenseForm.get('date').touched)
+                      "
+                      class="text-danger"
+                    >
+                      <div
+                        *ngIf="updateExpenseForm.controls.date.errors?.required"
+                      >
+                        date is required
+                      </div>
+                    </div>
+                  </div>
+                  <div class="selects input-control">
+                    <select
+                      required=""
+                      name="category"
+                      id="category"
+                      formControlName="category"
+                    >
+                      <option value="" disabled="">Select Option</option>
+                      <option value="education">Education</option>
+                      <option value="groceries">Groceries</option>
+                      <option value="health">Health</option>
+                      <option value="subscriptions">Subscriptions</option>
+
+                      <option value="shopping">Shopping</option>
+                      <option value="travelling">Travelling</option>
+                      <option value="other">Other</option>
+                    </select>
+                    <div
+                      *ngIf="
+                        updateExpenseForm.get('category').invalid &&
+                        (updateExpenseForm.get('category').dirty ||
+                          updateExpenseForm.get('category').touched)
+                      "
+                      class="text-danger"
+                    >
+                      <div
+                        *ngIf="
+                          updateExpenseForm.controls.category.errors?.required
+                        "
+                      >
+                        category is required
+                      </div>
+                    </div>
+                  </div>
+                  <div class="input-control">
+                    <textarea
+                      name="description"
+                      placeholder="Add A Reference"
+                      id="description"
+                      cols="30"
+                      rows="4"
+                      formControlName="description"
+                      >{{ expenseData.description }}</textarea
+                    >
+                    <div
+                      *ngIf="
+                        updateExpenseForm.get('description').invalid &&
+                        (updateExpenseForm.get('description').dirty ||
+                          updateExpenseForm.get('description').touched)
+                      "
+                      class="text-danger"
+                    >
+                      <div
+                        *ngIf="
+                          updateExpenseForm.controls.description.errors
+                            ?.required
+                        "
+                      >
+                        description is required
+                      </div>
+                      <div
+                        *ngIf="
+                          updateExpenseForm.controls.description.errors
+                            ?.maxlength
+                        "
+                      >
+                        description length must be less then 40
+                      </div>
+                    </div>
+                  </div>
+                  <div class="submit-btn">
+                    <button
+                      class="sc-gKPRtg hqswlf"
+                      style="
+                        background-color: rgb(228, 18, 204);
+                        padding: 0.8rem 1.6rem;
+                        border-radius: 30px;
+                      "
+                      (click)="save()"
+                    >
+                      <i class="fa-solid fa-plus"></i>Upate Expense
+                    </button>
+                  </div>
+                </form>
+              </div>
+              <div class="incomes">
+                <h1 id="poptitle">{{ expenseData.title }}</h1>
+
+                <h3>
+                  Amount :
+                  <span style="color: #222260" id="popamount"
+                    >{{ expenseData.amount }}
+                  </span>
+                </h3>
+                <h3>
+                  Date :
+                  <span style="color: #222260" id="popdate"
+                    >{{ expenseData.date }}
+                  </span>
+                </h3>
+                <h3>
+                  Category :
+                  <span style="color: #222260" id="popcategory"
+                    >{{ expenseData.category }}
+                  </span>
+                </h3>
+                <h3>
+                  AddedBy :
+                  <span style="color: #222260" id="popaddedBy">
+                    {{ expenseData.addedBy }}</span
+                  >
+                </h3>
+                <h3>
+                  Description :
+                  <span style="color: #222260" id="popdescription">
+                    {{ expenseData.description }}</span
+                  >
+                </h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>

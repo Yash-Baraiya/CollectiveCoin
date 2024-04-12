@@ -233,3 +233,60 @@ export const deleteBudget = async (
 
   next();
 };
+
+export const updateBudget = async (req: Request, res: Response) => {
+  try {
+    const { title, amount, category, description, date } = req.body;
+
+    const auth = req.headers.authorization;
+    if (!auth) {
+      throw new Error("not authorized");
+    }
+    const token = auth.split(" ")[1];
+    const decodedtoken = jwt.decode(token) as JwtPayload;
+    if (!decodedtoken) {
+      throw new Error("token not found");
+    }
+    const userId = decodedtoken.id;
+    console.log(userId);
+
+    const user = await User.findById({ _id: userId });
+    if (!user) {
+      throw new Error("user not found");
+    }
+    console.log(req.params.budgetId);
+    let budget = await Budget.findById({ _id: req.params.budgetId });
+    if (!budget) {
+      throw new Error("income not found");
+    }
+    console.log(budget);
+    if (budget?.CreatedBy !== user.name) {
+      throw new Error(
+        `This income is added by ${budget.CreatedBy}. You are not allowed to delete it`
+      );
+    }
+    budget = await Budget.findByIdAndUpdate(
+      { _id: req.params.incomeId },
+      {
+        title: title,
+        amount: amount,
+        category: category,
+        description: description,
+        date: date,
+      },
+      { new: true }
+    );
+
+    res.status(200).json({
+      status: "success",
+      messasge: "income updated successfully",
+      budget,
+    });
+  } catch (error: any) {
+    console.log(error);
+    res.status(400).json({
+      status: "failed",
+      message: error.message,
+    });
+  }
+};

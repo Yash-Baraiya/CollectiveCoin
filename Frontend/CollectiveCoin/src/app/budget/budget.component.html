@@ -12,7 +12,7 @@
             >
               <span style="display: inline-block">
                 <p
-                  [@scroll]="save"
+                  [@scroll]="animationState"
                   style="color: #222260"
                   *ngFor="let obj of budgetservice.overbudget"
                 >
@@ -414,7 +414,7 @@
             </div>
           </div>
         </div>
-        <app-bar-cart></app-bar-cart>
+       <app-bar-chart></app-bar-chart>
       </main>
     </div>
   </div>

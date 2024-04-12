@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ExpenseService } from './expense.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-expense',
@@ -9,45 +10,21 @@ import { ExpenseService } from './expense.service';
 export class ExpenseComponent implements OnInit {
   expensedatapop: any;
 
-  constructor(public expenseservice: ExpenseService) {}
+  constructor(
+    public expenseservice: ExpenseService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
-    this.expenseservice.getExpense();
+    this.expenseservice.getExpense().subscribe(() => {
+      console.log('getting expense');
+    });
   }
   openbox4(id: any) {
-    document.getElementById('contactForm').style.display = 'block';
-    document.getElementById('contactForm').style.opacity = '1';
-    document.getElementById('overlay').style.display = 'block';
-
-    this.expenseservice.data.forEach((expense) => {
-      if (expense.id === id) {
-        this.expensedatapop = expense;
-      }
-    });
-    console.log(this.expensedatapop);
-    document.getElementById('poptitle').innerText = this.expensedatapop.title;
-    document.getElementById('popamount').innerText = this.expensedatapop.amount;
-    document.getElementById('popdate').innerText = this.expensedatapop.date;
-    document.getElementById('popcategory').innerText =
-      this.expensedatapop.category;
-    document.getElementById('popaddedBy').innerText =
-      this.expensedatapop.addedBy;
-    document.getElementById('popdescription').innerText =
-      this.expensedatapop.description;
+    this.router.navigate([`update-expense/${id}`], { relativeTo: this.route });
   }
-  closebox4() {
-    document.getElementById('contactForm').style.display = 'none';
-    document.getElementById('overlay').style.display = 'none';
-
-    this.expensedatapop = {};
-    console.log(this.expensedatapop);
-    document.getElementById('poptitle').innerText = '';
-    document.getElementById('popamount').innerText = '';
-    document.getElementById('popcategory').innerText = '';
-    document.getElementById('popdate').innerText = '';
-    document.getElementById('popaddedBy').innerText = '';
-    document.getElementById('popdescription').innerText = '';
-  }
+  closebox4() {}
 
   saveadd() {
     if (this.expenseservice.expenseForm.valid) {

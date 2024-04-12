@@ -11,7 +11,6 @@ import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TokenInterceptor } from './shared/interceptors/custom.interceptor';
@@ -22,6 +21,10 @@ import { ResetpasswordComponent } from './resetpassword/resetpassword.component'
 import { LineChartComponent } from './line-chart/line-chart.component';
 import { Chart } from 'chart.js';
 import { BarCartComponent } from './bar-cart/bar-cart.component';
+import { UpdateincomeComponent } from './updateincome/updateincome.component';
+import { UpdateexpenseComponent } from './updateexpense/updateexpense.component';
+import { UpdatebudgetComponent } from './updatebudget/updatebudget.component';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -33,12 +36,14 @@ import { BarCartComponent } from './bar-cart/bar-cart.component';
     SidebarComponent,
     LoginComponent,
     SignupComponent,
-    ForgotpasswordComponent,
     MembersComponent,
     BudgetComponent,
     ResetpasswordComponent,
     LineChartComponent,
     BarCartComponent,
+    UpdateincomeComponent,
+    UpdateexpenseComponent,
+    UpdatebudgetComponent,
   ],
   imports: [
     BrowserModule,
@@ -52,6 +57,7 @@ import { BarCartComponent } from './bar-cart/bar-cart.component';
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     provideAnimationsAsync(),
+    DatePipe,
   ],
   bootstrap: [AppComponent],
 })
