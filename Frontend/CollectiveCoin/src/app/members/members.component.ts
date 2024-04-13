@@ -14,6 +14,7 @@ export class MembersComponent implements OnInit {
   allmembers = [];
   memberrform: FormGroup;
   emailform: FormGroup;
+  photo: '';
   constructor(private router: Router, private http: HttpClient) {}
 
   ngOnInit(): void {
@@ -76,6 +77,7 @@ export class MembersComponent implements OnInit {
             role: member.role,
             isEarning: member.isEarning,
             id: member._id,
+            photo: member.photo,
           }));
 
           console.log(this.allmembers);

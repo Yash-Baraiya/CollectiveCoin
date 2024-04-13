@@ -13,5 +13,5 @@ router
   .get("/get-budgets", protect, getBudget)
   .delete("/delete-budget/:budgetId", protect, deleteBudget);
 
-router.patch("/update-income/:budgetId", protect, restrictTo, updateBudget);
+router.patch("/update-budget/:budgetId", protect, restrictTo, updateBudget);
 export default router;

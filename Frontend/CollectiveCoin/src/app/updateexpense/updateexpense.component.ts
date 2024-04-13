@@ -4,6 +4,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ExpenseService } from '../expense/expense.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-updateexpense',
@@ -18,8 +19,8 @@ export class UpdateexpenseComponent implements OnInit, OnDestroy {
   constructor(
     public expenseservice: ExpenseService,
     private route: ActivatedRoute,
-    private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private datepipe: DatePipe
   ) {}
   ngOnInit(): void {
     this.updateExpenseForm = new FormGroup({
@@ -42,7 +43,20 @@ export class UpdateexpenseComponent implements OnInit, OnDestroy {
         this.expenseservice.data.forEach((expense) => {
           if (expense.id === this.expenseId) {
             this.expenseData = expense;
-            console.log(this.expenseData);
+            if (this.expenseData) {
+              this.updateExpenseForm.patchValue({
+                title: this.expenseData.title,
+                amount: this.expenseData.amount,
+                category: this.expenseData.category,
+                description: this.expenseData.description,
+                date: this.datepipe.transform(
+                  this.expenseData.date,
+                  'MM/dd/yyyy'
+                ),
+              });
+            } else {
+              console.log('Budget data is undefined.');
+            }
           }
         });
       });

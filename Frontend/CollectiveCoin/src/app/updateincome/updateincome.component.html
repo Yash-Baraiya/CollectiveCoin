@@ -14,7 +14,6 @@
                       type="text"
                       name="title"
                       placeholder="Income Title"
-                      value="{{ incomeData.title }}"
                       formControlName="title"
                     />
                     <div
@@ -37,7 +36,6 @@
                       type="text"
                       name="amount"
                       placeholder="Income Amount"
-                      value="{{ incomeData.amount }}"
                       formControlName="amount"
                     />
                     <div
@@ -68,7 +66,6 @@
                         type="text"
                         placeholder="Enter A Date"
                         class="form-control bs-datepicker-body"
-                        value="{{ incomeData.date }}"
                         bsDatepicker
                         formControlName="date"
                       />
@@ -134,8 +131,7 @@
                       cols="30"
                       rows="4"
                       formControlName="description"
-                      >{{ incomeData.description }}</textarea
-                    >
+                    ></textarea>
                     <div
                       *ngIf="
                         updateIncomeForm.get('description').invalid &&

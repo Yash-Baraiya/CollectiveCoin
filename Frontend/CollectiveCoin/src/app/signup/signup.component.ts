@@ -73,9 +73,6 @@ export class SignupComponent implements OnInit {
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
       this.signupForm.get('photo').setValue(file);
-
-      // Reset the file input element by clearing its files property
-      event.target.value = ''; // This will clear the selected file from the input
     }
   }
 

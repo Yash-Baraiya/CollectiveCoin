@@ -1,1 +1,216 @@
-<p>updatebudget works!</p>
+<div id="root">
+  <div class="sc-ipEyDJ inODki App">
+    <div class="sc-iveFHk gxwcQv"></div>
+    <div class="sc-bcXHqe lekOns">
+      <app-sidebar></app-sidebar>
+      <main>
+        <div class="sc-pyfCe ibcpLe">
+          <div class="sc-gswNZR jriFEe">
+            <div class="income-content">
+              <div class="form-container">
+                <form class="sc-iBYQkv amZsh" [formGroup]="updateBudgetForm">
+                  <div class="input-control">
+                    <input
+                      type="text"
+                      name="title"
+                      placeholder="Income Title"
+                      formControlName="title"
+                    />
+                    <div
+                      *ngIf="
+                        updateBudgetForm.get('title').invalid &&
+                        (updateBudgetForm.get('title').dirty ||
+                          updateBudgetForm.get('title').touched)
+                      "
+                      class="text-danger"
+                    >
+                      <div
+                        *ngIf="updateBudgetForm.controls.title.errors?.required"
+                      >
+                        Title is required
+                      </div>
+                    </div>
+                  </div>
+                  <div class="input-control">
+                    <input
+                      type="text"
+                      name="amount"
+                      placeholder="Income Amount"
+                      formControlName="amount"
+                    />
+                    <div
+                      *ngIf="
+                        updateBudgetForm.get('amount').invalid &&
+                        (updateBudgetForm.get('amount').dirty ||
+                          updateBudgetForm.get('amount').touched)
+                      "
+                      class="text-danger"
+                    >
+                      <div
+                        *ngIf="
+                          updateBudgetForm.controls.amount.errors?.required
+                        "
+                      >
+                        amount is required
+                      </div>
+                      <div
+                        *ngIf="updateBudgetForm.controls.amount.errors?.pattern"
+                      >
+                        amount must be a number
+                      </div>
+                    </div>
+                  </div>
+                  <div class="input-control">
+                    <div class="input-group">
+                      <input
+                        type="text"
+                        placeholder="Enter A Date"
+                        class="form-control bs-datepicker-body"
+                        bsDatepicker
+                        formControlName="date"
+                      />
+                      <div class="input-group-append">
+                        <span class="input-group-text">
+                          <i class="bi bi-calendar-date-fill"></i>
+                        </span>
+                      </div>
+                    </div>
+                    <div
+                      *ngIf="
+                        updateBudgetForm.get('date').invalid &&
+                        (updateBudgetForm.get('date').dirty ||
+                          updateBudgetForm.get('date').touched)
+                      "
+                      class="text-danger"
+                    >
+                      <div
+                        *ngIf="updateBudgetForm.controls.date.errors?.required"
+                      >
+                        date is required
+                      </div>
+                    </div>
+                  </div>
+                  <div class="selects input-control">
+                    <select
+                      required=""
+                      name="category"
+                      id="category"
+                      formControlName="category"
+                    >
+                      <option value="" disabled="">Select Option</option>
+                      <option value="education">Education</option>
+                      <option value="groceries">Groceries</option>
+                      <option value="health">Health</option>
+                      <option value="subscriptions">Subscriptions</option>
+
+                      <option value="shopping">Shopping</option>
+                      <option value="travelling">Travelling</option>
+                      <option value="other">Other</option>
+                    </select>
+                    <div
+                      *ngIf="
+                        updateBudgetForm.get('category').invalid &&
+                        (updateBudgetForm.get('category').dirty ||
+                          updateBudgetForm.get('category').touched)
+                      "
+                      class="text-danger"
+                    >
+                      <div
+                        *ngIf="
+                          updateBudgetForm.controls.category.errors?.required
+                        "
+                      >
+                        category is required
+                      </div>
+                    </div>
+                  </div>
+                  <div class="input-control">
+                    <textarea
+                      name="description"
+                      placeholder="Add A Reference"
+                      id="description"
+                      cols="30"
+                      rows="4"
+                      formControlName="description"
+                    ></textarea>
+                    <div
+                      *ngIf="
+                        updateBudgetForm.get('description').invalid &&
+                        (updateBudgetForm.get('description').dirty ||
+                          updateBudgetForm.get('description').touched)
+                      "
+                      class="text-danger"
+                    >
+                      <div
+                        *ngIf="
+                          updateBudgetForm.controls.description.errors?.required
+                        "
+                      >
+                        description is required
+                      </div>
+                      <div
+                        *ngIf="
+                          updateBudgetForm.controls.description.errors
+                            ?.maxlength
+                        "
+                      >
+                        description length must be less then 40
+                      </div>
+                    </div>
+                  </div>
+                  <div class="submit-btn">
+                    <button
+                      class="sc-gKPRtg hqswlf"
+                      style="
+                        background-color: rgb(228, 18, 204);
+                        padding: 0.8rem 1.6rem;
+                        border-radius: 30px;
+                      "
+                      (click)="save()"
+                    >
+                      <i class="fa-solid fa-plus"></i>Upate Income
+                    </button>
+                  </div>
+                </form>
+              </div>
+              <div class="incomes">
+                <h1 id="poptitle">{{ budgetData.title }}</h1>
+
+                <h3>
+                  Amount :
+                  <span style="color: #222260" id="popamount"
+                    >{{ budgetData.amount }}
+                  </span>
+                </h3>
+                <h3>
+                  Date :
+                  <span style="color: #222260" id="popdate"
+                    >{{ budgetData.date }}
+                  </span>
+                </h3>
+                <h3>
+                  Category :
+                  <span style="color: #222260" id="popcategory"
+                    >{{ budgetData.category }}
+                  </span>
+                </h3>
+                <h3>
+                  AddedBy :
+                  <span style="color: #222260" id="popaddedBy">
+                    {{ budgetData.createdBy }}</span
+                  >
+                </h3>
+                <h3>
+                  Description :
+                  <span style="color: #222260" id="popdescription">
+                    {{ budgetData.description }}</span
+                  >
+                </h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>

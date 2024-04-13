@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-updateincome',
@@ -19,7 +20,8 @@ export class UpdateincomeComponent implements OnInit, OnDestroy {
     public incomeservice: IncomeService,
     private route: ActivatedRoute,
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private datepipe: DatePipe
   ) {}
   ngOnInit(): void {
     this.updateIncomeForm = new FormGroup({
@@ -43,6 +45,20 @@ export class UpdateincomeComponent implements OnInit, OnDestroy {
           if (income.id === this.incomeId) {
             this.incomeData = income;
             console.log(this.incomeData);
+            if (this.incomeData) {
+              this.updateIncomeForm.patchValue({
+                title: this.incomeData.title,
+                amount: this.incomeData.amount,
+                category: this.incomeData.category,
+                description: this.incomeData.description,
+                date: this.datepipe.transform(
+                  this.incomeData.date,
+                  'MM/dd/yyyy'
+                ),
+              });
+            } else {
+              console.log('Budget data is undefined.');
+            }
           }
         });
       });

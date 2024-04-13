@@ -86,7 +86,7 @@ export class BudgetService {
                 title: budget.title,
                 category: budget.category,
                 amount: budget.amount,
-                date: budget.date.split('T')[0],
+                date: budget.date.split('T')[0].split('-').join('/'),
                 id: budget._id,
                 description: budget.description,
                 createdBy: budget.CreatedBy,
@@ -144,8 +144,8 @@ export class BudgetService {
           (resultData) => {
             try {
               console.log(resultData);
-              alert('income deleted successfully');
-              this.getBudgets();
+              alert('budget deleted successfully');
+              this.getBudgets().subscribe();
             } catch (error) {
               console.log(error);
             }

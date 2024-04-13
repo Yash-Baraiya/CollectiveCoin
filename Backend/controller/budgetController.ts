@@ -10,40 +10,45 @@ import { AnyArray } from "mongoose";
 //type RequiredUserFields = Pick<ExpenseIn, 'category' | 'amount' | 'date'>;
 
 export const addBudget = async (req: Request, res: Response) => {
-  const { title, amount, category, description, date } = req.body;
-
-  const auth = req.headers.authorization;
-  if (!auth) {
-    throw new Error("not authorized");
-  }
-
-  const token = auth.split(" ")[1];
-
-  const decodedtoken = jwt.decode(token) as JwtPayload;
-  if (!decodedtoken) {
-    throw new Error("token not found");
-  }
-  const userId = decodedtoken.id;
-  if (!decodedtoken) {
-    throw new Error("token not found");
-  }
-
-  const user = await User.findById({ _id: userId });
-  console.log(user?.name);
-  if (!user) {
-    throw new Error("user not found");
-  }
-  const budget = await Budget.create({
-    title,
-    amount,
-    category,
-    description,
-    date,
-    CreatedBy: user.name,
-    familycode: user.familycode,
-  });
-
   try {
+    const { title, amount, category, description, date } = req.body;
+
+    const auth = req.headers.authorization;
+    if (!auth) {
+      throw new Error("not authorized");
+    }
+
+    const token = auth.split(" ")[1];
+
+    const decodedtoken = jwt.decode(token) as JwtPayload;
+    if (!decodedtoken) {
+      throw new Error("token not found");
+    }
+    const userId = decodedtoken.id;
+    if (!decodedtoken) {
+      throw new Error("token not found");
+    }
+    const cat = await Budget.findOne({ category: req.body.category });
+
+    if (cat) {
+      throw new Error("budget with this category already exist");
+    }
+
+    const user = await User.findById({ _id: userId });
+    console.log(user?.name);
+    if (!user) {
+      throw new Error("user not found");
+    }
+    const budget = await Budget.create({
+      title,
+      amount,
+      category,
+      description,
+      date,
+      CreatedBy: user.name,
+      familycode: user.familycode,
+    });
+
     if (!title || !category || !description || !date) {
       return res.status(400).json({ message: "All fields are required!" });
     }
@@ -59,7 +64,8 @@ export const addBudget = async (req: Request, res: Response) => {
       budget,
     });
   } catch (error: any) {
-    res.status(500).json({
+    console.log(error);
+    res.status(400).json({
       status: "failed",
       message: error.message,
     });
@@ -219,12 +225,12 @@ export const deleteBudget = async (
     }
 
     // Delete the expense
-    await Budget.deleteOne({ _id: req.params.expenseId });
+    await Budget.deleteOne({ _id: req.params.budgetId });
 
     // Send success response
     res.status(200).json({ status: "success", message: "budget Deleted" });
   } catch (error: any) {
-    console.error(error);
+    console.log(error);
     res.status(500).json({
       status: "failed",
       message: error.message,
@@ -266,7 +272,7 @@ export const updateBudget = async (req: Request, res: Response) => {
       );
     }
     budget = await Budget.findByIdAndUpdate(
-      { _id: req.params.incomeId },
+      { _id: req.params.budgetId },
       {
         title: title,
         amount: amount,
