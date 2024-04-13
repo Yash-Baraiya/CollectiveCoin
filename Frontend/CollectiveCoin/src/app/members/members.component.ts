@@ -1,8 +1,8 @@
-import { style } from '@angular/animations';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { LoginDataService } from '../shared/login-data.service';
 
 @Component({
   selector: 'app-members',
@@ -14,11 +14,20 @@ export class MembersComponent implements OnInit {
   allmembers = [];
   memberrform: FormGroup;
   emailform: FormGroup;
-  photo: '';
-  constructor(private router: Router, private http: HttpClient) {}
+  loginData: any;
+
+  role: any;
+  constructor(
+    private router: Router,
+    private http: HttpClient,
+    private logindataservice: LoginDataService
+  ) {}
 
   ngOnInit(): void {
     this.getMemebers();
+    this.loginData = this.logindataservice.getData();
+    this.role = this.loginData.data.user.role;
+    console.log(this.role);
 
     this.memberrform = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
@@ -179,5 +188,61 @@ export class MembersComponent implements OnInit {
           }
         }
       );
+  }
+
+  makeAdmin(id: any) {
+    if (confirm('are you sure you want to make this user an admin')) {
+      this.http
+        .patch(
+          `http://localhost:8000/api/v1/CollectiveCoin/user//makeadmin/${id}`,
+          {}
+        )
+        .subscribe(
+          (resultData) => {
+            try {
+              console.log(resultData);
+
+              alert('successfully made admin');
+              this.getMemebers();
+            } catch (error) {
+              console.log(error);
+            }
+          },
+          (error) => {
+            if (error.error.message) {
+              console.log(error.error.message);
+              alert(error.error.message);
+            }
+          }
+        );
+    }
+  }
+
+  makeEarner(id: any) {
+    if (confirm("are you sure you want to chang user's earning status ")) {
+      this.http
+        .patch(
+          `http://localhost:8000/api/v1/CollectiveCoin/user/makeearner/${id}`,
+          {}
+        )
+        .subscribe(
+          (resultData) => {
+            try {
+              console.log(resultData);
+
+              alert('successfully changedearning status');
+              this.getMemebers();
+            } catch (error) {
+              console.log(error);
+            }
+          },
+          (error) => {
+            if (error.error.message) {
+              console.log(error.error.message);
+              alert(error.error.message);
+            }
+          }
+        );
+    }
   }
 }

@@ -36,8 +36,14 @@
               "
             >
               <img
-                [src]="'./../../assets/' + photo"
-                alt='<img src="https://img.icons8.com/ios/50/user-male-circle--v1.png"/>'
+                *ngIf="i.role === 'admin'"
+                src="https://img.icons8.com/ios/50/admin-settings-male.png"
+                alt="admin-settings-male"
+              />
+              <img
+                *ngIf="i.role === 'user'"
+                src="https://img.icons8.com/ios/50/user--v1.png"
+                alt="user--v1"
               />
             </div>
             <div
@@ -134,6 +140,38 @@
                     {{ i.isEarning }}
                   </p>
                 </div>
+                <button
+                  *ngIf="role === 'admin'"
+                  style="
+                    padding: 1rem;
+                    background: #222260;
+                    color: #fcf6f9;
+                    border: none;
+                    margin-right: -54%;
+                    border-radius: 50px;
+                    position: sticky;
+                  "
+                  (click)="makeEarner(i.id)"
+                >
+                  <span *ngIf="i.isEarning === false">Make Earner</span>
+                  <span *ngIf="i.isEarning === true">Make non-Earner</span>
+                </button>
+                <button
+                  *ngIf="role === 'admin' && i.role === 'user'"
+                  class="bottom-right-btn"
+                  style="
+                    padding: 1rem;
+                    background: #222260;
+                    color: #fcf6f9;
+                    border: none;
+                    margin-right: -53%;
+                    border-radius: 50px;
+                    position: sticky;
+                  "
+                  (click)="makeAdmin(i.id)"
+                >
+                  Make Admin
+                </button>
                 <div class="btn-con">
                   <button
                     style="

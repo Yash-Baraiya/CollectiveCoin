@@ -26,8 +26,8 @@ export class SignupComponent implements OnInit {
         Validators.required,
         Validators.minLength(8),
       ]),
-      role: new FormControl('user', [Validators.required]),
-      isEarning: new FormControl('false', [Validators.required]),
+      // role: new FormControl('user', [Validators.required]),
+      // isEarning: new FormControl('false', [Validators.required]),
       familycode: new FormControl('', [
         Validators.required,
         Validators.minLength(5),
@@ -43,8 +43,8 @@ export class SignupComponent implements OnInit {
     formData.append('name', this.signupForm.get('name').value);
     formData.append('email', this.signupForm.get('email').value);
     formData.append('password', this.signupForm.get('password').value);
-    formData.append('role', this.signupForm.get('role').value);
-    formData.append('isEarning', this.signupForm.get('isEarning').value);
+    // formData.append('role', this.signupForm.get('role').value);
+    // formData.append('isEarning', this.signupForm.get('isEarning').value);
     formData.append('familycode', this.signupForm.get('familycode').value);
 
     // Append the photo file separately

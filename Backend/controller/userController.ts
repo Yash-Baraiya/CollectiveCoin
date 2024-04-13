@@ -326,3 +326,90 @@ export const sendmailAdmin = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const makeAdmin = async (req: Request, res: Response) => {
+  try {
+    const auth = req.headers.authorization;
+    if (!auth) {
+      throw new Error("not Authorized");
+    }
+    const token = auth.split(" ")[1];
+    const decodedtoken = jwt.decode(token) as JwtPayload;
+    if (!decodedtoken) {
+      throw new Error("token not found");
+    }
+    const adminId = decodedtoken.id;
+
+    const admin = await User.findById(adminId);
+    if (!admin) {
+      throw new Error("admin not found");
+    }
+
+    const updateduser = await User.findByIdAndUpdate(
+      { _id: req.params.id },
+      { role: "admin" }
+    );
+    if (!updateduser) {
+      throw new Error("usr with that id not found");
+    }
+
+    res.status(200).json({
+      status: "success",
+      updateduser,
+    });
+  } catch (error: any) {
+    console.log(error);
+    res.status(200).json({
+      status: "failed",
+      message: error.message,
+    });
+  }
+};
+
+export const toggleEarningState = async (req: Request, res: Response) => {
+  try {
+    const auth = req.headers.authorization;
+    if (!auth) {
+      throw new Error("not Authorized");
+    }
+    const token = auth.split(" ")[1];
+    const decodedtoken = jwt.decode(token) as JwtPayload;
+    if (!decodedtoken) {
+      throw new Error("token not found");
+    }
+    const adminId = decodedtoken.id;
+
+    const admin = await User.findById(adminId);
+    if (!admin) {
+      throw new Error("admin not found");
+    }
+
+    const user = await User.findById({ _id: req.params.id });
+
+    if (user?.isEarning === false) {
+      const updateduser = await User.findByIdAndUpdate(
+        { _id: req.params.id },
+        { isEarning: true }
+      );
+      res.status(200).json({
+        status: "success",
+        updateduser,
+      });
+    } else {
+      const updateduser = await User.findByIdAndUpdate(
+        { _id: req.params.id },
+        { isEarning: false }
+      );
+      res.status(200).json({
+        status: "success",
+        updateduser,
+      });
+    }
+  } catch (error: any) {
+    console.log(error);
+    res.status(200).json({
+      status: "failed",
+      message: error.message,
+    });
+  }
+};

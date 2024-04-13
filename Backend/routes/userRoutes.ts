@@ -15,6 +15,8 @@ import {
   deletefamily,
   deleteuser,
   sendmailAdmin,
+  makeAdmin,
+  toggleEarningState,
 } from "../controller/userController";
 
 import multer from "multer";
@@ -49,4 +51,6 @@ router.patch("/resetPassword/:token", resetPassword);
 
 router.patch("/uploadimage", protect, upload.single("photo"), uploadImage);
 router.post("/sendmail", protect, sendmailAdmin);
+router.patch("/makeadmin/:id", protect, restrictTo, makeAdmin);
+router.patch("/makeearner/:id", protect, restrictTo, toggleEarningState);
 export default router;

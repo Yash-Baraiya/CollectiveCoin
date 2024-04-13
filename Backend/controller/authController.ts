@@ -50,7 +50,6 @@ const createSendToken = (user: any, statusCode: any, res: Response) => {
 
 export const signUp = async (req: Request, res: Response) => {
   try {
-    // Check if user already exists
     const existingUser = await User.findOne({ email: req.body.email });
     const existingFamilycode = await User.findOne({
       familycode: req.body.familycode,
@@ -61,17 +60,7 @@ export const signUp = async (req: Request, res: Response) => {
         "User with this email already exists. Please use another email."
       );
     }
-    if (!existingFamilycode && req.body.role === "user") {
-      throw new Error(
-        "You are the first one to use that famly code so please login as Admin"
-      );
-    }
 
-    if (req.body.role === "admin" && req.body.isEarning === "false") {
-      throw new Error(
-        "you can not login as admin because  you are not earning"
-      );
-    }
     let file = req.file;
 
     if (!file) {
@@ -80,27 +69,48 @@ export const signUp = async (req: Request, res: Response) => {
 
     const photo = `${file.filename}`;
     console.log(photo);
-    const newUser = await User.create({
-      name: req.body.name,
-      email: req.body.email,
-      password: req.body.password,
-      isEarning: req.body.isEarning,
-      role: req.body.role,
-      familycode: req.body.familycode,
-      photo: photo,
-      loggedInAt: Date.now(),
-    });
-    const message = `Welcome to Collective Coin family! Enjoy your accountings.`;
-    await sendEmail({
-      to: req.body.email,
-      subject: "Welcome to CollectiveCoin",
-      text: message,
-    });
-    // Create and send JWT token
-    createSendToken(newUser, 201, res);
+    if (!existingFamilycode) {
+      const newUser = await User.create({
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password,
+        isEarning: true,
+        role: "admin",
+        familycode: req.body.familycode,
+        photo: photo,
+        loggedInAt: Date.now(),
+      });
+      const message = `Welcome to Collective Coin family! Enjoy your accountings.`;
+      await sendEmail({
+        to: req.body.email,
+        subject: "Welcome to CollectiveCoin",
+        text: message,
+      });
+      // Create and send JWT token
+      createSendToken(newUser, 201, res);
+    } else {
+      const newUser = await User.create({
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password,
+        isEarning: false,
+        role: "user",
+        familycode: req.body.familycode,
+        photo: photo,
+        loggedInAt: Date.now(),
+      });
+      const message = `Welcome to Collective Coin family! Enjoy your accountings.`;
+      await sendEmail({
+        to: req.body.email,
+        subject: "Welcome to CollectiveCoin",
+        text: message,
+      });
+      // Create and send JWT token
+      createSendToken(newUser, 201, res);
+    }
   } catch (error: any) {
-    console.error("Error in signUp:", error);
-    res.status(400).json({
+    console.log(error);
+    res.status(200).json({
       status: "failed",
       message: error.message,
     });
@@ -433,17 +443,61 @@ export const restrictToAdd = async (
   }
 };
 
-// const findpermittedadmin = async function (familyCode: string, email: string) {
-//   const members = await User.find({ familycode: familyCode });
-//   let value = false;
-//   console.log(members);
+// export const signUp = async (req: Request, res: Response) => {
+//   try {
+//     // Check if user already exists
+//     const existingUser = await User.findOne({ email: req.body.email });
+//     const existingFamilycode = await User.findOne({
+//       familycode: req.body.familycode,
+//     });
 
-//   members.forEach((member) => {
-//     for (let i = 0; i < member.permittedadmin.length; i++) {
-//       if (member.permittedadmin[i] === email) {
-//         value = true;
-//         break;
-//       }
+//     if (existingUser) {
+//       throw new Error(
+//         "User with this email already exists. Please use another email."
+//       );
 //     }
-//   });
+//     if (!existingFamilycode) {
+//       throw new Error(
+//         "You are the first one to use that famly code so please login as Admin"
+//       );
+//     }
+
+//     if (req.body.role === "admin" && req.body.isEarning === "false") {
+//       throw new Error(
+//         "you can not login as admin because  you are not earning"
+//       );
+//     }
+//     let file = req.file;
+
+//     if (!file) {
+//       throw new Error("please upload photo");
+//     }
+
+//     const photo = `${file.filename}`;
+//     console.log(photo);
+//     const newUser = await User.create({
+//       name: req.body.name,
+//       email: req.body.email,
+//       password: req.body.password,
+//       isEarning: req.body.isEarning,
+//       role: req.body.role,
+//       familycode: req.body.familycode,
+//       photo: photo,
+//       loggedInAt: Date.now(),
+//     });
+//     const message = `Welcome to Collective Coin family! Enjoy your accountings.`;
+//     await sendEmail({
+//       to: req.body.email,
+//       subject: "Welcome to CollectiveCoin",
+//       text: message,
+//     });
+//     // Create and send JWT token
+//     createSendToken(newUser, 201, res);
+//   } catch (error: any) {
+//     console.error("Error in signUp:", error);
+//     res.status(400).json({
+//       status: "failed",
+//       message: error.message,
+//     });
+//   }
 // };

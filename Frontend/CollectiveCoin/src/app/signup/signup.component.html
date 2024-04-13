@@ -169,49 +169,6 @@
                         </div>
                       </div>
                     </div>
-                    <div class="mb-4 pb-2">
-                      <label class="form-label" for="form2Example22"
-                        >Role :</label
-                      >
-                      <select class="select" formControlName="role">
-                        <option value="user">User</option>
-                        <option value="admin">Admin</option>
-                      </select>
-                      <div
-                        *ngIf="
-                          signupForm.get('role').invalid &&
-                          (signupForm.get('role').dirty ||
-                            signupForm.get('role').touched)
-                        "
-                        class="text-danger"
-                      >
-                        <div *ngIf="signupForm.controls.role.errors?.required">
-                          please select a role
-                        </div>
-                      </div>
-
-                      <label class="form-label" for="form2Example22"
-                        >Do You Earn :</label
-                      >
-                      <select class="select" formControlName="isEarning">
-                        <option value="true">True</option>
-                        <option value="false">False</option>
-                      </select>
-                      <div
-                        *ngIf="
-                          signupForm.get('isEarning').invalid &&
-                          (signupForm.get('isEarning').dirty ||
-                            signupForm.get('isEarning').touched)
-                        "
-                        class="text-danger"
-                      >
-                        <div
-                          *ngIf="signupForm.controls.isearning.errors?.required"
-                        >
-                          please select is earning property
-                        </div>
-                      </div>
-                    </div>
                     <div class="form-outline mb-4">
                       <input
                         type="file"
