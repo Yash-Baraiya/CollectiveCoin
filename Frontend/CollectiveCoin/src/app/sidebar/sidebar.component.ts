@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { myTheme } from '../../environments/environment';
-import { ThemeToggleService } from '../shared/darkmodeservice.service';
 import { LoginDataService } from '../shared/login-data.service';
-import { HttpClient } from '@angular/common/http';
-import { Form, FormControl, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-sidebar',
@@ -22,9 +20,7 @@ export class SidebarComponent implements OnInit {
 
   constructor(
     private router: Router,
-    public themeToggleService: ThemeToggleService,
-    private loginDataService: LoginDataService,
-    private http: HttpClient
+    private loginDataService: LoginDataService
   ) {}
 
   isActive(Route: string) {
@@ -46,16 +42,6 @@ export class SidebarComponent implements OnInit {
     console.log('user photo string is', this.photo);
   }
 
-  SwitchMode() {
-    if (this.myTheme === 'light') {
-      this.myTheme = 'dark';
-      console.log(this.data);
-    } else {
-      this.myTheme = 'light';
-    }
-    console.log(this.myTheme);
-    return this.myTheme;
-  }
   clearStorage() {
     localStorage.clear();
   }

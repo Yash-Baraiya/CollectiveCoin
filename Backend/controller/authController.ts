@@ -430,7 +430,7 @@ export const restrictToAdd = async (
     if (user.role === "user") {
       res.status(401).json({
         status: "failed",
-        message: "you are not admin you are not allowed to add members",
+        message: "you are not admin you are not allowed perform this action",
       });
     }
     next();

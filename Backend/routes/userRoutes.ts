@@ -44,13 +44,13 @@ router.post("/signup", upload.single("photo"), signUp);
 router.post("/login", signIn);
 router.post("/add-member", protect, restrictToAdd, addUser);
 router.get("/getmembers", protect, getMembers);
-router.patch("/delete-member/:id", protect, restrictTo, deleteuser);
+router.patch("/delete-member/:id", protect, restrictToAdd, deleteuser);
 router.delete("/deletefamily", protect, deletefamily);
 router.post("/forgotpassword", forgotPassword);
 router.patch("/resetPassword/:token", resetPassword);
 
 router.patch("/uploadimage", protect, upload.single("photo"), uploadImage);
 router.post("/sendmail", protect, sendmailAdmin);
-router.patch("/makeadmin/:id", protect, restrictTo, makeAdmin);
-router.patch("/makeearner/:id", protect, restrictTo, toggleEarningState);
+router.patch("/makeadmin/:id", protect, restrictToAdd, makeAdmin);
+router.patch("/makeearner/:id", protect, restrictToAdd, toggleEarningState);
 export default router;
