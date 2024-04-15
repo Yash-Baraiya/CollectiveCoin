@@ -50,11 +50,9 @@ export class UpdateincomeComponent implements OnInit, OnDestroy {
                 amount: this.incomeData.amount,
                 category: this.incomeData.category,
                 description: this.incomeData.description,
-                date: this.datepipe.transform(
-                  this.incomeData.date,
-                  'MM/dd/yyyy'
-                ),
+                date: this.incomeData.date,
               });
+              console.log(this.incomeData);
             } else {
               console.log('data is undefined.');
             }
@@ -70,6 +68,7 @@ export class UpdateincomeComponent implements OnInit, OnDestroy {
   Updateincome(id: any): Observable<any> {
     return new Observable((obseraver) => {
       let bodyData = this.updateIncomeForm.value;
+      console.log(bodyData);
       if (confirm('are you sure you want to update this income')) {
         this.http
           .patch(
@@ -80,7 +79,6 @@ export class UpdateincomeComponent implements OnInit, OnDestroy {
             (resultData) => {
               try {
                 alert('income updated successfully');
-                //this.router.navigate(['Income']);
                 console.log(resultData);
                 obseraver.next();
               } catch (error) {

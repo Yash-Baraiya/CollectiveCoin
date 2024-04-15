@@ -4,6 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import BudgetResponse from './budget.interface';
 import { Observable } from 'rxjs';
+import { DatePipe } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +20,11 @@ export class BudgetService {
   overbudget: Array<any> = [];
   underbudget: Array<any> = [];
   expcategoryAmounts: object = {};
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private datepipe: DatePipe
+  ) {
     this.budgetForm = new FormGroup({
       title: new FormControl('', [Validators.required]),
       amount: new FormControl('', [
@@ -85,7 +90,7 @@ export class BudgetService {
                 title: budget.title,
                 category: budget.category,
                 amount: budget.amount,
-                date: budget.date.split('T')[0].split('-').join('/'),
+                date: this.datepipe.transform(budget.date, 'MM/dd/yyyy'),
                 id: budget._id,
                 description: budget.description,
                 createdBy: budget.CreatedBy,

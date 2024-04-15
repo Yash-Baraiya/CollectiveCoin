@@ -43,13 +43,6 @@ export class IncomeService {
   }
   addIncome() {
     let bodyData = this.incomeForm.value;
-    let selecteddate = this.incomeForm.get('date').value;
-
-    let formateddate = this.datepipe.transform(selecteddate, 'yyyy-MM-dd');
-
-    bodyData.date = formateddate;
-    console.log(formateddate);
-    console.log(bodyData.date);
     this.http
       .post(
         'http://localhost:8000/api/v1/CollectiveCoin/user/incomes/add-income',
@@ -94,7 +87,7 @@ export class IncomeService {
                 title: income.title,
                 category: income.category,
                 amount: income.amount,
-                date: income.date.split('T')[0],
+                date: this.datepipe.transform(income.date, 'MM/dd/yyyy'),
                 id: income._id,
                 description: income.description,
                 addedBy: income.addedBy,
@@ -104,12 +97,7 @@ export class IncomeService {
               this.incamounts = resultData.monthlyincome
                 .map((income) => ({
                   amount: income.amount[0],
-                  date: income.date
-                    .toString()
-                    .slice(0, 10)
-                    .split('-')
-                    .reverse()
-                    .join('/'),
+                  date: this.datepipe.transform(income.date, 'dd/MM/yyyy'),
                 }))
                 .sort((a, b) => {
                   const dateA = new Date(a.date);

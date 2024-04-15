@@ -58,18 +58,10 @@ const routes: Routes = [
   },
   {
     path: 'Budget',
-    children: [
-      {
-        path: '',
-        component: BudgetComponent,
-        canActivate: [RouteGuard],
-      },
-      {
-        path: 'update-budget/:id',
-        component: UpdatebudgetComponent,
-        canActivate: [RouteGuard],
-      },
-    ],
+    loadChildren: async () => {
+      const module = await import('./budget/budget.module');
+      return module.BudgetModule;
+    },
   },
 ];
 

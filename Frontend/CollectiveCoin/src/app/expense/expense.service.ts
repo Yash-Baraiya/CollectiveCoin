@@ -4,6 +4,7 @@ import ExpenseResponse from './expense.interface';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { DatePipe } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +17,11 @@ export class ExpenseService {
   amountsvalue: Array<number> = [];
   totalexpense: number = 0;
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private datepipe: DatePipe
+  ) {
     this.expenseForm = new FormGroup({
       title: new FormControl('', [Validators.required]),
       amount: new FormControl('', [
@@ -80,7 +85,7 @@ export class ExpenseService {
                 title: expense.title,
                 amount: expense.amount,
                 category: expense.category,
-                date: expense.date.split('T')[0],
+                date: this.datepipe.transform(expense.date, 'MM/dd/yyyy'),
                 type: 'expense',
                 id: expense._id,
                 description: expense.description,
@@ -89,12 +94,7 @@ export class ExpenseService {
               this.expamounts = resultData.monthlyexpense
                 .map((expense) => ({
                   amount: expense.amount,
-                  date: expense.date
-                    .toString()
-                    .slice(0, 10)
-                    .split('-')
-                    .reverse()
-                    .join('/'),
+                  date: this.datepipe.transform(expense.date, 'dd/MM/yyyy'),
                 }))
                 .sort((a, b) => {
                   const dateA = new Date(a.date);

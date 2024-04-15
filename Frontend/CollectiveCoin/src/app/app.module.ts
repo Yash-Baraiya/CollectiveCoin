@@ -12,11 +12,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TokenInterceptor } from './shared/interceptors/custom.interceptor';
 import { MembersComponent } from './members/members.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { BudgetComponent } from './budget/budget.component';
 import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
 import { LineChartComponent } from './line-chart/line-chart.component';
-import { BarCartComponent } from './bar-cart/bar-cart.component';
-import { UpdatebudgetComponent } from './updatebudget/updatebudget.component';
 import { DatePipe } from '@angular/common';
 import { SharedModule } from './shared/shared.module';
 
@@ -28,11 +25,8 @@ import { SharedModule } from './shared/shared.module';
     LoginComponent,
     SignupComponent,
     MembersComponent,
-    BudgetComponent,
     ResetpasswordComponent,
     LineChartComponent,
-    BarCartComponent,
-    UpdatebudgetComponent,
   ],
   imports: [
     BrowserModule,

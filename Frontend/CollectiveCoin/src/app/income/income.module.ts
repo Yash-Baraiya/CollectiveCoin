@@ -15,7 +15,6 @@ import { UpdateincomeComponent } from '../updateincome/updateincome.component';
     SharedModule,
     IncomeModuleRoutingModule,
   ],
-  bootstrap: [IncomeComponent],
 })
 export class IncomeModule {
   constructor() {

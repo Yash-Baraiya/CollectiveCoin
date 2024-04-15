@@ -15,6 +15,5 @@ import { UpdateexpenseComponent } from '../updateexpense/updateexpense.component
     ReactiveFormsModule,
     ExpenseModuleRoutingModule,
   ],
-  // bootstrap: [ExpenseComponent],
 })
 export class ExpenseModule {}
