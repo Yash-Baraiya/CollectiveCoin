@@ -98,6 +98,9 @@ export class LineChartComponent implements OnInit {
           y: {
             beginAtZero: true,
           },
+          x: {
+            beginAtZero: true,
+          },
         },
         responsive: true,
       },

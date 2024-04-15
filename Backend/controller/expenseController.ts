@@ -76,12 +76,13 @@ export const getExpense = async (req: Request, res: Response) => {
     const expenses = await Expense.find({ familycode: familycode }).sort({
       createdAt: -1,
     });
-    console.log(expenses);
 
     const currentMonth = new Date().getMonth() + 1;
+    const currentYear = new Date().getFullYear();
     for (let expense of expenses) {
       let expMonth = expense.date.getMonth() + 1;
-      if (expMonth === currentMonth) {
+      let expyear = expense.date.getFullYear();
+      if (expMonth === currentMonth && expyear === currentYear) {
         monthlyexpense.push(expense);
       }
     }

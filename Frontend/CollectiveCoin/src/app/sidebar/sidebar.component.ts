@@ -43,6 +43,7 @@ export class SidebarComponent implements OnInit {
   }
 
   clearStorage() {
+    console.log('click happened');
     localStorage.clear();
   }
 }

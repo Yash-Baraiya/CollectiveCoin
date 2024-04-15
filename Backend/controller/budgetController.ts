@@ -107,9 +107,11 @@ export const getBudget = async (req: Request, res: Response) => {
     }));
     let monthlyexpense: Array<any> = [];
     const currentMonth = new Date().getMonth() + 1;
+    const currentYear = new Date().getFullYear();
     for (let expense of expenses) {
       let expMonth = expense.date.getMonth() + 1;
-      if (expMonth === currentMonth) {
+      let expyear = expense.date.getFullYear();
+      if (expMonth === currentMonth && expyear === currentYear) {
         monthlyexpense.push(expense);
       }
     }
@@ -133,7 +135,8 @@ export const getBudget = async (req: Request, res: Response) => {
 
     for (let budget of budgets) {
       let budMonth = budget.date.getMonth() + 1;
-      if (budMonth === currentMonth) {
+      let budYear = budget.date.getFullYear();
+      if (budMonth === currentMonth && budYear === currentYear) {
         monthlybudget.push(budget);
       }
     }

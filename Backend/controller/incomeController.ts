@@ -100,10 +100,12 @@ export const getIncomes = async (req: Request, res: Response) => {
       });
       console.log(incomes);
       const currentMonth = new Date().getMonth() + 1;
+      const currentYear = new Date().getFullYear();
 
       for (let income of incomes) {
         let incMonth = income.date.getMonth() + 1;
-        if (incMonth === currentMonth) {
+        let incYear = income.date.getFullYear();
+        if (incMonth === currentMonth && incYear === currentYear) {
           monthlyincome.push(income);
         }
       }

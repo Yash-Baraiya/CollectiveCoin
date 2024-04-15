@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IncomeService } from '../income/income.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -19,7 +19,6 @@ export class UpdateincomeComponent implements OnInit, OnDestroy {
   constructor(
     public incomeservice: IncomeService,
     private route: ActivatedRoute,
-    private router: Router,
     private http: HttpClient,
     private datepipe: DatePipe
   ) {}
@@ -57,7 +56,7 @@ export class UpdateincomeComponent implements OnInit, OnDestroy {
                 ),
               });
             } else {
-              console.log('Budget data is undefined.');
+              console.log('data is undefined.');
             }
           }
         });

@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
-import { RouteReuseStrategy, RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { IncomeComponent } from './income/income.component';
-import { ExpenseComponent } from './expense/expense.component';
 import { TransactionsComponent } from './transactions/transactions.component';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
@@ -10,8 +8,6 @@ import { MembersComponent } from './members/members.component';
 import { RouteGuard } from './route.guard';
 import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
 import { BudgetComponent } from './budget/budget.component';
-import { UpdateincomeComponent } from './updateincome/updateincome.component';
-import { UpdateexpenseComponent } from './updateexpense/updateexpense.component';
 import { UpdatebudgetComponent } from './updatebudget/updatebudget.component';
 
 const routes: Routes = [
@@ -26,33 +22,17 @@ const routes: Routes = [
   },
   {
     path: 'Income',
-    children: [
-      {
-        path: '',
-        component: IncomeComponent,
-        canActivate: [RouteGuard],
-      },
-      {
-        path: 'update-income/:id',
-        component: UpdateincomeComponent,
-        canActivate: [RouteGuard],
-      },
-    ],
+    loadChildren: async () => {
+      const module = await import('./income/income.module');
+      return module.IncomeModule;
+    },
   },
   {
     path: 'Expense',
-    children: [
-      {
-        path: '',
-        component: ExpenseComponent,
-        canActivate: [RouteGuard],
-      },
-      {
-        path: 'update-expense/:id',
-        component: UpdateexpenseComponent,
-        canActivate: [RouteGuard],
-      },
-    ],
+    loadChildren: async () => {
+      const module = await import('./expense/expense.module');
+      return module.ExpenseModule;
+    },
   },
   {
     path: 'Transactions',
