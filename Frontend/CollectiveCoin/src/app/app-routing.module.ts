@@ -7,8 +7,6 @@ import { SignupComponent } from './signup/signup.component';
 import { MembersComponent } from './members/members.component';
 import { RouteGuard } from './route.guard';
 import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
-import { BudgetComponent } from './budget/budget.component';
-import { UpdatebudgetComponent } from './updatebudget/updatebudget.component';
 
 const routes: Routes = [
   {

@@ -50,6 +50,7 @@ const createSendToken = (user: any, statusCode: any, res: Response) => {
 
 export const signUp = async (req: Request, res: Response) => {
   try {
+    let priority = 1;
     const existingUser = await User.findOne({ email: req.body.email });
     const existingFamilycode = await User.findOne({
       familycode: req.body.familycode,
@@ -59,6 +60,11 @@ export const signUp = async (req: Request, res: Response) => {
       throw new Error(
         "User with this email already exists. Please use another email."
       );
+    }
+
+    const members: any = await User.find({ familycode: req.body.familycode });
+    if (members) {
+      priority = priority + members.length;
     }
 
     let file = req.file;
@@ -78,7 +84,7 @@ export const signUp = async (req: Request, res: Response) => {
         role: "admin",
         familycode: req.body.familycode,
         photo: photo,
-        loggedInAt: Date.now(),
+        priority: 1,
       });
       const message = `Welcome to Collective Coin family! Enjoy your accountings.`;
       await sendEmail({
@@ -97,7 +103,7 @@ export const signUp = async (req: Request, res: Response) => {
         role: "user",
         familycode: req.body.familycode,
         photo: photo,
-        loggedInAt: Date.now(),
+        priority: members.length + 1,
       });
       const message = `Welcome to Collective Coin family! Enjoy your accountings.`;
       await sendEmail({
@@ -127,7 +133,7 @@ export const signIn = async (req: Request, res: Response) => {
       familycode: req.body.familycode,
     });
 
-    let admin = await User.find({ familycode });
+    let admin = await User.find({ familycode: req.body.familycode });
     let user = await User.findOne({ email }).select("+password");
 
     if (!user) {
@@ -177,7 +183,7 @@ export const signIn = async (req: Request, res: Response) => {
     } else if (user.familycode === null && existingFamilycode) {
       user = await User.findOneAndUpdate(
         { email },
-        { familycode, role: "user" },
+        { familycode, role: "user", priority: admin.length + 1 },
         { new: true }
       );
       createSendToken(user, 200, res);

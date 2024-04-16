@@ -61,7 +61,7 @@ const userSchema = new Schema<UserIn>({
   passwordResetToken: String,
   passwordResetExpires: Date,
   forgotpasswordotp: String,
-  loggedInAt: Date,
+  priority: Number,
 });
 
 userSchema.pre<UserIn>("save", async function (next) {

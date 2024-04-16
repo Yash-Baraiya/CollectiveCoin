@@ -55,11 +55,16 @@ export class SignupComponent implements OnInit {
       .post('http://localhost:8000/api/v1/CollectiveCoin/user/signup', formData)
       .subscribe(
         (resultData: any) => {
-          this.loginDataService.setData(resultData);
-          alert('Signed up successfully');
-          this.router.navigate(['/DashBoard']);
+          if (resultData.status === 'success') {
+            this.loginDataService.setData(resultData);
+            alert('Signed up successfully');
+            this.router.navigate(['/DashBoard']);
+          } else {
+            alert(resultData.message);
+          }
         },
         (error) => {
+          console.log(error);
           if (error.error.message) {
             console.log(error.error.message);
             alert(error.error.message);

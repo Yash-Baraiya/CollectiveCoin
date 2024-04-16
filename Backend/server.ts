@@ -7,8 +7,6 @@ import expenseRouter from "./routes/expenseRoutes";
 import budgetRouter from "./routes/budgetRoutes";
 import transactionRouter from "./routes/transactionsRoute";
 import cors from "cors";
-import path from "path";
-
 dotenv.config({ path: "./config.env" });
 const app: Application = express();
 

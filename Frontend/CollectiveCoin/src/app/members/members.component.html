@@ -141,7 +141,10 @@
                   </p>
                 </div>
                 <button
-                  *ngIf="role === 'admin'"
+                  *ngIf="
+                    (role === 'admin' && priority <= i.priority) ||
+                    (role === 'admin' && i.role === 'user')
+                  "
                   style="
                     padding: 1rem;
                     background: #222260;
@@ -157,7 +160,10 @@
                   <span *ngIf="i.isEarning === true">Make non-Earner</span>
                 </button>
                 <button
-                  *ngIf="role === 'admin' && i.role === 'user'"
+                  *ngIf="
+                    (role === 'admin' && priority <= i.priority) ||
+                    (role === 'admin' && i.role === 'user')
+                  "
                   class="bottom-right-btn"
                   style="
                     padding: 1rem;
@@ -170,7 +176,8 @@
                   "
                   (click)="makeAdmin(i.id)"
                 >
-                  Make Admin
+                  <span *ngIf="i.role === 'user'"> Make Admin</span>
+                  <span *ngIf="i.role === 'admin'"> Make User</span>
                 </button>
                 <div class="btn-con">
                   <button

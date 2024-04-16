@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ResolveStart, Router } from '@angular/router';
 import { LoginDataService } from '../shared/login-data.service';
 
 @Component({
@@ -15,8 +15,9 @@ export class MembersComponent implements OnInit {
   memberrform: FormGroup;
   emailform: FormGroup;
   loginData: any;
-
+  firstadmin: any;
   role: any;
+  priority: any;
   constructor(
     private router: Router,
     private http: HttpClient,
@@ -27,8 +28,7 @@ export class MembersComponent implements OnInit {
     this.getMemebers();
     this.loginData = this.logindataservice.getData();
     this.role = this.loginData.data.user.role;
-    console.log(this.role);
-
+    this.priority = this.loginData.data.user.priority;
     this.memberrform = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
     });
@@ -87,9 +87,10 @@ export class MembersComponent implements OnInit {
             isEarning: member.isEarning,
             id: member._id,
             photo: member.photo,
+            priority: member.priority,
           }));
-
-          console.log(this.allmembers);
+          this.firstadmin = resultData;
+          console.log(this.firstadmin.firstadmin);
         },
         (error) => {
           console.log(error);
@@ -191,7 +192,7 @@ export class MembersComponent implements OnInit {
   }
 
   makeAdmin(id: any) {
-    if (confirm('are you sure you want to make this user an admin')) {
+    if (confirm("are you sure you want to change this user's role")) {
       this.http
         .patch(
           `http://localhost:8000/api/v1/CollectiveCoin/user//makeadmin/${id}`,
@@ -201,16 +202,16 @@ export class MembersComponent implements OnInit {
           (resultData) => {
             try {
               console.log(resultData);
-
-              alert('successfully made admin');
+              alert('successfully changed');
               this.getMemebers();
             } catch (error) {
               console.log(error);
             }
           },
           (error) => {
+            console.log(error);
             if (error.error.message) {
-              console.log(error.error.message);
+              console.log(error);
               alert(error.error.message);
             }
           }
@@ -226,12 +227,16 @@ export class MembersComponent implements OnInit {
           {}
         )
         .subscribe(
-          (resultData) => {
+          (resultData: any) => {
             try {
               console.log(resultData);
 
-              alert('successfully changedearning status');
-              this.getMemebers();
+              if (resultData.status === 'success') {
+                alert('successfully changedearning status');
+                this.getMemebers();
+              } else {
+                alert(resultData.message);
+              }
             } catch (error) {
               console.log(error);
             }

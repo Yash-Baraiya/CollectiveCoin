@@ -6,6 +6,7 @@ import Income from "../models/incomeModel";
 import Expense from "../models/expenseModel";
 import Budget from "../models/budgetModel";
 import { Request, Response } from "express";
+import { Admin } from "mongodb";
 
 export const addUser = async (req: Request, res: Response) => {
   const email1 = req.body.email;
@@ -90,6 +91,7 @@ export const addUser = async (req: Request, res: Response) => {
 
 export const getMembers = async (req: Request, res: Response) => {
   try {
+    let firstadmin: any = "";
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("not Authorized");
@@ -106,13 +108,24 @@ export const getMembers = async (req: Request, res: Response) => {
     if (!user) {
       throw new Error("user not found");
     }
-    const familycode = await user.familycode;
+    const familycode = user.familycode;
 
     const members = await User.find({ familycode: familycode });
+
+    members.forEach((member) => {
+      if (!member.priority) {
+        throw new Error("loggedinAt not found");
+      } else if (firstadmin === "") {
+        firstadmin = member;
+      } else if (member.priority < firstadmin.priority) {
+        firstadmin = member;
+      }
+    });
 
     res.status(200).json({
       status: "success",
       members,
+      firstadmin,
     });
   } catch (error) {
     console.log(error);
@@ -150,8 +163,14 @@ export const deleteuser = async (req: Request, res: Response) => {
     if (AdminId === memberId) {
       throw new Error("you can not delete yourself");
     }
-
-    await User.findByIdAndUpdate(memberId, { familycode: null });
+    if (member?.priority) {
+      if (member?.priority < user.priority && member.role === "admin") {
+        throw new Error(
+          " you can not delete an admin who join the family before you"
+        );
+      }
+    }
+    await User.findByIdAndUpdate(memberId, { familycode: null, priority: 0 });
     await User.findByIdAndUpdate(AdminId, { $push: { deleteduser: memberId } });
 
     res.status(200).json({
@@ -184,10 +203,16 @@ export const deletefamily = async (req: Request, res: Response) => {
     if (!user) {
       throw new Error("user not found");
     }
-    await findmember(user);
+
     const familyCode = user.familycode;
     if (user.role !== "admin") {
       throw new Error("You are not allowed to remove anyone");
+    }
+
+    if (user.priority !== 1) {
+      throw new Error(
+        "you can not delete whole family because you are not first admin"
+      );
     }
 
     await User.deleteMany({ familycode: familyCode });
@@ -257,16 +282,14 @@ export const uploadImage = async (req: Request, res: Response) => {
   }
 };
 
-const findmember = async function (user: any) {
+const findmember = async function (user: any, message: string) {
   const familyCode = user.familycode;
   const members = await User.find({ familycode: familyCode });
   members.forEach((member) => {
-    if (member.loggedInAt && user.loggedInAt) {
-      console.log(member, member.loggedInAt.getTime());
-      if (member.loggedInAt?.getTime() < user.loggedInAt?.getTime()) {
-        throw new Error(
-          " you are not the first admin you can not delete whole family"
-        );
+    if (member.priority && user.priority) {
+      console.log(member, member.priority);
+      if (member.priority < user.priority) {
+        throw new Error(message);
       }
     }
   });
@@ -345,18 +368,36 @@ export const makeAdmin = async (req: Request, res: Response) => {
       throw new Error("admin not found");
     }
 
-    const updateduser = await User.findByIdAndUpdate(
-      { _id: req.params.id },
-      { role: "admin" }
-    );
-    if (!updateduser) {
-      throw new Error("usr with that id not found");
+    const user = await User.findById({ _id: req.params.id });
+    if (!user) {
+      throw new Error("user not found");
     }
 
-    res.status(200).json({
-      status: "success",
-      updateduser,
-    });
+    if (user.role === "user") {
+      const updateduser = await User.findByIdAndUpdate(
+        { _id: req.params.id },
+        { role: "admin" }
+      );
+      res.status(200).json({
+        status: "success",
+        updateduser,
+      });
+    } else {
+      if (user.priority > admin.priority) {
+        const updateduser = await User.findByIdAndUpdate(
+          { _id: req.params.id },
+          { role: "user" }
+        );
+        res.status(200).json({
+          status: "success",
+          updateduser,
+        });
+      } else {
+        throw new Error(
+          "you can not change the role of admin who joined the family before you "
+        );
+      }
+    }
   } catch (error: any) {
     console.log(error);
     res.status(200).json({
@@ -385,25 +426,37 @@ export const toggleEarningState = async (req: Request, res: Response) => {
     }
 
     const user = await User.findById({ _id: req.params.id });
+    if (!user) {
+      throw new Error("user not found");
+    }
 
-    if (user?.isEarning === false) {
-      const updateduser = await User.findByIdAndUpdate(
-        { _id: req.params.id },
-        { isEarning: true }
-      );
-      res.status(200).json({
-        status: "success",
-        updateduser,
-      });
+    if (
+      user.role === "user" ||
+      (user.role === "admin" && user.priority > admin.priority)
+    ) {
+      if (user?.isEarning === false) {
+        const updateduser = await User.findByIdAndUpdate(
+          { _id: req.params.id },
+          { isEarning: true }
+        );
+        res.status(200).json({
+          status: "success",
+          updateduser,
+        });
+      } else {
+        const updateduser = await User.findByIdAndUpdate(
+          { _id: req.params.id },
+          { isEarning: false }
+        );
+        res.status(200).json({
+          status: "success",
+          updateduser,
+        });
+      }
     } else {
-      const updateduser = await User.findByIdAndUpdate(
-        { _id: req.params.id },
-        { isEarning: false }
+      throw new Error(
+        "you can not change the earining state of admin join the family before you"
       );
-      res.status(200).json({
-        status: "success",
-        updateduser,
-      });
     }
   } catch (error: any) {
     console.log(error);

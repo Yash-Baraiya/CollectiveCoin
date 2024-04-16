@@ -9,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class IncomeComponent implements OnInit {
   incomedatapop: any;
+  role: string
   constructor(
     public incomeservice: IncomeService,
     private router: Router,
@@ -16,6 +17,8 @@ export class IncomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.role = localStorage.getItem("role");
+    
     this.incomeservice.getIncome().subscribe(() => {
       console.log(' subscriberd method is getting called');
     });
