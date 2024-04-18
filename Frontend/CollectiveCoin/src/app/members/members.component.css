@@ -1,4 +1,4 @@
-.lekOns {
+.con-in {
   padding: 2rem;
   height: 100%;
   display: -webkit-box;
@@ -11,7 +11,7 @@
   padding: 2rem 1.5rem;
   width: 100%;
 }
-.gTlnoH {
+.main-container {
   padding: 2rem 1.5rem;
   width: 374px;
   height: 100%;
@@ -33,7 +33,7 @@
   justify-content: space-between;
   gap: 2rem;
 }
-.gTlnoH .user-con {
+.main-container .user-con {
   height: 100px;
   display: -webkit-box;
   display: -webkit-flex;
@@ -45,7 +45,7 @@
   align-items: center;
   gap: 1rem;
 }
-.gTlnoH .user-con img {
+.main-container .user-con img {
   width: 80px;
   height: 80px;
   border-radius: 50%;
@@ -55,13 +55,13 @@
   padding: 0.2rem;
   box-shadow: 0px 1px 17px rgba(0, 0, 0, 0.06);
 }
-.gTlnoH .user-con h2 {
+.main-container .user-con h2 {
   color: rgba(34, 34, 96, 1);
 }
-.gTlnoH .user-con p {
+.main-container .user-con p {
   color: rgba(34, 34, 96, 0.6);
 }
-.gTlnoH .menu-items {
+.main-container .menu-items {
   -webkit-flex: 1;
   -ms-flex: 1;
   flex: 1;
@@ -73,7 +73,7 @@
   -ms-flex-direction: column;
   flex-direction: column;
 }
-.gTlnoH .menu-items li {
+.main-container .menu-items li {
   display: grid;
   grid-template-columns: 40px auto;
   -webkit-align-items: center;
@@ -89,19 +89,19 @@
   padding-left: 1rem;
   position: relative;
 }
-.gTlnoH .menu-items li i {
+.main-container .menu-items li i {
   color: rgba(34, 34, 96, 0.6);
   font-size: 1.4rem;
   -webkit-transition: all 0.4s ease-in-out;
   transition: all 0.4s ease-in-out;
 }
-.gTlnoH .active {
+.main-container .active {
   color: rgba(34, 34, 96, 1) !important;
 }
-.gTlnoH .active i {
+.main-container .active i {
   color: rgba(34, 34, 96, 1) !important;
 }
-.gTlnoH .active::before {
+.main-container .active::before {
   content: "";
   position: absolute;
   left: 0;
