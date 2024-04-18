@@ -5,7 +5,8 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import User from "../models/userModel";
 import sendEmail from "../email";
 import otpgenerator from "otp-generator";
-
+import { cloudinaryconfig } from "../cloudinary";
+import { v2 as cloudinary } from "cloudinary";
 declare global {
   namespace Express {
     interface Request {
@@ -69,11 +70,34 @@ export const signUp = async (req: Request, res: Response) => {
 
     let file = req.file;
 
-    if (!file) {
-      throw new Error("please upload photo");
-    }
+    if (!file) throw new Error("please upload file");
 
-    const photo = `${file.filename}`;
+    console.log(file);
+
+    let photo = `${file.filename}`;
+
+    const cloudinaryUpload = new Promise((resolve, reject) => {
+      const options = {
+        public_id: photo,
+      };
+      cloudinaryconfig();
+      cloudinary.uploader.upload(
+        file.path,
+        options,
+        (error: any, result: any) => {
+          if (error) {
+            console.log(error);
+            reject(error);
+          } else {
+            photo = result.url;
+            resolve(result);
+          }
+        }
+      );
+    });
+
+    const result = await cloudinaryUpload;
+
     console.log(photo);
     if (!existingFamilycode) {
       const newUser = await User.create({

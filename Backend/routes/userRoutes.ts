@@ -21,15 +21,16 @@ import {
 
 import multer from "multer";
 import { v4 as uuidv4 } from "uuid";
+import { cloudinaryconfig } from "./../cloudinary";
 
 var path = require("path");
 var storage = multer.diskStorage({
-  destination: function (req, file, callback) {
-    callback(
-      null,
-      "C:/Users/AM/Desktop/CollectiveCoin/Frontend/CollectiveCoin/src/assets"
-    );
-  },
+  // destination: function (req, file, callback) {
+  //   callback(
+  //     null,
+  //     "C:/Users/AM/Desktop/CollectiveCoin/Frontend/CollectiveCoin/src/assets"
+  //   );
+  // },
 
   filename: function (req, file, callback) {
     var fname = "user" + uuidv4() + path.extname(file.originalname);
@@ -40,7 +41,7 @@ var storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 const router = express.Router();
 
-router.post("/signup", upload.single("photo"), signUp);
+router.post("/signup", upload.single("photo"), signUp, uploadImage);
 router.post("/login", signIn);
 router.post("/add-member", protect, restrictToAdd, addUser);
 router.get("/getmembers", protect, getMembers);

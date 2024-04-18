@@ -6,7 +6,8 @@ import Income from "../models/incomeModel";
 import Expense from "../models/expenseModel";
 import Budget from "../models/budgetModel";
 import { Request, Response } from "express";
-import { Admin } from "mongodb";
+import { v2 as cloudinary } from "cloudinary";
+import { cloudinaryconfig } from "../cloudinary";
 
 export const addUser = async (req: Request, res: Response) => {
   const email1 = req.body.email;
@@ -234,65 +235,59 @@ export const deletefamily = async (req: Request, res: Response) => {
 export const uploadImage = async (req: Request, res: Response) => {
   try {
     const auth = req.headers.authorization;
-    if (!auth) {
-      throw new Error("not Authorized");
-    }
+    if (!auth) throw new Error("not Authorized");
 
     const token = auth.split(" ")[1];
     const decodedtoken = jwt.decode(token) as JwtPayload;
-    if (!decodedtoken) {
-      throw new Error("token not found");
-    }
+    if (!decodedtoken) throw new Error("token not found");
+
     const userId = decodedtoken.id;
 
     const user = await User.findById(userId);
-    if (!user) {
-      throw new Error("user not found");
-    }
+    if (!user) throw new Error("user not found");
+
     let file = req.file;
 
-    if (!file) {
-      res.status(400).json({
-        status: "failed",
-        message: "please upload file",
-      });
-      throw new Error("please upload file");
-    }
+    if (!file) throw new Error("please upload file");
+
     console.log(file);
-    let filetype = file.mimetype.split("/")[1];
 
     const photo = `${file.filename}`;
-    console.log(photo);
+
+    const cloudinaryUpload = new Promise((resolve, reject) => {
+      4;
+      cloudinaryconfig();
+      cloudinary.uploader.upload(file.path, (error: any, result: any) => {
+        if (error) {
+          console.log(error);
+          reject(error);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+
+    const result = await cloudinaryUpload;
+
     const updatedUser = await User.findByIdAndUpdate(
       { _id: userId },
       { photo: photo },
       { new: true }
     );
 
+    // Send the response
     res.status(200).json({
       status: "success",
       message: "image uploaded successfully",
       updatedUser,
     });
   } catch (error: any) {
+    console.log(error);
     res.status(400).json({
       status: "failed",
       message: error.message,
     });
   }
-};
-
-const findmember = async function (user: any, message: string) {
-  const familyCode = user.familycode;
-  const members = await User.find({ familycode: familyCode });
-  members.forEach((member) => {
-    if (member.priority && user.priority) {
-      console.log(member, member.priority);
-      if (member.priority < user.priority) {
-        throw new Error(message);
-      }
-    }
-  });
 };
 
 export const sendmailAdmin = async (req: Request, res: Response) => {

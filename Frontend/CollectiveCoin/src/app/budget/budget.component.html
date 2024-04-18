@@ -10,21 +10,26 @@
               class="total-income"
               *ngIf="budgetservice.overbudget.length > 0"
             >
-              <span style="display: inline-block">
-                <p
-                  [@scroll]="animationState"
+              <ul
+                #scrollContainer
+                style="display: inline-block"
+                [@scrollAnimation]="animationState"
+                (@scrollAnimation.done)="scrollTicker()"
+              >
+                <li
                   style="color: #222260"
                   *ngFor="let obj of budgetservice.overbudget"
                 >
                   you are going over budget for
                   <span style="color: red">{{ obj.category }} </span> by
                   <span style="color: red">{{ obj.amount }}$ </span>,
-                </p>
-              </span>
+                </li>
+              </ul>
             </h2>
             <div class="income-content">
               <div class="form-container">
                 <form
+                  *ngIf="isEarning"
                   class="sc-iBYQkv amZsh"
                   [formGroup]="budgetservice.budgetForm"
                 >
@@ -414,26 +419,8 @@
             </div>
           </div>
         </div>
-       <app-bar-chart></app-bar-chart>
+        <app-bar-chart></app-bar-chart>
       </main>
     </div>
   </div>
 </div>
-
-<div id="contactForm">
-  <h1 id="poptitle"></h1>
-
-  <h3>Amount : <span style="color: #222260" id="popamount"> </span></h3>
-  <h3>Date : <span style="color: #222260" id="popdate"> </span></h3>
-  <h3>Category : <span style="color: #222260" id="popcategory"> </span></h3>
-  <h3>AddedBy : <span style="color: #222260" id="popaddedBy"> </span></h3>
-  <h3>
-    Description : <span style="color: #222260" id="popdescription"> </span>
-  </h3>
-
-  <button class="formBtn" style="margin-left: 10px" (click)="closebox4()">
-    close
-  </button>
-</div>
-
-<div id="overlay" class="overlay" (click)="closebox4()"></div>

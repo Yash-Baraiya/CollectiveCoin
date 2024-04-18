@@ -142,7 +142,7 @@
                 </div>
                 <button
                   *ngIf="
-                    (role === 'admin' && priority <= i.priority) ||
+                    (role === 'admin' && priority < i.priority) ||
                     (role === 'admin' && i.role === 'user')
                   "
                   style="
@@ -161,7 +161,7 @@
                 </button>
                 <button
                   *ngIf="
-                    (role === 'admin' && priority <= i.priority) ||
+                    (role === 'admin' && priority < i.priority) ||
                     (role === 'admin' && i.role === 'user')
                   "
                   class="bottom-right-btn"
@@ -211,6 +211,7 @@
         </div>
         <div class="btn-con">
           <button
+            *ngIf="role === 'admin'"
             style="
               padding: 1rem;
               background: #222260;
@@ -270,6 +271,7 @@
             Email Admin
           </button>
           <button
+            *ngIf="role === 'admin'"
             class="bottom-right-btn"
             style="
               padding: 1rem;

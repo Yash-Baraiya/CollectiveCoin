@@ -12,6 +12,7 @@
   "dependencies": {
     "@types/uuid": "^9.0.8",
     "bcryptjs": "^2.4.3",
+    "cloudinary": "^2.1.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",

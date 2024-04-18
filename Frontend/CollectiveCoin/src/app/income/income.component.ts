@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { IncomeService } from './income.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoginDataService } from '../shared/login-data.service';
 @Component({
   selector: 'app-income',
   templateUrl: './income.component.html',
@@ -9,16 +10,19 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class IncomeComponent implements OnInit {
   incomedatapop: any;
-  role: string
+  isEarning: any;
+  data: any;
   constructor(
     public incomeservice: IncomeService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private loginservice: LoginDataService
   ) {}
 
   ngOnInit(): void {
-    this.role = localStorage.getItem("role");
-    
+    this.data = this.loginservice.getData();
+    this.isEarning = this.data.data.user.isEarning;
+
     this.incomeservice.getIncome().subscribe(() => {
       console.log(' subscriberd method is getting called');
     });
