@@ -1,11 +1,11 @@
 <div id="root">
-  <div class="sc-ipEyDJ inODki App">
-    <div class="sc-iveFHk gxwcQv"></div>
-    <div class="sc-bcXHqe con-in">
+  <div class="fir-div App">
+    <div class="emp-div"></div>
+    <div class="con-in">
       <app-sidebar></app-sidebar>
       <main>
-        <div class="sc-kDvujY nbQqU">
-          <div class="sc-gswNZR jriFEe">
+        <div class="totaldiv">
+          <div class="con-content1">
             <h2 class="total-income">
               Total Expense:
               <span style="color: red">${{ expenseservice.totalexpense }}</span>
@@ -13,7 +13,7 @@
             <div class="income-content">
               <div class="form-container">
                 <form
-                  class="sc-jrcTuL ezQrzZ"
+                  class="sc-jrcTuL exenseform"
                   [formGroup]="expenseservice.expenseForm"
                 >
                   <div class="input-control">
@@ -181,7 +181,7 @@
                   </div>
                   <div class="submit-btn">
                     <button
-                      class="sc-gKPRtg hqswlf"
+                      class="sc- formbtn"
                       style="
                         background-color: rgb(228, 18, 204);
                         padding: 0.8rem 1.6rem;
@@ -410,21 +410,3 @@
     </div>
   </div>
 </div>
-
-<div id="contactForm">
-  <h1 id="poptitle"></h1>
-
-  <h3>Amount : <span style="color: #222260" id="popamount"> </span></h3>
-  <h3>Date : <span style="color: #222260" id="popdate"> </span></h3>
-  <h3>Category : <span style="color: #222260" id="popcategory"> </span></h3>
-  <h3>AddedBy : <span style="color: #222260" id="popaddedBy"> </span></h3>
-  <h3>
-    Description : <span style="color: #222260" id="popdescription"> </span>
-  </h3>
-
-  <button class="formBtn" style="margin-left: 10px" (click)="closebox4()">
-    close
-  </button>
-</div>
-
-<div id="overlay" class="overlay" (click)="closebox4()"></div>

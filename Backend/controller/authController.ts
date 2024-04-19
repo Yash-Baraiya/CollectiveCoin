@@ -333,12 +333,20 @@ export const forgotPassword = async (
     // 3) Send it to user's email
     const resetURL = `localhost:4200/resetpassword/${resetToken}`;
 
-    const message = `<p>Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: <a href= "${resetURL}">${resetURL}</a>.\nOTP : ${otp}\nIf you didn't forget your password, please ignore this email!</p>`;
+    //const message = `<p>Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: <a href= "${resetURL}">${resetURL}</a>.\nOTP : ${otp}\nIf you didn't forget your password, please ignore this email!</p>`;
     try {
       await sendEmail({
         to: email,
         subject: "reset Your password(valid for 10 minutes)",
-        text: message,
+        html: ` <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2>Forgot Your Password?</h2>
+        <p>Hi there,</p>
+        <p>We received a request to reset your password. If this was you, please click the link below to reset your password:</p>
+        <p><a href="${resetURL}" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Reset Password</a></p>
+        <p>If you didn't request to reset your password, please ignore this email. Your account is still safe and no changes have been made.</p>
+        <p>Additionally, here is your One-Time Password (OTP) for verification: <strong>${otp}</strong></p>
+        <p>Thank you,<br>CollectiveCoin Team</p>
+    </div>`,
       });
 
       res.status(200).json({
