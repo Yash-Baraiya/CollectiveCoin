@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { myTheme } from '../../environments/environment';
-import { LoginDataService } from '../shared/login-data.service';
+import { myTheme } from '../../../environments/environment';
+import { LoginDataService } from '../login-data.service';
 import { FormGroup } from '@angular/forms';
 
 @Component({
