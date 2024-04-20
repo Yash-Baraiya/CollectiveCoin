@@ -34,6 +34,8 @@ export class ExpenseService {
         Validators.maxLength(40),
       ]),
       date: new FormControl('', [Validators.required]),
+      markAspaid: new FormControl(true, [Validators.required]),
+      duedate: new FormControl(''),
     });
   }
 
@@ -90,6 +92,8 @@ export class ExpenseService {
                 id: expense._id,
                 description: expense.description,
                 addedBy: expense.addedBy,
+                markAspaid: expense.markAspaid,
+                duedate: this.datepipe.transform(expense.duedate, 'MM/dd/yyyy'),
               }));
               this.expamounts = resultData.monthlyexpense
                 .map((expense) => ({
@@ -141,7 +145,9 @@ export class ExpenseService {
             try {
               console.log(resultData);
               alert('expense deleted successfully');
-              this.getExpense();
+              this.getExpense().subscribe(() => {
+                console.log('getting expense again');
+              });
             } catch (error) {
               console.log(error);
             }

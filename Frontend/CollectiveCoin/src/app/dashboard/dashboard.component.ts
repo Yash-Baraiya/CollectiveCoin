@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { IncomeService } from '../income/income.service';
 import { ExpenseService } from '../expense/expense.service';
@@ -9,15 +9,20 @@ import { TransactionService } from '../transactions/transaction.service';
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   totalbalance: any = 0;
   constructor(
-    private http: HttpClient,
     public incomeservice: IncomeService,
     public expenseservice: ExpenseService,
     public transactionservice: TransactionService
   ) {}
 
+  ngOnDestroy(): void {
+    this.transactionservice.maxexpense = 0;
+    this.transactionservice.maxincome = 0;
+    this.transactionservice.minincome = 0;
+    this.transactionservice.minexpense = 0;
+  }
   ngOnInit(): void {
     this.incomeservice.getIncome();
     this.expenseservice.getExpense();

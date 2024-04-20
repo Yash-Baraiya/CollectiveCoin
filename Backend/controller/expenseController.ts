@@ -3,9 +3,12 @@ import { ExpenseIn } from "../interface/expenseInterface";
 import User from "../models/userModel";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
+import sendEmail from "../email";
+import { UserIn } from "../interface/userInterface";
 
 export const addExpense = async (req: Request, res: Response) => {
-  const { title, amount, category, description, date } = req.body;
+  const { title, amount, category, description, date, markAspaid, duedate } =
+    req.body;
 
   const auth = req.headers.authorization;
   if (!auth) {
@@ -22,6 +25,7 @@ export const addExpense = async (req: Request, res: Response) => {
   if (!user) {
     throw new Error("user not found");
   }
+
   const expense = await Expense.create({
     title,
     amount,
@@ -30,6 +34,8 @@ export const addExpense = async (req: Request, res: Response) => {
     date,
     addedBy: user.name,
     familycode: user.familycode,
+    markAspaid: markAspaid,
+    duedate: duedate,
   });
 
   try {
@@ -43,6 +49,34 @@ export const addExpense = async (req: Request, res: Response) => {
         .json({ message: "Amount must be a positive number!" });
     }
 
+    if (markAspaid === false) {
+      //to not block the response
+      setTimeout(async () => {
+        const users = await User.find({ familycode: user.familycode });
+        for (const u of users) {
+          await sendEmail({
+            from: "collectivecoin@team.in",
+            to: u.email,
+            subject: "Bill Due Reminder",
+            html: `<div style="font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; background-color: #f7f7f7;">
+          <div style="max-width: 600px; margin: 20px auto; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);">
+              <h1 style="color: #333; text-align: center;">Bill Due Reminder</h1>
+              <p style="color: #666; text-align: center;">Hello,</p>
+              <p style="color: #666; margin-bottom: 20px; text-align: center;">We're writing to remind you that a new bill has been added by ${user.name} in your family, and it's due to be paid soon. Here are the details:</p>
+              <div style="padding: 20px; background-color: #f7f7f7; border-radius: 10px;">
+                  <h2 style="color: #333; margin-top: 0;">Bill Details:</h2>
+                  <p style="margin-bottom: 10px;"><strong>Title:</strong> ${title}</p>
+                  <p style="margin-bottom: 10px;"><strong>Amount:</strong> ${amount}</p>
+                  <p style="margin-bottom: 10px;"><strong>Due Date:</strong>${duedate}</p>
+              </div>
+              <p style="color: #666; margin-top: 20px;">Please make sure to take necessary actions to pay the bill on time.</p>
+              <p style="color: #666;">Thank you.</p>
+          </div>
+          </div>`,
+          });
+        }
+      }, 0);
+    }
     res.status(200).json({
       status: "success",
       message: "Expense Added",

@@ -1,4 +1,4 @@
-import { Document, Schema, model } from "mongoose";
+import { Schema, model } from "mongoose";
 import { ExpenseIn } from "../interface/expenseInterface";
 
 const ExpenseSchema = new Schema<ExpenseIn>(
@@ -41,7 +41,16 @@ const ExpenseSchema = new Schema<ExpenseIn>(
     familycode: {
       type: String,
     },
+    markAspaid: {
+      type: Boolean,
+      default: true,
+    },
+    duedate: {
+      type: Date,
+      trim: true,
+    },
   },
+
   { timestamps: true }
 );
 

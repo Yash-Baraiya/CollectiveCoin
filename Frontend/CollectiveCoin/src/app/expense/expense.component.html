@@ -115,13 +115,14 @@
                       name="category"
                       id="category"
                       formControlName="category"
+                      (change)="onCategoryChange($event)"
                     >
                       <option value="" disabled="">Select Option</option>
                       <option value="education">Education</option>
                       <option value="groceries">Groceries</option>
                       <option value="health">Health</option>
                       <option value="subscriptions">Subscriptions</option>
-
+                      <option value="monthlybills  ">Monthly Bills</option>
                       <option value="shopping">Shopping</option>
                       <option value="travelling">Travelling</option>
                       <option value="other">Other</option>
@@ -144,6 +145,36 @@
                       </div>
                     </div>
                   </div>
+                  <div *ngIf="showAdditionalFields">
+                    <label
+                      for="markAsPaid"
+                      style="display: inline-block; margin-right: 10px"
+                      >Mark as Paid</label
+                    >
+                    <input
+                      type="checkbox"
+                      name="markAsPaid"
+                      id="markAsPaid"
+                      formControlName="markAspaid"
+                      checked
+                    />
+                    <div
+                      class="input-control"
+                      *ngIf="
+                        expenseservice.expenseForm.get('markAspaid').value ===
+                        false
+                      "
+                    >
+                      <input
+                        type="text"
+                        placeholder="Due Date"
+                        class="form-control"
+                        bsDatepicker
+                        formControlName="duedate"
+                      />
+                    </div>
+                  </div>
+
                   <div class="input-control">
                     <textarea
                       name="description"
@@ -261,6 +292,11 @@
                       src="https://img.icons8.com/ios/50/more.png"
                       alt="more"
                     />
+                    <img
+                      *ngIf="i.category === 'monthlybills'"
+                      src="https://img.icons8.com/dotty/80/installment-plan.png"
+                      alt="installment-plan"
+                    />
                   </div>
                   <div
                     class="content"
@@ -293,7 +329,26 @@
                           background: #ff6b6b;
                         "
                       ></span>
+                      <button
+                        *ngIf="
+                          i.category === 'monthlybills' &&
+                          i.markAspaid === false
+                        "
+                        style="
+                          background: #222260;
+                          color: #fcf6f9;
+                          border: none;
+                          height: 36px;
+                          width: 100px;
+                          border-radius: 6px;
+                          margin-left: 200px;
+                        "
+                        [id]="i.id"
+                      >
+                        Pay
+                      </button>
                     </h5>
+
                     <div
                       class="inner-content"
                       style="
@@ -371,6 +426,20 @@
                             />
                           </svg>
                           {{ i.category }}
+                        </p>
+
+                        <p
+                          id="markAsPaid"
+                          *ngIf="i.category === 'monthlybills' && i.duedate"
+                        >
+                          <img
+                            width="16"
+                            height="16"
+                            style="color: #222260"
+                            src="https://img.icons8.com/external-smashingstocks-mixed-smashing-stocks/68/000000/external-due-date-finance-trading-and-banking-smashingstocks-mixed-smashing-stocks.png"
+                            alt="external-due-date-finance-trading-and-banking-smashingstocks-mixed-smashing-stocks"
+                          />
+                          {{ i.duedate }}
                         </p>
                       </div>
                       <div class="btn-con">

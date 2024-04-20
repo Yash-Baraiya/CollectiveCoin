@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { IncomeService } from './income.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoginDataService } from '../shared/login-data.service';
+import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 @Component({
   selector: 'app-income',
   templateUrl: './income.component.html',
@@ -12,12 +13,21 @@ export class IncomeComponent implements OnInit {
   incomedatapop: any;
   isEarning: any;
   data: any;
+  bsConfig: Partial<BsDatepickerConfig>;
   constructor(
     public incomeservice: IncomeService,
     private router: Router,
     private route: ActivatedRoute,
     private loginservice: LoginDataService
-  ) {}
+  ) {
+    this.bsConfig = Object.assign(
+      {},
+      {
+        containerClass: 'theme-dark-blue',
+        style: 'background-color : blue ',
+      }
+    );
+  }
 
   ngOnInit(): void {
     this.data = this.loginservice.getData();

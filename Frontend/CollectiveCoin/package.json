@@ -23,6 +23,7 @@
     "@ngrx/effects": "^17.2.0",
     "@ngrx/store": "^17.2.0",
     "bootstrap": "^5.3.3",
+    "bootstrap-datepicker": "^1.10.0",
     "bootstrap-icons": "^1.11.3",
     "chart.js": "^4.4.2",
     "ng2-charts": "^6.0.0",

@@ -21,6 +21,7 @@ export class BarCartComponent {
     'shopping',
     'clothing',
     'travelling',
+    'monthlybills',
   ];
   constructor(private budgetservice: BudgetService) {
     Chart.register(...registerables);

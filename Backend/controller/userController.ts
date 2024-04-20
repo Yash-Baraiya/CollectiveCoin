@@ -38,15 +38,20 @@ export const addUser = async (req: Request, res: Response) => {
   if (user) {
     const loginURL = `localhost:4200/login`;
 
-    const message = `your admin is requesting to join with them on our Collective app family please join using following url ${loginURL}
-    please login with this family code : ${familycode}`;
-
     try {
       await sendEmail({
         from: Admin.email,
         to: email1,
         subject: "login request to Collective Coin",
-        text: message,
+        html: `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2>Welcome to CollectiveCoin!</h2>
+        <p>Hi there,</p>
+        <p>I'm delighted to welcome you to our family budget management community! I've been using our website for a while now, and it has made managing our family finances so much easier.</p>
+        <p>To join our family and start managing your finances with us, please click the link below:</p>
+        <p><a href="${loginURL}" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Join Our Family</a></p>
+        <p>During the registration process, you'll be asked to enter a Family Code. Here's the code you need to join our family: <strong>${familycode}</strong></p>
+        <p>I'm excited to have you onboard, and I'm looking forward to us achieving our financial goals together!</p>
+        <p>Warm regards,<br>Your Name</p></div>`,
       });
 
       res.status(200).json({

@@ -1,4 +1,4 @@
-import express, { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import crypto from "crypto";
 const { promisify } = require("util");
 import jwt, { JwtPayload } from "jsonwebtoken";
@@ -26,7 +26,7 @@ const createSendToken = (user: any, statusCode: any, res: Response) => {
   const token = signToken(user._id);
   const jwtExpiresIn = process.env.JWT_COOKIE_EXPIRES_IN
     ? parseInt(process.env.JWT_COOKIE_EXPIRES_IN)
-    : 7; //bydefault 7 days if expitation time is not set
+    : 7;
   const cookieOptions = {
     expires: new Date(Date.now() + jwtExpiresIn * 24 * 60 * 60 * 1000),
     httpOnly: true,
@@ -336,6 +336,7 @@ export const forgotPassword = async (
     //const message = `<p>Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: <a href= "${resetURL}">${resetURL}</a>.\nOTP : ${otp}\nIf you didn't forget your password, please ignore this email!</p>`;
     try {
       await sendEmail({
+        from: "collectivecoin@team.in",
         to: email,
         subject: "reset Your password(valid for 10 minutes)",
         html: ` <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">

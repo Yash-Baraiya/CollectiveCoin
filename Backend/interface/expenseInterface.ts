@@ -8,4 +8,6 @@ export interface ExpenseIn extends Document {
   description: string;
   addedBy?: string;
   familycode?: string;
+  markAspaid?: boolean;
+  duedate?: Date;
 }
