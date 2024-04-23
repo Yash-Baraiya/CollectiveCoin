@@ -1,12 +1,12 @@
 import express from "express";
-import { protect, restrictTo } from "../controller/authController";
+import { protect } from "../controller/authController";
 import {
   addExpense,
   getExpense,
   deleteExpense,
   updateExpense,
 } from "../controller/expenseController";
-import { createCheckOutSession } from "./../stripe";
+import { createCheckOutSession, handleStripeEvent } from "./../stripe";
 
 const router = express.Router();
 
@@ -18,4 +18,6 @@ router
   .delete("/delete-expense/:expenseId", protect, deleteExpense)
   .patch("/update-expense/:expenseId", protect, updateExpense)
   .post("/billpayment/:expenseId", protect, createCheckOutSession);
+
+router.post("/stripe-webhook", handleStripeEvent);
 export default router;

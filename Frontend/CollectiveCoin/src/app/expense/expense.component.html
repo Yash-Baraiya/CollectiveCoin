@@ -344,6 +344,7 @@
                           margin-left: 200px;
                         "
                         [id]="i.id"
+                        (click)="payment(i.id)"
                       >
                         Pay
                       </button>
@@ -430,7 +431,11 @@
 
                         <p
                           id="markAsPaid"
-                          *ngIf="i.category === 'monthlybills' && i.duedate"
+                          *ngIf="
+                            i.category === 'monthlybills' &&
+                            i.markAspaid === false &&
+                            i.duedate
+                          "
                         >
                           <img
                             width="16"

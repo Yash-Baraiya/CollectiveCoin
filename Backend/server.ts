@@ -1,4 +1,4 @@
-import express, { Application } from "express";
+import express, { Request, Response, Application } from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import userRouter from "./routes/userRoutes";
@@ -20,7 +20,13 @@ app.use(
   })
 );
 
-app.use(express.json());
+app.use(
+  express.json({
+    verify: (req: Request, res: Response, buf: Buffer) => {
+      (req as any).rawBody = buf;
+    },
+  })
+);
 app.listen(8000, () => {
   console.log("hello from server side");
 });
@@ -32,7 +38,7 @@ const DB = process.env.DATABASE!.replace(
 mongoose.connect(DB).then(() => {
   console.log("db connected successfully !");
 });
-//app.use("*", cloudinaryconfig);
+
 app.use("/api/v1/CollectiveCoin/user", userRouter);
 app.use("/api/v1/CollectiveCoin/user/incomes", incomeRouter);
 app.use("/api/v1/CollectiveCoin/user/expenses", expenseRouter);

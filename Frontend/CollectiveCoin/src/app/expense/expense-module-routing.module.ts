@@ -18,6 +18,7 @@ const routes: Routes = [
         component: UpdateexpenseComponent,
         canActivate: [RouteGuard],
       },
+      
     ],
   },
 ];

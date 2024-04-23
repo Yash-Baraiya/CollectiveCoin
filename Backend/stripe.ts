@@ -24,6 +24,9 @@ export const createCheckOutSession = async (req: Request, res: Response) => {
     const userId = decodedtoken.id;
 
     const user = await User.findOne({ _id: userId });
+    if (!user) {
+      throw new Error("user not found");
+    }
     const expenseId = req.params.expenseId;
     const expense = await Expense.findById(expenseId);
 
@@ -50,17 +53,59 @@ export const createCheckOutSession = async (req: Request, res: Response) => {
       mode: "payment",
       success_url: `${req.protocol}://${req.get("host")}/`,
       cancel_url: `${req.protocol}://${req.get("host")}/expenses`,
+      metadata: {
+        expenseId: expenseId,
+        username: user.name,
+      },
     });
 
     res.status(303).json({
       status: "success",
       link: session.url,
       name: expense.title,
-      paidby: user?.name,
     });
   } catch (error: any) {
     console.log(error);
     res.status(400).json({
+      message: error.message,
+    });
+  }
+};
+
+export const handleStripeEvent = async (req: Request, res: Response) => {
+  try {
+    const payload = (req as any).rawBody;
+    const sig = req.headers["stripe-signature"] as string;
+
+    const event = stripeInstance.webhooks.constructEvent(
+      payload,
+      sig,
+      process.env.STRIPE_WEBHOOK_SECRET!
+    );
+
+    if (event.type === "checkout.session.completed") {
+      const session = event.data.object;
+
+      if (!session.metadata) {
+        throw new Error("session not found");
+      }
+      const expenseId = session.metadata.expenseId;
+      const username = session.metadata.username;
+      console.log(expenseId);
+
+      await Expense.findByIdAndUpdate(expenseId, {
+        markAspaid: true,
+        paidBy: username,
+      });
+    }
+
+    res.status(200).json({
+      status: "success",
+    });
+  } catch (error: any) {
+    console.error(error.message);
+    res.status(400).json({
+      status: "failed",
       message: error.message,
     });
   }

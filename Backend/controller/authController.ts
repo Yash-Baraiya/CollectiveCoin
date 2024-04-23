@@ -110,11 +110,20 @@ export const signUp = async (req: Request, res: Response) => {
         photo: photo,
         priority: 1,
       });
-      const message = `Welcome to Collective Coin family! Enjoy your accountings.`;
+
       await sendEmail({
         to: req.body.email,
         subject: "Welcome to CollectiveCoin",
-        text: message,
+        html: `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2>Welcome to CollectiveCoin!</h2>
+        <p>Hi there,</p>
+        <p>We are thrilled to welcome you to CollectiveCoin, your go-to platform for managing family finances!</p>
+        <p>With CollectiveCoin, you can easily track your family's income, expenses, and budgets, helping you to achieve your financial goals together.</p>
+        <p>To get started, simply log in to your account and begin exploring the features.</p>
+        <p>If you have any questions or need assistance, feel free to reach out to our support team. We're here to help!</p>
+        <p>Thank you for choosing CollectiveCoin. We're excited to have you as part of our community!</p>
+        <p>Best regards,<br>The CollectiveCoin Team</p>
+    </div>`,
       });
       // Create and send JWT token
       createSendToken(newUser, 201, res);
@@ -133,7 +142,16 @@ export const signUp = async (req: Request, res: Response) => {
       await sendEmail({
         to: req.body.email,
         subject: "Welcome to CollectiveCoin",
-        text: message,
+        html: `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2>Welcome to CollectiveCoin!</h2>
+        <p>Hi there,</p>
+        <p>We are thrilled to welcome you to CollectiveCoin, your go-to platform for managing family finances!</p>
+        <p>With CollectiveCoin, you can easily track your family's income, expenses, and budgets, helping you to achieve your financial goals together.</p>
+        <p>To get started, simply log in to your account and begin exploring the features.</p>
+        <p>If you have any questions or need assistance, feel free to reach out to our support team. We're here to help!</p>
+        <p>Thank you for choosing CollectiveCoin. We're excited to have you as part of our community!</p>
+        <p>Best regards,<br>The CollectiveCoin Team</p>
+    </div>`,
       });
       // Create and send JWT token
       createSendToken(newUser, 201, res);

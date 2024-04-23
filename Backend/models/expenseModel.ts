@@ -49,6 +49,10 @@ const ExpenseSchema = new Schema<ExpenseIn>(
       type: Date,
       trim: true,
     },
+    paidBy: {
+      type: String,
+      trim: true,
+    },
   },
 
   { timestamps: true }

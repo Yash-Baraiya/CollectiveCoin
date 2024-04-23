@@ -10,4 +10,5 @@ export interface ExpenseIn extends Document {
   familycode?: string;
   markAspaid?: boolean;
   duedate?: Date;
+  paidBy?:string;
 }
