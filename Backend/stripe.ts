@@ -51,8 +51,8 @@ export const createCheckOutSession = async (req: Request, res: Response) => {
         },
       ],
       mode: "payment",
-      success_url: `${req.protocol}://${req.get("host")}/`,
-      cancel_url: `${req.protocol}://${req.get("host")}/expenses`,
+      success_url: `${req.protocol}://localhost:4200/Expense`,
+      cancel_url: `${req.protocol}://localhost:4200/Expense`,
       metadata: {
         expenseId: expenseId,
         username: user.name,

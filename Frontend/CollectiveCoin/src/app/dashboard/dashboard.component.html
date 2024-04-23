@@ -53,16 +53,17 @@
                       *ngIf="
                         incomeservice.totalIncome < expenseservice.totalexpense
                       "
-                      style="color: red"
+                      style="color: red; font-size: 64px"
                     >
-                      {{ totalbalence }}
+                      ${{ totalbalence }}
                     </p>
                     <p
                       *ngIf="
                         incomeservice.totalIncome >= expenseservice.totalexpense
                       "
-                      style="color: green"
+                      style="color: green; font-size: 64px"
                     >
+                      $
                       {{
                         incomeservice.totalIncome - expenseservice.totalexpense
                       }}

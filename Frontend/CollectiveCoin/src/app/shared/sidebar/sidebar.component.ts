@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { myTheme } from '../../../environments/environment';
 import { LoginDataService } from '../login-data.service';

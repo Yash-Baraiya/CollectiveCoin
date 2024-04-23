@@ -44,15 +44,18 @@ export class ExpenseComponent implements OnInit {
       .subscribe(
         (resultData: any) => {
           try {
-            console.log(resultData);
-            this.router.navigate(resultData.link);
+            const rediretLink = resultData.link;
+            window.location.href = rediretLink;
           } catch (error) {
             console.log(error);
           }
         },
         (error) => {
           console.log(error);
-          if (error.error.message) {
+          if (error.status === 303) {
+            const redirectUrl = error.error.link;
+            window.location.href = redirectUrl;
+          } else if (error.error.message) {
             alert(error.error.message);
           } else {
             alert('There was a problem loading this page. Please login again.');

@@ -9,7 +9,7 @@ export class LoginDataService {
 
   setData(parsedData: any) {
     this.data = parsedData;
-    //console.log(this.data);
+   
     localStorage.setItem('loginToken', this.data.token);
     console.log(this.data.token);
   }
