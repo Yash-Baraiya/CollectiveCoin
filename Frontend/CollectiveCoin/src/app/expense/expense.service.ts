@@ -94,6 +94,7 @@ export class ExpenseService {
                 addedBy: expense.addedBy,
                 markAspaid: expense.markAspaid,
                 duedate: this.datepipe.transform(expense.duedate, 'MM/dd/yyyy'),
+                paidBy: expense.paidBy,
               }));
               this.expamounts = resultData.monthlyexpense
                 .map((expense) => ({

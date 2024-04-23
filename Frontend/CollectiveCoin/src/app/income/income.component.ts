@@ -20,6 +20,7 @@ export class IncomeComponent implements OnInit {
     private route: ActivatedRoute,
     private loginservice: LoginDataService
   ) {
+    this.isEarning = localStorage.getItem('isEarning');
     this.bsConfig = Object.assign(
       {},
       {
@@ -30,8 +31,6 @@ export class IncomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.data = this.loginservice.getData();
-    this.isEarning = this.data.data.user.isEarning;
     this.incomeservice.getIncome().subscribe(() => {
       console.log(' subscriberd method is getting called');
     });

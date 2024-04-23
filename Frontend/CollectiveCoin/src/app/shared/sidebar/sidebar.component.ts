@@ -21,7 +21,10 @@ export class SidebarComponent implements OnInit {
   constructor(
     private router: Router,
     private loginDataService: LoginDataService
-  ) {}
+  ) {
+    this.name = localStorage.getItem('username');
+    this.photo = localStorage.getItem('photo');
+  }
 
   isActive(Route: string) {
     return this.router.isActive(Route, true);
@@ -35,12 +38,7 @@ export class SidebarComponent implements OnInit {
     this.status = !this.status;
   }
 
-  ngOnInit(): void {
-    this.data = this.loginDataService.getData();
-    this.name = this.data.data.user.name;
-    this.photo = this.data.data.user.photo;
-    console.log('user photo string is', this.photo);
-  }
+  ngOnInit(): void {}
 
   clearStorage() {
     console.log('click happened');

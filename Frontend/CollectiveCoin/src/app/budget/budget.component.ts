@@ -57,7 +57,9 @@ export class BudgetComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private loginservice: LoginDataService
-  ) {}
+  ) {
+    this.isEarning = localStorage.getItem('isEarning');
+  }
   openbox4(id: any) {
     this.router.navigate([`update-budget/${id}`], { relativeTo: this.route });
   }
@@ -70,8 +72,6 @@ export class BudgetComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.data = this.loginservice.getData();
-    this.isEarning = this.data.data.user.isEarning;
     this.budgetservice.getBudgets().subscribe(() => {
       console.log('getting budgets');
     });

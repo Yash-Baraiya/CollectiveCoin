@@ -18,7 +18,7 @@ export class AppComponent {
 
   @HostListener('window:beforeunload', ['$event'])
   onBeforeUnload(event: Event) {
-    this.clearstorage.clearLocalStorage();
+    //this.clearstorage.clearLocalStorage();
   }
 
   @HostListener('window:unload', ['$event'])
@@ -26,6 +26,6 @@ export class AppComponent {
     const loginToken = localStorage.getItem('LoginToken');
     console.log(loginToken);
 
-    this.clearstorage.clearLocalStorage();
+    //this.clearstorage.clearLocalStorage();
   }
 }
