@@ -201,3 +201,62 @@ h1 {
   margin: 0;
   color: #222260;
 }
+
+/* Styles for the filters section */
+.filters {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap; /* Allow wrapping if content overflows */
+}
+
+/* Styles for the form group */
+.filters form {
+  display: flex;
+  flex-wrap: wrap; /* Allow wrapping if content overflows */
+}
+
+/* Styles for the form group 
+/* .filters .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1; /* Let form groups take available space 
+}
+
+/* Styles for the label 
+.filters label {
+  color: #222260;
+  margin-right: 0.5rem; /* Add space between label and input 
+}
+
+/* Styles for the select input 
+.filters select,
+.filters input[type="date"] {
+  flex: 1; /* Let input fields take available space 
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 2px solid #fff;
+  background: transparent;
+  color: #222260;
+} */
+
+/* Styles for the filter buttons */
+/* .filters .filter-item button {
+  padding: 1rem;
+  background: #222260;
+  color: #fcf6f9;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  margin-left: 0.5rem; /* Add space between buttons 
+} */
+
+/* Styles for the clear button */
+/* .filters .filter-item button.clear {
+  background: #aaa;
+}
+
+/* Hover effect for filter buttons 
+.filters .filter-item button:hover {
+  background: #000;
+} */

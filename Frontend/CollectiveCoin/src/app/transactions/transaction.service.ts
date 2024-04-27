@@ -1,6 +1,8 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +17,15 @@ export class TransactionService {
   minexpense: number = 0;
   data: any;
   recenthistory: Array<any> = [];
-  constructor(private http: HttpClient, private router: Router) {}
+  filtersForm: FormGroup;
+
+  constructor(private http: HttpClient, private router: Router) {
+    this.filtersForm = new FormGroup({
+      type: new FormControl('', Validators.required),
+      startDate: new FormControl(''),
+      endDate: new FormControl(''),
+    });
+  }
   gettAllTransactions() {
     this.http
       .get(
@@ -94,6 +104,35 @@ export class TransactionService {
             alert(error.error.message);
           } else {
             alert('somthing went wrong please try again after some time');
+          }
+        }
+      );
+  }
+
+  getFilteredTransactions(): void {
+    const formData = this.filtersForm.value;
+
+    this.http
+      .get<any>(
+        `http://localhost:8000/api/v1/CollectiveCoin/user/transactions/filter`,
+        { params: formData }
+      )
+      .subscribe(
+        (filteredData) => {
+          try {
+            console.log(filteredData);
+            // Assuming filteredData is an array of transactions
+            this.alltransactions = filteredData.transactions;
+          } catch (error) {
+            console.log(error);
+          }
+        },
+        (error) => {
+          console.log(error);
+          if (error.error.message) {
+            alert(error.error.message);
+          } else {
+            alert('Something went wrong. Please try again after some time.');
           }
         }
       );
