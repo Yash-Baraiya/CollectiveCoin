@@ -51,6 +51,7 @@ export class LoginComponent implements OnInit {
     document.getElementById('overlay').style.display = 'none';
   }
   login() {
+    console.log('login button clicked');
     let bodyData = this.loginForm.value;
 
     this.http
