@@ -7,11 +7,12 @@ import { SignupComponent } from './signup/signup.component';
 import { MembersComponent } from './members/members.component';
 import { RouteGuard } from './route.guard';
 import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
+import { CoverpageComponent } from './coverpage/coverpage.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: LoginComponent,
+    component: CoverpageComponent,
   },
   {
     path: 'DashBoard',
@@ -38,6 +39,11 @@ const routes: Routes = [
     canActivate: [RouteGuard],
   },
   {
+    path: 'Members',
+    component: MembersComponent,
+    canActivate: [RouteGuard],
+  },
+  {
     path: 'signup',
     component: SignupComponent,
   },
@@ -45,11 +51,7 @@ const routes: Routes = [
     path: 'login',
     component: LoginComponent,
   },
-  {
-    path: 'Members',
-    component: MembersComponent,
-    canActivate: [RouteGuard],
-  },
+
   {
     path: 'resetpassword/:token',
     component: ResetpasswordComponent,

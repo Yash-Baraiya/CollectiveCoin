@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { LoginDataService } from '../shared/login-data.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-signup',
@@ -15,7 +16,8 @@ export class SignupComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private loginDataService: LoginDataService
+    private loginDataService: LoginDataService,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -24,10 +26,9 @@ export class SignupComponent implements OnInit {
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [
         Validators.required,
-        Validators.minLength(8),
+        Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/),
       ]),
-      // role: new FormControl('user', [Validators.required]),
-      // isEarning: new FormControl('false', [Validators.required]),
+
       familycode: new FormControl('', [
         Validators.required,
         Validators.minLength(5),
@@ -43,11 +44,9 @@ export class SignupComponent implements OnInit {
     formData.append('name', this.signupForm.get('name').value);
     formData.append('email', this.signupForm.get('email').value);
     formData.append('password', this.signupForm.get('password').value);
-    // formData.append('role', this.signupForm.get('role').value);
-    // formData.append('isEarning', this.signupForm.get('isEarning').value);
+
     formData.append('familycode', this.signupForm.get('familycode').value);
 
-    // Append the photo file separately
     const photoFile = this.signupForm.get('photo').value;
     formData.append('photo', photoFile);
 
@@ -57,17 +56,17 @@ export class SignupComponent implements OnInit {
         (resultData: any) => {
           if (resultData.status === 'success') {
             this.loginDataService.setData(resultData);
-            alert('Signed up successfully');
+            this.showMessage('signedUp successfully');
             this.router.navigate(['/DashBoard']);
           } else {
-            alert(resultData.message);
+            this.showMessage(resultData.message);
           }
         },
         (error) => {
           console.log(error);
           if (error.error.message) {
             console.log(error.error.message);
-            alert(error.error.message);
+            this, this.showMessage(error.error.message);
           } else {
             alert('An error occurred. Please try again later.');
           }
@@ -87,5 +86,12 @@ export class SignupComponent implements OnInit {
     } else {
       alert('please fill the form as directed');
     }
+  }
+
+  showMessage(message: any) {
+    this.snackBar.open(message || 'An error occurred', 'Close', {
+      duration: 5000,
+      panelClass: ['snackbar-error'],
+    });
   }
 }

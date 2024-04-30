@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-resetpassword',
@@ -17,7 +18,8 @@ export class ResetpasswordComponent {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -50,24 +52,24 @@ export class ResetpasswordComponent {
         .subscribe(
           (resultData: any) => {
             if (resultData.status === 'success') {
-              alert('password reseted successfully');
+              this.showMessage('password reseted successfully');
               this.router.navigate(['/login']);
             } else {
-              alert(resultData.messege);
+              this.showMessage(resultData.messege);
             }
           },
           (error) => {
             console.log(error);
             if (error.message) {
               console.log(error.error.messege);
-              alert(error.messege);
+              this.showMessage(error.messege);
             } else {
-              alert('An error occurred. Please try again later.');
+              this.showMessage('An error occurred. Please try again later.');
             }
           }
         );
     } else {
-      alert('please fill the form correctly');
+      this.showMessage('please fill the form correctly');
     }
   }
 
@@ -75,7 +77,13 @@ export class ResetpasswordComponent {
     if (this.passwordreset.valid) {
       this.resetpassword();
     } else {
-      alert('please fill the form as directed');
+      this.showMessage('please fill the form as directed');
     }
+  }
+  showMessage(message: any) {
+    this.snackBar.open(message || 'An error occurred', 'Close', {
+      duration: 5000,
+      panelClass: ['snackbar-error'],
+    });
   }
 }

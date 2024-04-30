@@ -5,6 +5,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-updateincome',
@@ -20,7 +21,7 @@ export class UpdateincomeComponent implements OnInit, OnDestroy {
     public incomeservice: IncomeService,
     private route: ActivatedRoute,
     private http: HttpClient,
-    private datepipe: DatePipe
+    private snackBar: MatSnackBar
   ) {}
   ngOnInit(): void {
     this.updateIncomeForm = new FormGroup({
@@ -78,7 +79,7 @@ export class UpdateincomeComponent implements OnInit, OnDestroy {
           .subscribe(
             (resultData) => {
               try {
-                alert('income updated successfully');
+                this.showMessage('income updated successfully');
                 console.log(resultData);
                 obseraver.next();
               } catch (error) {
@@ -88,9 +89,11 @@ export class UpdateincomeComponent implements OnInit, OnDestroy {
             (error) => {
               console.log(error);
               if (error.error.message) {
-                alert(error.error.message);
+                this.showMessage(error.error.message);
               } else {
-                alert('somthing went wrong please try again after some time');
+                this.showMessage(
+                  'somthing went wrong please try again after some time'
+                );
               }
             }
           );
@@ -112,7 +115,13 @@ export class UpdateincomeComponent implements OnInit, OnDestroy {
         });
       });
     } else {
-      alert('please fill form as directed');
+      this.showMessage('please fill form as directed');
     }
+  }
+  showMessage(message: any) {
+    this.snackBar.open(message || 'An error occurred', 'Close', {
+      duration: 5000,
+      panelClass: ['snackbar-error'],
+    });
   }
 }

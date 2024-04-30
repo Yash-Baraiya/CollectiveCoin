@@ -11,31 +11,17 @@ import { FormGroup } from '@angular/forms';
 })
 export class SidebarComponent implements OnInit {
   imageform: FormGroup;
-  status: boolean = false;
-  classStatus = false;
   data: any;
   name: string = '';
   photo: any = '';
-  myTheme = myTheme;
 
-  constructor(
-    private router: Router,
-    private loginDataService: LoginDataService
-  ) {
+  constructor(private router: Router) {
     this.name = localStorage.getItem('username');
     this.photo = localStorage.getItem('photo');
   }
 
   isActive(Route: string) {
     return this.router.isActive(Route, true);
-  }
-
-  onSwitchClass() {
-    this.classStatus = !this.classStatus;
-  }
-
-  onDropdownClick(): void {
-    this.status = !this.status;
   }
 
   ngOnInit(): void {}

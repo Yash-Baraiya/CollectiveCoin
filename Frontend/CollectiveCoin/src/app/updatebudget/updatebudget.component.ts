@@ -5,6 +5,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { DatePipe } from '@angular/common';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-updatebudget',
@@ -20,7 +21,8 @@ export class UpdatebudgetComponent {
     public budgetservice: BudgetService,
     private route: ActivatedRoute,
     private http: HttpClient,
-    private datepipe: DatePipe
+    private datepipe: DatePipe,
+    private snackBar: MatSnackBar
   ) {}
   ngOnInit(): void {
     this.route.params.subscribe((param) => {
@@ -81,7 +83,7 @@ export class UpdatebudgetComponent {
           .subscribe(
             (resultData) => {
               try {
-                alert('Budget updated successfully');
+                this.showMessage('Budget updated successfully');
                 console.log(resultData);
                 obseraver.next();
               } catch (error) {
@@ -91,9 +93,11 @@ export class UpdatebudgetComponent {
             (error) => {
               console.log(error);
               if (error.error.message) {
-                alert(error.error.message);
+                this.showMessage(error.error.message);
               } else {
-                alert('somthing went wrong please try again after some time');
+                this.showMessage(
+                  'somthing went wrong please try again after some time'
+                );
               }
             }
           );
@@ -115,7 +119,13 @@ export class UpdatebudgetComponent {
         });
       });
     } else {
-      alert('please fill form as directed');
+      this.showMessage('please fill form as directed');
     }
+  }
+  showMessage(message: any) {
+    this.snackBar.open(message || 'An error occurred', 'Close', {
+      duration: 5000,
+      panelClass: ['snackbar-error'],
+    });
   }
 }

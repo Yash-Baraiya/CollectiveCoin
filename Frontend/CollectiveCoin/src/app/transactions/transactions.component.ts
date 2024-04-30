@@ -34,7 +34,6 @@ export class TransactionsComponent implements OnInit {
         try {
           const doc = new jsPDF();
 
-          // Add transactions to PDF
           let yOffset = 10;
           this.transactionservice.alltransactions.forEach(
             (transaction: any) => {

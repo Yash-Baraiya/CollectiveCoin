@@ -110,8 +110,11 @@ export const deleteTransaction = async (
     }
   } catch (error: any) {
     // Handle errors
-    console.error(error);
-    res.status(500).json({ message: "Server Error" });
+    console.log(error);
+    res.status(500).json({
+      status: "failed",
+      message: error.message,
+    });
   }
 
   // Call next middleware
@@ -172,9 +175,12 @@ export const downloadTransactionsPDF = async (
     );
     doc.pipe(res);
     doc.end(); // End the PDF document
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal server error" });
+  } catch (error: any) {
+    console.log(error);
+    res.status(500).json({
+      status: "failed",
+      message: error.message,
+    });
   }
 };
 
@@ -205,8 +211,8 @@ export const getFilteredTransactions = async (
 
     let query: any = { familycode: familyCode };
 
-    // Add type condition if it's provided
-    if (type && type !== "null") {
+    console.log("type :", type);
+    if (type && type !== "null" && type !== null && type !== "") {
       if (type !== "income" && type !== "expense") {
         throw new Error(
           "Invalid 'type' parameter. It should be 'income' or 'expense'."
@@ -215,7 +221,6 @@ export const getFilteredTransactions = async (
       query.type = type;
     }
 
-    // Add date conditions only if both startDate and endDate are provided
     if (startDate && endDate) {
       const parsedStartDate = new Date(startDate as string);
       const parsedEndDate = new Date(endDate as string);
@@ -240,10 +245,9 @@ export const getFilteredTransactions = async (
       query.date = { $lte: parsedEndDate };
     }
 
-    // Fetch transactions based on the constructed query
+    console.log(query);
     let transactions;
 
-    // Determine which model to use based on the presence of type in the query
     if (query.type) {
       if (query.type === "income") {
         transactions = await Income.find(query);
@@ -251,14 +255,13 @@ export const getFilteredTransactions = async (
         transactions = await Expense.find(query);
       }
     } else {
-      // If type is not specified, fetch both income and expense transactions
       transactions = await Promise.all([
         Income.find(query.date ? { ...query, date: query.date } : query),
         Expense.find(query.date ? { ...query, date: query.date } : query),
       ]);
     }
 
-    console.log("transactions :", transactions);
+    // console.log("transactions :", transactions);
     res.status(200).json({
       status: "success",
       transactions,

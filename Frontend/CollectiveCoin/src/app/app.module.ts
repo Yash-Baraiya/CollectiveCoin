@@ -16,6 +16,12 @@ import { ResetpasswordComponent } from './resetpassword/resetpassword.component'
 import { LineChartComponent } from './line-chart/line-chart.component';
 import { DatePipe } from '@angular/common';
 import { SharedModule } from './shared/shared.module';
+import { CoverpageComponent } from './coverpage/coverpage.component';
+import { EffectsModule, mergeEffects } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
+import { reducer } from './members/memberstore/members.reducer';
+import { MembersEffects } from './members/memberstore/members.effects';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -27,6 +33,7 @@ import { SharedModule } from './shared/shared.module';
     MembersComponent,
     ResetpasswordComponent,
     LineChartComponent,
+    CoverpageComponent,
   ],
   imports: [
     BrowserModule,
@@ -35,12 +42,17 @@ import { SharedModule } from './shared/shared.module';
     HttpClientModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
+    MatSnackBarModule,
+
+    StoreModule.forRoot({ members: reducer }),
+    EffectsModule.forRoot([MembersEffects]),
     SharedModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     provideAnimationsAsync(),
     DatePipe,
+    provideAnimationsAsync('noop'),
   ],
   bootstrap: [AppComponent],
 })

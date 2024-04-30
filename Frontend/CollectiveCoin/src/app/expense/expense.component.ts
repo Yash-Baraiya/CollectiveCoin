@@ -17,56 +17,15 @@ export class ExpenseComponent implements OnInit {
   constructor(
     public expenseservice: ExpenseService,
     private router: Router,
-    private route: ActivatedRoute,
-    private http: HttpClient
-  ) {
-    //this.stripePromise = this.loadStripe();
-  }
+    private route: ActivatedRoute
+  ) {}
 
-  private loadStripe(): Promise<Stripe> {
-    return (window as any).Stripe(
-      'pk_test_51P7XldSCqlnBTgeBDXQpbvdF3fgScPKDMNyjmtwTu2BWasJkUtuJvtEodSTEE9akM6eaW4mADMNjzuV78nwPLOxX00e8uBseJH'
-    );
-  }
   ngOnInit(): void {
     this.expenseservice.getExpense().subscribe(() => {
       console.log('getting expense');
     });
   }
-  payment(id: any) {
-    console.log('button clicked');
 
-    this.http
-      .post(
-        `http://localhost:8000/api/v1/CollectiveCoin/user/expenses/billpayment/${id}`,
-        {}
-      )
-      .subscribe(
-        (resultData: any) => {
-          try {
-            const rediretLink = resultData.link;
-            window.location.href = rediretLink;
-          } catch (error) {
-            console.log(error);
-          }
-        },
-        (error) => {
-          console.log(error);
-          if (error.status === 303) {
-            const redirectUrl = error.error.link;
-            window.location.href = redirectUrl;
-          } else if (error.error.message) {
-            alert(error.error.message);
-          } else {
-            alert('There was a problem loading this page. Please login again.');
-            //this.router.navigate(['/login']);
-          }
-          if (error.error.message === 'Please login first') {
-            this.router.navigate(['/login']);
-          }
-        }
-      );
-  }
   openbox4(id: any) {
     this.router.navigate([`update-expense/${id}`], { relativeTo: this.route });
   }

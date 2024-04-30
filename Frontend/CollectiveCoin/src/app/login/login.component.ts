@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginDataService } from '../shared/login-data.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private loginDataServeice: LoginDataService
+    private loginDataServeice: LoginDataService,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -27,7 +29,7 @@ export class LoginComponent implements OnInit {
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [
         Validators.required,
-        Validators.minLength(8),
+        Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/),
       ]),
       familycode: new FormControl('', [
         Validators.required,
@@ -62,11 +64,11 @@ export class LoginComponent implements OnInit {
             try {
               this.loginDataServeice.setData(resultData);
 
-              alert('logged in successfully');
+              this.showMessage('loggedin successfully');
               this.router.navigate(['/DashBoard']);
             } catch (error) {
               console.log(error);
-              alert(resultData.error.message);
+              this.showMessage(resultData.error.message);
             }
           }
         },
@@ -74,7 +76,7 @@ export class LoginComponent implements OnInit {
           console.log(error);
           if (error.error.message) {
             console.log(error.error.message);
-            alert(error.error.message);
+            this.showMessage(error.error.message);
             this.router.navigate(['/login']);
           } else {
             alert('An error occurred. Please try again later.');
@@ -98,15 +100,14 @@ export class LoginComponent implements OnInit {
             this.data = resultData;
             const token = this.data.resetToken;
             this.closebox2();
-            //this.router.navigate([`/resetpassword/${token}`]);
-            alert(this.data.messege);
+            this.showMessage(this.data.messege);
           },
           (error) => {
             console.log(error);
 
             if (error.error.messege) {
               this.closebox2();
-              alert(error.error.messege);
+              this.showMessage(error.error.message);
             } else {
               this.closebox2();
               alert(
@@ -126,5 +127,11 @@ export class LoginComponent implements OnInit {
     } else {
       alert('please fill the form as directed');
     }
+  }
+  showMessage(message: any) {
+    this.snackBar.open(message || 'An error occurred', 'Close', {
+      duration: 5000,
+      panelClass: ['snackbar-error'],
+    });
   }
 }

@@ -133,11 +133,11 @@ export const getMembers = async (req: Request, res: Response) => {
       members,
       firstadmin,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.log(error);
     res.status(400).json({
       status: "failed",
-      error,
+      message: error.message,
     });
   }
 };
@@ -163,8 +163,8 @@ export const deleteuser = async (req: Request, res: Response) => {
     if (user.role !== "admin") {
       throw new Error("You are not allowed to remove anyone");
     }
-
     const memberId = req.params.id;
+    console.log(req.params);
     const member = await User.findById(memberId);
     if (AdminId === memberId) {
       throw new Error("you can not delete yourself");
@@ -185,6 +185,7 @@ export const deleteuser = async (req: Request, res: Response) => {
       member,
     });
   } catch (error: any) {
+    console.log(error);
     res.status(400).json({
       status: "failed",
       message: error.message,
@@ -352,6 +353,7 @@ export const sendmailAdmin = async (req: Request, res: Response) => {
 
 export const makeAdmin = async (req: Request, res: Response) => {
   try {
+    console.log("coming here");
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("not Authorized");

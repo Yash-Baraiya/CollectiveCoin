@@ -5,6 +5,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { DatePipe } from '@angular/common';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Stripe } from 'stripe';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +22,8 @@ export class ExpenseService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private datepipe: DatePipe
+    private datepipe: DatePipe,
+    private snackBar: MatSnackBar
   ) {
     this.expenseForm = new FormGroup({
       title: new FormControl('', [Validators.required]),
@@ -52,7 +55,7 @@ export class ExpenseService {
           try {
             console.log(resultData);
 
-            alert('expense added successfully');
+            this.showMessage('expense added successfully');
             this.getExpense().subscribe(() => {
               console.log('getting expense again');
             });
@@ -64,10 +67,10 @@ export class ExpenseService {
         },
         (error) => {
           if (error.error.messege) {
-            alert(error.error.messege);
+            this.showMessage(error.error.messege);
             this.expenseForm.reset();
           } else {
-            alert('something went wrong plase');
+            this.showMessage('something went wrong plase');
           }
         }
       );
@@ -123,9 +126,11 @@ export class ExpenseService {
           },
           (error) => {
             if (error.error.messege) {
-              alert(error.error.messege);
+              this.showMessage(error.error.messege);
             } else {
-              alert('there was problem loading this page please login again ');
+              this.showMessage(
+                'there was problem loading this page please login again '
+              );
               this.router.navigate(['/login']);
             }
             if (error.error.messege === 'please login first') {
@@ -145,7 +150,7 @@ export class ExpenseService {
           (resultData) => {
             try {
               console.log(resultData);
-              alert('expense deleted successfully');
+              this.showMessage('expense deleted successfully');
               this.getExpense().subscribe(() => {
                 console.log('getting expense again');
               });
@@ -156,12 +161,59 @@ export class ExpenseService {
           (error) => {
             console.log(error);
             if (error.error.message) {
-              alert(error.error.message);
+              this.showMessage(error.error.message);
             } else {
-              alert('somthing went wrong please try again after some time');
+              this.showMessage(
+                'somthing went wrong please try again after some time'
+              );
             }
           }
         );
     }
+  }
+  private loadStripe(): Promise<Stripe> {
+    return (window as any).Stripe(
+      'pk_test_51P7XldSCqlnBTgeBDXQpbvdF3fgScPKDMNyjmtwTu2BWasJkUtuJvtEodSTEE9akM6eaW4mADMNjzuV78nwPLOxX00e8uBseJH'
+    );
+  }
+  payment(id: any) {
+    console.log('button clicked');
+
+    this.http
+      .post(
+        `http://localhost:8000/api/v1/CollectiveCoin/user/expenses/billpayment/${id}`,
+        {}
+      )
+      .subscribe(
+        (resultData: any) => {
+          try {
+            const rediretLink = resultData.link;
+            window.location.href = rediretLink;
+          } catch (error) {
+            console.log(error);
+          }
+        },
+        (error) => {
+          console.log(error);
+          if (error.status === 303) {
+            const redirectUrl = error.error.link;
+            window.location.href = redirectUrl;
+          } else if (error.error.message) {
+            alert(error.error.message);
+          } else {
+            alert('There was a problem loading this page. Please login again.');
+            //this.router.navigate(['/login']);
+          }
+          if (error.error.message === 'Please login first') {
+            this.router.navigate(['/login']);
+          }
+        }
+      );
+  }
+  showMessage(message: any) {
+    this.snackBar.open(message || 'An error occurred', 'Close', {
+      duration: 5000,
+      panelClass: ['snackbar-error'],
+    });
   }
 }

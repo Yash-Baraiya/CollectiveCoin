@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
@@ -19,7 +20,11 @@ export class TransactionService {
   recenthistory: Array<any> = [];
   filtersForm: FormGroup;
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private snackBar: MatSnackBar
+  ) {
     this.filtersForm = new FormGroup({
       type: new FormControl('', Validators.required),
       startDate: new FormControl(''),
@@ -33,7 +38,6 @@ export class TransactionService {
       )
       .subscribe((resultData) => {
         try {
-          console.log(resultData);
           this.data = resultData;
           this.incomedata = this.data.incomes.map((income: any) => ({
             title: income.title,
@@ -92,7 +96,7 @@ export class TransactionService {
           try {
             if (confirm('are you sure you want to delete this tranaction'))
               console.log(resultData);
-            alert('transaction deleted successfully');
+            this.showMessage('transaction deleted successfully');
             this.gettAllTransactions();
           } catch (error) {
             console.log(error);
@@ -101,9 +105,11 @@ export class TransactionService {
         (error) => {
           console.log(error);
           if (error.error.message) {
-            alert(error.error.message);
+            this.showMessage(error.error.message);
           } else {
-            alert('somthing went wrong please try again after some time');
+            this.showMessage(
+              'somthing went wrong please try again after some time'
+            );
           }
         }
       );
@@ -121,7 +127,6 @@ export class TransactionService {
         (filteredData) => {
           try {
             console.log(filteredData);
-            // Assuming filteredData is an array of transactions
             this.alltransactions = filteredData.transactions;
           } catch (error) {
             console.log(error);
@@ -130,11 +135,19 @@ export class TransactionService {
         (error) => {
           console.log(error);
           if (error.error.message) {
-            alert(error.error.message);
+            this.showMessage(error.error.message);
           } else {
-            alert('Something went wrong. Please try again after some time.');
+            this.showMessage(
+              'Something went wrong. Please try again after some time.'
+            );
           }
         }
       );
+  }
+  showMessage(message: any): void {
+    this.snackBar.open(message || 'An error occurred', 'Close', {
+      duration: 5000,
+      panelClass: ['snackbar-error'],
+    });
   }
 }

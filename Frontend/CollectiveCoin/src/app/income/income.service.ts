@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
 import { DatePipe } from '@angular/common';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +22,8 @@ export class IncomeService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private datepipe: DatePipe
+    private datepipe: DatePipe,
+    private snackBar: MatSnackBar
   ) {
     this.incomeForm = new FormGroup({
       title: new FormControl('', [Validators.required]),
@@ -52,7 +54,7 @@ export class IncomeService {
         (resultData) => {
           try {
             console.log(resultData);
-            alert('income added successfully');
+            this.showMessage('income added successfully');
             this.getIncome().subscribe(() => {
               console.log('add income subscribe is getting called');
             });
@@ -64,11 +66,11 @@ export class IncomeService {
         },
         (error) => {
           if (error.error.message) {
-            alert(error.error.message);
+            this.showMessage(error.error.message);
             this.incomeForm.reset();
           } else {
             console.log(error);
-            alert('somthing went wrong');
+            this.showMessage('somthing went wrong');
           }
         }
       );
@@ -120,9 +122,11 @@ export class IncomeService {
           },
           (error) => {
             if (error.error.messege) {
-              alert(error.error.messege);
+              this.showMessage(error.error.messege);
             } else {
-              alert('there was problem loading this page please login again ');
+              this.showMessage(
+                'there was problem loading this page please login again '
+              );
               this.router.navigate(['/login']);
             }
             if (error.error.messege === 'please login first') {
@@ -143,7 +147,7 @@ export class IncomeService {
           (resultData) => {
             try {
               console.log(resultData);
-              alert('income deleted successfully');
+              this.showMessage('income deleted successfully');
               this.getIncome();
             } catch (error) {
               console.log(error);
@@ -152,12 +156,20 @@ export class IncomeService {
           (error) => {
             console.log(error);
             if (error.error.message) {
-              alert(error.error.message);
+              this.showMessage(error.error.message);
             } else {
-              alert('somthing went wrong please try again after some time');
+              this.showMessage(
+                'somthing went wrong please try again after some time'
+              );
             }
           }
         );
     }
+  }
+  showMessage(message: any) {
+    this.snackBar.open(message || 'An error occurred', 'Close', {
+      duration: 5000,
+      panelClass: ['snackbar-error'],
+    });
   }
 }
