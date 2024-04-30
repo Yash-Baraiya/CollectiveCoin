@@ -15,6 +15,8 @@ export class LoginDataService {
     localStorage.setItem('username', this.data.data.user.name);
     localStorage.setItem('photo', this.data.data.user.photo);
     localStorage.setItem('isEarning', this.data.data.user.isEarning);
+    localStorage.setItem('role', this.data.data.user.role);
+    localStorage.setItem('priority', this.data.data.user.priority);
     console.log(this.data.token);
   }
 

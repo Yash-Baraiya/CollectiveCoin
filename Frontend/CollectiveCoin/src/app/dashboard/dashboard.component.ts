@@ -10,7 +10,6 @@ import { TransactionService } from '../transactions/transaction.service';
   styleUrl: './dashboard.component.css',
 })
 export class DashboardComponent implements OnInit, OnDestroy {
-  totalbalance: any = 0;
   constructor(
     public incomeservice: IncomeService,
     public expenseservice: ExpenseService,

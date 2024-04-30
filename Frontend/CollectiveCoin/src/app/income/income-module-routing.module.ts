@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { IncomeComponent } from './income.component';
 import { UpdateincomeComponent } from '../updateincome/updateincome.component';
-import { RouteGuard } from '../route.guard';
+import { RouteGuard } from '../shared/route.guard';
 
 const incomeRoutes: Routes = [
   {

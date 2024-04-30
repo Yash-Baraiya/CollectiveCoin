@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ExpenseComponent } from './expense.component';
-import { RouteGuard } from '../route.guard';
+import { RouteGuard } from '../shared/route.guard';
 import { UpdateexpenseComponent } from '../updateexpense/updateexpense.component';
 
 const routes: Routes = [
@@ -18,7 +18,6 @@ const routes: Routes = [
         component: UpdateexpenseComponent,
         canActivate: [RouteGuard],
       },
-      
     ],
   },
 ];

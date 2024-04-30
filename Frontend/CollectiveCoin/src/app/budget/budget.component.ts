@@ -46,7 +46,7 @@ import { ActivatedRoute, Router } from '@angular/router';
           transform: 'translateX(-125%)',
         })
       ),
-      transition('start => end', animate('5s')),
+      transition('start => end', animate('10s')),
       transition('end => start', animate('0s')),
     ]),
   ],

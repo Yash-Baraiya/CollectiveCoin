@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { AppState } from './memberstore/members.reducer'; // Import your app state interface
+import { AppState } from './memberstore/members.reducer';
 import * as MembersActions from './memberstore/members.action';
 import { LoginDataService } from '../shared/login-data.service';
 
@@ -25,11 +25,6 @@ export class MembersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loginData = this.logindataservice.getData();
-    this.role = this.loginData?.data?.user?.role || 'admin';
-    this.priority = this.loginData?.data?.user?.priority || 'admin';
-    this.allmembers$ = this.store.select((state) => state.members.members);
-
     this.memberrform = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
     });
@@ -42,6 +37,10 @@ export class MembersComponent implements OnInit {
         Validators.maxLength(70),
       ]),
     });
+
+    this.role = localStorage.getItem('role');
+    this.priority = localStorage.getItem('priority');
+    this.allmembers$ = this.store.select((state) => state.members.members);
 
     this.store.dispatch(MembersActions.loadMembers());
   }

@@ -5,7 +5,7 @@ import { TransactionsComponent } from './transactions/transactions.component';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { MembersComponent } from './members/members.component';
-import { RouteGuard } from './route.guard';
+import { RouteGuard } from './shared/route.guard';
 import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
 import { CoverpageComponent } from './coverpage/coverpage.component';
 

@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { IncomeService } from './income.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LoginDataService } from '../shared/login-data.service';
+
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 @Component({
   selector: 'app-income',

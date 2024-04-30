@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BudgetComponent } from './budget.component';
-import { RouteGuard } from '../route.guard';
+import { RouteGuard } from '../shared/route.guard';
 import { UpdatebudgetComponent } from '../updatebudget/updatebudget.component';
 
 const routes: Routes = [
