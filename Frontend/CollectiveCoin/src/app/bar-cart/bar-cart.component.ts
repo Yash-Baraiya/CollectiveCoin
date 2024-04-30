@@ -35,6 +35,7 @@ export class BarCartComponent {
     });
   }
 
+  //fetching the data to show in chart
   fetchData(): Observable<any> {
     return new Observable((obseraver) => {
       this.labels.forEach((label) => {
@@ -50,7 +51,7 @@ export class BarCartComponent {
           this.budgetdata.push(0);
         }
       });
-      console.log(this.budgetdata, ':budgetdata');
+
       this.labels.forEach((label) => {
         let value: boolean;
 
@@ -67,12 +68,12 @@ export class BarCartComponent {
           this.expensedata.push(0);
         }
       });
-      console.log(this.expensedata, ': expesedata');
 
       obseraver.next();
     });
   }
 
+  //method for creating the chart
   async createChart() {
     var canvas = document.getElementById('myChart2') as HTMLCanvasElement;
     var ctx = canvas.getContext('2d');

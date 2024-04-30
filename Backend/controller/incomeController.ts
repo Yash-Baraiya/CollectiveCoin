@@ -4,6 +4,8 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
 import { IncomeIn } from "../interface/incomeInterface";
 
+
+//method for adding the income
 export const addIncome = async (req: Request, res: Response) => {
   const { title, amount, category, description } = req.body;
 
@@ -66,6 +68,7 @@ export const addIncome = async (req: Request, res: Response) => {
   }
 };
 
+//method for getting all the incomes
 export const getIncomes = async (req: Request, res: Response) => {
   try {
     let totalincome = 0;
@@ -129,6 +132,8 @@ export const getIncomes = async (req: Request, res: Response) => {
   }
 };
 
+
+//method for deleting the income
 export const deleteIncome = async (
   req: Request,
   res: Response,
@@ -177,6 +182,8 @@ export const deleteIncome = async (
   next();
 };
 
+
+//method for updating the income
 export const updateIncome = async (req: Request, res: Response) => {
   try {
     const { title, amount, category, description, date } = req.body;

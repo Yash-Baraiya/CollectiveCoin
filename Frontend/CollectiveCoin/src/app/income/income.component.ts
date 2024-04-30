@@ -37,10 +37,9 @@ export class IncomeComponent implements OnInit, OnDestroy {
     this.incomeservice.incomeForm.reset();
   }
 
-  openbox3(id: any) {
+  updateIncome(id: any) {
     this.router.navigate([`update-income/${id}`], { relativeTo: this.route });
   }
-  closebox3() {}
 
   save() {
     if (this.incomeservice.incomeForm.valid) {

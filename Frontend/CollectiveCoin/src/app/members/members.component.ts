@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { AppState } from './memberstore/members.reducer'; // Import your app state interface
-import * as MembersActions from './memberstore/members.action'; // Import your NgRx actions
+import * as MembersActions from './memberstore/members.action';
 import { LoginDataService } from '../shared/login-data.service';
 
 @Component({
@@ -12,7 +12,7 @@ import { LoginDataService } from '../shared/login-data.service';
   styleUrls: ['./members.component.css'],
 })
 export class MembersComponent implements OnInit {
-  allmembers$: Observable<any[]>; // Define an observable to access members state
+  allmembers$: Observable<any[]>;
   memberrform: FormGroup;
   emailform: FormGroup;
   role: any;

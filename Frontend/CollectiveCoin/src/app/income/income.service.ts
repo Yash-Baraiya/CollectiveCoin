@@ -166,6 +166,8 @@ export class IncomeService {
         );
     }
   }
+
+  //method for showing alert message
   showMessage(message: any) {
     this.snackBar.open(message || 'An error occurred', 'Close', {
       duration: 5000,

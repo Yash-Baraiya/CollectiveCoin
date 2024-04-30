@@ -1,7 +1,6 @@
 import User from "../models/userModel";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import sendEmail from "../email";
-
 import Income from "../models/incomeModel";
 import Expense from "../models/expenseModel";
 import Budget from "../models/budgetModel";
@@ -9,6 +8,7 @@ import { Request, Response } from "express";
 import { v2 as cloudinary } from "cloudinary";
 import { cloudinaryconfig } from "../cloudinary";
 
+//method for adding the user
 export const addUser = async (req: Request, res: Response) => {
   const email1 = req.body.email;
   const auth = req.headers.authorization;
@@ -66,20 +66,22 @@ export const addUser = async (req: Request, res: Response) => {
     }
   } else {
     console.log(Admin);
-    const signupURL = `${req.protocol}:/
-    /${req.get("host")}/api/v1/CollectiveCoin/user/signup`;
-
-    const message = `your admin is requesting to join with them on out Collective Coin family please join using following url
-    ${signupURL}
-    
-    please sign up with this family code:${familycode} `;
+    const signupURL = `localhost:4200/signup`;
 
     try {
       await sendEmail({
         from: Admin.email,
         to: email1,
         subject: "sign up request to Collective Coin",
-        text: message,
+        html: `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2>Welcome to CollectiveCoin!</h2>
+        <p>Hi there,</p>
+        <p>I'm delighted to welcome you to our family budget management community! I've been using our website for a while now, and it has made managing our family finances so much easier.</p>
+        <p>To join our family and start managing your finances with us, please click the link below:</p>
+        <p><a href="${signupURL}" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Join Our Family</a></p>
+        <p>During the registration process, you'll be asked to enter a Family Code. Here's the code you need to join our family: <strong>${familycode}</strong></p>
+        <p>I'm excited to have you onboard, and I'm looking forward to us achieving our financial goals together!</p>
+        <p>Warm regards,<br>Your Name</p></div>`,
       });
 
       res.status(200).json({
@@ -95,6 +97,7 @@ export const addUser = async (req: Request, res: Response) => {
   }
 };
 
+//method for getting all the members of family
 export const getMembers = async (req: Request, res: Response) => {
   try {
     let firstadmin: any = "";
@@ -142,6 +145,7 @@ export const getMembers = async (req: Request, res: Response) => {
   }
 };
 
+//method for removing the user from the family. user will not be removed from database
 export const deleteuser = async (req: Request, res: Response) => {
   try {
     const auth = req.headers.authorization;
@@ -193,6 +197,7 @@ export const deleteuser = async (req: Request, res: Response) => {
   }
 };
 
+//method for deleting the whole family from the database
 export const deletefamily = async (req: Request, res: Response) => {
   try {
     const auth = req.headers.authorization;
@@ -238,6 +243,7 @@ export const deletefamily = async (req: Request, res: Response) => {
   }
 };
 
+//method for uploading the image to cloudinary storage
 export const uploadImage = async (req: Request, res: Response) => {
   try {
     const auth = req.headers.authorization;
@@ -296,6 +302,7 @@ export const uploadImage = async (req: Request, res: Response) => {
   }
 };
 
+//method for communicating with your admin
 export const sendmailAdmin = async (req: Request, res: Response) => {
   try {
     const auth = req.headers.authorization;
@@ -323,13 +330,12 @@ export const sendmailAdmin = async (req: Request, res: Response) => {
     if (admin.role !== "admin") {
       throw new Error("email you provided is not of admin");
     }
-
     try {
       await sendEmail({
         from: user.email,
         to: email,
-        subject: "email request to email",
-        text: req.body.message,
+        subject: ` request by ${user.name}`,
+        html: req.body.message,
       });
 
       res.status(200).json({
@@ -351,6 +357,7 @@ export const sendmailAdmin = async (req: Request, res: Response) => {
   }
 };
 
+//method for changing  user's role
 export const makeAdmin = async (req: Request, res: Response) => {
   try {
     console.log("coming here");
@@ -409,6 +416,7 @@ export const makeAdmin = async (req: Request, res: Response) => {
   }
 };
 
+//for chaging the user's earning status
 export const toggleEarningState = async (req: Request, res: Response) => {
   try {
     const auth = req.headers.authorization;

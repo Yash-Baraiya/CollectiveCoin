@@ -5,6 +5,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import Income from "../models/incomeModel";
 import PDFDocument from "pdfkit";
 
+//method for getting all the transactions
 export const getalltransactions = async (
   req: Request,
   res: Response
@@ -46,13 +47,13 @@ export const getalltransactions = async (
   }
 };
 
+//method for deleting the transaction
 export const deleteTransaction = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    // Find user and expense based on their IDs
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("not authorized");
@@ -72,14 +73,12 @@ export const deleteTransaction = async (
     const income = await Income.findById(req.params.id);
     const expense = await Expense.findById(req.params.id);
 
-    // Check if both user and expense exist
     if (!user || (!expense && !income)) {
       return res
         .status(404)
         .json({ status: "failed", message: "User or transaction not found" });
     }
 
-    // Check if the user is the one who added the expense
     if (expense) {
       if (user.name !== expense.addedBy) {
         return res.status(403).json({
@@ -88,10 +87,8 @@ export const deleteTransaction = async (
         });
       }
 
-      // Delete the expense
       await Expense.deleteOne({ _id: req.params.id });
 
-      // Send success response
       res.status(200).json({ status: "success", message: "Expense Deleted" });
     }
     if (income) {
@@ -102,14 +99,11 @@ export const deleteTransaction = async (
         });
       }
 
-      // Delete the expense
       await Income.deleteOne({ _id: req.params.id });
 
-      // Send success response
       res.status(200).json({ status: "success", message: "Income Deleted" });
     }
   } catch (error: any) {
-    // Handle errors
     console.log(error);
     res.status(500).json({
       status: "failed",
@@ -117,10 +111,10 @@ export const deleteTransaction = async (
     });
   }
 
-  // Call next middleware
   next();
 };
 
+//method for exporting  transactions as pdf
 export const downloadTransactionsPDF = async (
   req: Request,
   res: Response
@@ -175,6 +169,7 @@ export const downloadTransactionsPDF = async (
   }
 };
 
+//method for filtering the transaactions
 export const getFilteredTransactions = async (
   req: Request,
   res: Response

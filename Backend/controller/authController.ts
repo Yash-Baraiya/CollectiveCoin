@@ -16,12 +16,12 @@ declare global {
   }
 }
 
+//method for creating and sending signup token to the user
 const signToken = (id: string) => {
   return jwt.sign({ id }, process.env.JWT_SECRET || "defaultSecret$Yash@123$", {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 };
-
 const createSendToken = (user: any, statusCode: any, res: Response) => {
   const token = signToken(user._id);
   const jwtExpiresIn = process.env.JWT_COOKIE_EXPIRES_IN
@@ -32,14 +32,13 @@ const createSendToken = (user: any, statusCode: any, res: Response) => {
     httpOnly: true,
     secure: false,
   };
-  // Set secure cookie option in production
+
   if (process.env.NODE_ENV === "production") {
     cookieOptions.secure = true;
   }
   res.cookie("jwt", token, cookieOptions);
-  // Remove sensitive data from the user object
+
   user.password = undefined;
-  // Send token and user data in response
   res.status(statusCode).json({
     status: "success",
     token,
@@ -49,6 +48,7 @@ const createSendToken = (user: any, statusCode: any, res: Response) => {
   });
 };
 
+//method for signing the user up
 export const signUp = async (req: Request, res: Response) => {
   try {
     let priority = 1;
@@ -165,6 +165,7 @@ export const signUp = async (req: Request, res: Response) => {
   }
 };
 
+//method for logging  user in
 export const signIn = async (req: Request, res: Response) => {
   try {
     const { email, password, familycode } = req.body;
@@ -230,11 +231,10 @@ export const signIn = async (req: Request, res: Response) => {
       );
       createSendToken(user, 200, res);
     } else {
-      // Check if family code matches
       if (user.familycode !== familycode) {
         throw new Error("Incorrect family code.");
       }
-      // Create and send JWT token
+
       createSendToken(user, 200, res);
     }
   } catch (error: any) {
@@ -246,13 +246,13 @@ export const signIn = async (req: Request, res: Response) => {
   }
 };
 
+//method for protecting some functionalities from user before logging in
 export const protect = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    // Check for JWT token in request headers
     let token;
     if (
       req.headers.authorization &&
@@ -263,18 +263,17 @@ export const protect = async (
     if (!token) {
       throw new Error("You are not logged in! Please log in to get access.");
     }
-    // Verify JWT token
+
     const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-    // Check if user still exists
+
     const currentUser = await User.findById(decoded.id);
     if (!currentUser) {
       throw new Error("The user belonging to this token does not exist.");
     }
-    // Check if user changed password after token was issued
-    if (currentUser.changedPasswordAfter(decoded.iat)) {
-      throw new Error("User recently changed password! Please log in again.");
-    }
-    // Grant access to protected route
+
+    // if (currentUser.changedPasswordAfter(decoded.iat)) {
+    //   throw new Error("User recently changed password! Please log in again.");
+    // }
 
     req.user = currentUser;
     res.locals.user = currentUser;
@@ -290,13 +289,13 @@ export const protect = async (
   }
 };
 
+//method for restricting the non-earners from using some functionality
 export const restrictTo = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    // Fetch the user by ID
     if (!req.headers.authorization) {
       throw new Error("token not found");
     }
@@ -306,14 +305,14 @@ export const restrictTo = async (
       throw new Error("token not Found");
     }
     const user = await User.findById(decodedToken.id);
-    // Check if the user is allowed to perform the action
+
     if (!user || user.isEarning === false) {
       return res.status(403).json({
         status: "failed",
         message: "You are not allowed to perform this action.",
       });
     }
-    // If the user is allowed, continue to the next middleware
+
     next();
   } catch (error: any) {
     console.error("Error in restrictTo middleware:", error);
@@ -324,19 +323,19 @@ export const restrictTo = async (
   }
 };
 
+//forgot password method
 export const forgotPassword = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    // 1) Get user based on POSTed email
     const email = req.body.email;
     const user = await User.findOne({ email: req.body.email });
     if (!user) {
       throw new Error("There is no user with email address.");
     }
-    // 2) Generate the random reset token
+
     const resetToken = user.createPasswordResetToken();
     await user.save({ validateBeforeSave: false });
 
@@ -348,10 +347,9 @@ export const forgotPassword = async (
 
     user.forgotpasswordotp = otp;
     await user.save({ validateBeforeSave: false });
-    // 3) Send it to user's email
+
     const resetURL = `localhost:4200/resetpassword/${resetToken}`;
 
-    //const message = `<p>Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: <a href= "${resetURL}">${resetURL}</a>.\nOTP : ${otp}\nIf you didn't forget your password, please ignore this email!</p>`;
     try {
       await sendEmail({
         from: "collectivecoin@team.in",
@@ -390,9 +388,9 @@ export const forgotPassword = async (
   }
 };
 
+//method for resetting the password
 export const resetPassword = async (req: Request, res: Response) => {
   try {
-    // 1) Get user based on the token
     const hashedToken = crypto
       .createHash("sha256")
       .update(req.params.token)
@@ -404,7 +402,6 @@ export const resetPassword = async (req: Request, res: Response) => {
       forgotpasswordotp: req.body.otp,
     });
 
-    // 2) If token has not expired, and there is user, set the new password
     if (!user) {
       throw new Error("Token is invalid or has expired or incorrect OTP");
     }
@@ -419,7 +416,6 @@ export const resetPassword = async (req: Request, res: Response) => {
     user.forgotpasswordotp = undefined;
     await user.save();
 
-    // 4) Log the user in, send JWT
     createSendToken(user, 200, res);
   } catch (error: any) {
     console.log(error);
@@ -430,38 +426,7 @@ export const resetPassword = async (req: Request, res: Response) => {
   }
 };
 
-export const updatePassword = async (req: Request, res: Response) => {
-  try {
-    // 1) Get user from collection
-    console.log("this route is getting called");
-    const user = await User.findById(req.user.id).select("+password");
-    if (!user) {
-      throw new Error("user not found");
-    }
-
-    console.log(req.data); // 2) Check if POSTed current password is correct
-    if (
-      !(await user.correctPassword(req.body.passwordCurrent, user.password))
-    ) {
-      throw new Error("Your current password is wrong.");
-    }
-
-    // 3) If so, update password
-    user.password = req.body.password;
-    user.passwordConfirm = req.body.passwordConfirm;
-    await user.save();
-    // User.findByIdAndUpdate will NOT work as intended!
-
-    // 4) Log user in, send JWT
-    createSendToken(user, 200, res);
-  } catch (error) {
-    res.status(200).json({
-      status: "failed",
-      messege: "internal server error",
-    });
-  }
-};
-
+//restrincting some functionalities to only admins
 export const restrictToAdd = async (
   req: Request,
   res: Response,
@@ -499,62 +464,3 @@ export const restrictToAdd = async (
     });
   }
 };
-
-// export const signUp = async (req: Request, res: Response) => {
-//   try {
-//     // Check if user already exists
-//     const existingUser = await User.findOne({ email: req.body.email });
-//     const existingFamilycode = await User.findOne({
-//       familycode: req.body.familycode,
-//     });
-
-//     if (existingUser) {
-//       throw new Error(
-//         "User with this email already exists. Please use another email."
-//       );
-//     }
-//     if (!existingFamilycode) {
-//       throw new Error(
-//         "You are the first one to use that famly code so please login as Admin"
-//       );
-//     }
-
-//     if (req.body.role === "admin" && req.body.isEarning === "false") {
-//       throw new Error(
-//         "you can not login as admin because  you are not earning"
-//       );
-//     }
-//     let file = req.file;
-
-//     if (!file) {
-//       throw new Error("please upload photo");
-//     }
-
-//     const photo = `${file.filename}`;
-//     console.log(photo);
-//     const newUser = await User.create({
-//       name: req.body.name,
-//       email: req.body.email,
-//       password: req.body.password,
-//       isEarning: req.body.isEarning,
-//       role: req.body.role,
-//       familycode: req.body.familycode,
-//       photo: photo,
-//       loggedInAt: Date.now(),
-//     });
-//     const message = `Welcome to Collective Coin family! Enjoy your accountings.`;
-//     await sendEmail({
-//       to: req.body.email,
-//       subject: "Welcome to CollectiveCoin",
-//       text: message,
-//     });
-//     // Create and send JWT token
-//     createSendToken(newUser, 201, res);
-//   } catch (error: any) {
-//     console.error("Error in signUp:", error);
-//     res.status(400).json({
-//       status: "failed",
-//       message: error.message,
-//     });
-//   }
-// };

@@ -4,8 +4,8 @@ import User from "../models/userModel";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
 import sendEmail from "../email";
-import { UserIn } from "../interface/userInterface";
 
+//method for adding the expense
 export const addExpense = async (req: Request, res: Response) => {
   const { title, amount, category, description, date, markAspaid, duedate } =
     req.body;
@@ -92,6 +92,7 @@ export const addExpense = async (req: Request, res: Response) => {
   }
 };
 
+//method for geetting all the expenses
 export const getExpense = async (req: Request, res: Response) => {
   try {
     let totalexpense: number = 0;
@@ -139,13 +140,13 @@ export const getExpense = async (req: Request, res: Response) => {
   }
 };
 
+//method for deleting the expense
 export const deleteExpense = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    // Find user and expense based on their IDs
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("not authorized");
@@ -167,14 +168,12 @@ export const deleteExpense = async (
     }
     console.log(expense.addedBy);
 
-    // Check if both user and expense exist
     if (!user || !expense) {
       return res
         .status(404)
         .json({ status: "failed", message: "User or expense not found" });
     }
 
-    // Check if the user is the one who added the expense
     if (user.name !== expense.addedBy) {
       return res.status(403).json({
         status: "failed",
@@ -182,21 +181,21 @@ export const deleteExpense = async (
       });
     }
 
-    // Delete the expense
     await Expense.deleteOne({ _id: req.params.expenseId });
 
-    // Send success response
     res.status(200).json({ status: "success", message: "Expense Deleted" });
-  } catch (error) {
-    // Handle errors
-    console.error(error);
-    res.status(500).json({ message: "Server Error" });
+  } catch (error: any) {
+    console.log(error);
+    res.status(500).json({
+      status: "failed",
+      message: error.message,
+    });
   }
 
-  // Call next middleware
   next();
 };
 
+//method for updating the expense
 export const updateExpense = async (req: Request, res: Response) => {
   try {
     const { title, amount, category, description, date } = req.body;

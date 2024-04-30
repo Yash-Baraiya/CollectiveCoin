@@ -11,21 +11,5 @@ import { SidebarComponent } from './shared/sidebar/sidebar.component';
 export class AppComponent {
   title = 'CollectiveCoin';
   @ViewChild(SidebarComponent) sidebarcomponent!: SidebarComponent;
-  constructor(
-    private clearstorage: ClearStorageService,
-    private logindataservice: LoginDataService
-  ) {}
-
-  @HostListener('window:beforeunload', ['$event'])
-  onBeforeUnload(event: Event) {
-    //this.clearstorage.clearLocalStorage();
-  }
-
-  @HostListener('window:unload', ['$event'])
-  onUnload(event: Event) {
-    const loginToken = localStorage.getItem('LoginToken');
-    console.log(loginToken);
-
-    //this.clearstorage.clearLocalStorage();
-  }
+  constructor() {}
 }

@@ -1,14 +1,12 @@
 import Expense from "../models/expenseModel";
-import { ExpenseIn } from "../interface/expenseInterface";
 import User from "../models/userModel";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import Budget from "../models/budgetModel";
 import { BudgetIn } from "../interface/budgetInterface";
 import { Request, Response, NextFunction } from "express";
-import { AnyArray } from "mongoose";
 
-//type RequiredUserFields = Pick<ExpenseIn, 'category' | 'amount' | 'date'>;
 
+//method for adding the budget 
 export const addBudget = async (req: Request, res: Response) => {
   try {
     const { title, amount, category, description, date } = req.body;
@@ -72,6 +70,8 @@ export const addBudget = async (req: Request, res: Response) => {
   }
 };
 
+
+//method for getting the budget
 export const getBudget = async (req: Request, res: Response) => {
   try {
     let monthlybudget: Array<BudgetIn> = [];
@@ -115,16 +115,16 @@ export const getBudget = async (req: Request, res: Response) => {
         monthlyexpense.push(expense);
       }
     }
-    // Iterate through the expenses array
+    // iterating through the expenses array
     monthlyexpense.forEach((expense) => {
       let category = expense.category;
       let amount = expense.amount;
 
-      // If category already exists in the categoryAmounts object, add the amount
+      // igcategory already exists in the categoryAmounts object then add the amount
       if (expcategoryAmounts[category]) {
         expcategoryAmounts[category] += amount;
       } else {
-        // Otherwise, create a new entry for the category
+        // else create a new entry for the category
         expcategoryAmounts[category] = amount;
       }
     });
@@ -187,13 +187,14 @@ export const getBudget = async (req: Request, res: Response) => {
   }
 };
 
+//method for deleting the budget
 export const deleteBudget = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    // Find user and expense based on their IDs
+    
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("not authorized");
@@ -212,14 +213,14 @@ export const deleteBudget = async (
     console.log(user.name);
     const budget = await Budget.findById(req.params.budgetId);
 
-    // Check if both user and expense exist
+   
     if (!user || !budget) {
       return res
         .status(404)
         .json({ status: "failed", message: "User or budget not found" });
     }
 
-    // Check if the user is the one who added the expense
+   
     if (user.name !== budget.CreatedBy) {
       return res.status(403).json({
         status: "failed",
@@ -227,10 +228,10 @@ export const deleteBudget = async (
       });
     }
 
-    // Delete the expense
+    
     await Budget.deleteOne({ _id: req.params.budgetId });
 
-    // Send success response
+    
     res.status(200).json({ status: "success", message: "budget Deleted" });
   } catch (error: any) {
     console.log(error);
@@ -243,6 +244,7 @@ export const deleteBudget = async (
   next();
 };
 
+//method for updating the budget
 export const updateBudget = async (req: Request, res: Response) => {
   try {
     const { title, amount, category, description, date } = req.body;

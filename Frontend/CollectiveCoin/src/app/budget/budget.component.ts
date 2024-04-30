@@ -15,7 +15,6 @@ import {
   trigger,
 } from '@angular/animations';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LoginDataService } from '../shared/login-data.service';
 @Component({
   selector: 'app-budget',
   templateUrl: './budget.component.html',
@@ -65,7 +64,7 @@ export class BudgetComponent implements OnInit, OnDestroy {
   ) {
     this.isEarning = localStorage.getItem('isEarning');
   }
-  openbox4(id: any) {
+  updateBudget(id: any) {
     this.router.navigate([`update-budget/${id}`], { relativeTo: this.route });
   }
   scrollTicker() {

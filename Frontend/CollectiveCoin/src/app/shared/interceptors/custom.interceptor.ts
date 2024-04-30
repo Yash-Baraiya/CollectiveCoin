@@ -24,3 +24,5 @@ export class TokenInterceptor implements HttpInterceptor {
     return next.handle(request);
   }
 }
+
+//sending the token from localstorage with every request

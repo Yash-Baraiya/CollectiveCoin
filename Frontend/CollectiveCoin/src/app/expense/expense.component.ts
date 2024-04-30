@@ -29,7 +29,7 @@ export class ExpenseComponent implements OnInit, OnDestroy {
     this.expenseservice.expenseForm.reset();
   }
 
-  openbox4(id: any) {
+  updateExpense(id: any) {
     this.router.navigate([`update-expense/${id}`], { relativeTo: this.route });
   }
   onCategoryChange(event: any) {

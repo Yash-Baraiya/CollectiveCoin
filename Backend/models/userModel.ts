@@ -61,19 +61,16 @@ const userSchema = new Schema<UserIn>({
   priority: Number,
 });
 
+//method for resetting the  user's password
 userSchema.pre<UserIn>("save", async function (next) {
   if (!this.isModified("password")) return next();
 
   this.password = await bcrypt.hash(this.password, 12);
-  this.passwordChangedAt = new Date(Date.now() - 1000); // Update passwordChangedAt
+  this.passwordChangedAt = new Date(Date.now() - 1000);
   next();
 });
 
-// userSchema.pre<UserIn>(/^find/, function (next) {
-//   this.find({ active: { $ne: false } });
-//   next();
-// });
-
+//method for matching the passwords and letting user login
 userSchema.methods.correctPassword = async function (
   candidatePassword: string,
   userPassword: string
@@ -81,19 +78,7 @@ userSchema.methods.correctPassword = async function (
   return await bcrypt.compare(candidatePassword, userPassword);
 };
 
-userSchema.methods.changedPasswordAfter = function (
-  this: UserIn,
-  JWTTimestamp: number
-): boolean {
-  if (this.passwordChangedAt) {
-    const changedTimestamp = Math.floor(
-      this.passwordChangedAt.getTime() / 1000
-    );
-    return JWTTimestamp < changedTimestamp;
-  }
-  return false;
-};
-
+//method for creating the passwoord reset token
 userSchema.methods.createPasswordResetToken = function (): string {
   const resetToken = crypto.randomBytes(32).toString("hex");
 

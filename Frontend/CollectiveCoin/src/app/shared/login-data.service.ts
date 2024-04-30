@@ -7,6 +7,7 @@ export class LoginDataService {
 
   constructor() {}
 
+  //method for setting the user's data to local storange
   setData(parsedData: any) {
     this.data = parsedData;
     console.log(this.data);
@@ -17,6 +18,7 @@ export class LoginDataService {
     console.log(this.data.token);
   }
 
+  //method for getting the user
   getData() {
     console.log(this.data.data.user);
     return this.data;

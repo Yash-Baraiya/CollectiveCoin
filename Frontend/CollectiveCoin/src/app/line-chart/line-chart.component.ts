@@ -34,6 +34,8 @@ export class LineChartComponent implements OnInit {
       });
     });
   }
+
+  //method for fetching the data
   fetchData(): Observable<any> {
     return new Observable((obseraver) => {
       this.labels.forEach((label) => {
@@ -68,6 +70,7 @@ export class LineChartComponent implements OnInit {
     });
   }
 
+  //method for creating the chart
   async createChart() {
     var canvas = document.getElementById('myChart') as HTMLCanvasElement;
     var ctx = canvas.getContext('2d');
@@ -104,6 +107,7 @@ export class LineChartComponent implements OnInit {
     });
   }
 
+  //method for getting formated dates of every month
   getDaysInMonth(month: number, year: number): string[] {
     const date = new Date(year, month - 1, 1);
     const days: string[] = [];

@@ -138,6 +138,8 @@ export class LoginComponent implements OnInit {
       alert('please fill the form as directed');
     }
   }
+
+  //method for showing the alert message
   showMessage(message: any) {
     this.snackBar.open(message || 'An error occurred', 'Close', {
       duration: 5000,

@@ -25,3 +25,6 @@ export class RouteGuard implements CanActivate {
     }
   }
 }
+
+//guarding the route if the  token is not available in user's browser engine
+//if the login token expires when the user is logged in the  user willbe redirected to the login page

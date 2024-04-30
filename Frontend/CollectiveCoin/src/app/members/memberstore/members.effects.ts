@@ -152,7 +152,30 @@ export class MembersEffects {
       )
     )
   );
-  private showErrorMessage(error: any): void {
+
+  emailAdmin$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(MembersActions.emailAdmin),
+      switchMap(({ bodyData }) =>
+        this.http
+          .post(
+            `http://localhost:8000/api/v1/CollectiveCoin/user/sendmail`,
+            bodyData
+          )
+          .pipe(
+            map(() => MembersActions.emailAdminSuccess()),
+            tap(() => {
+              this.store.dispatch(MembersActions.loadMembers());
+            }),
+
+            catchError((error) =>
+              of(MembersActions.emailAdminFailure({ error }))
+            )
+          )
+      )
+    )
+  );
+  private showErrorMessage(error: any) {
     this.snackBar.open(error.message || 'An error occurred', 'Close', {
       duration: 5000,
       panelClass: ['snackbar-error'],

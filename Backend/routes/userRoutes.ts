@@ -21,17 +21,11 @@ import {
 
 import multer from "multer";
 import { v4 as uuidv4 } from "uuid";
-import { cloudinaryconfig } from "./../cloudinary";
 
 var path = require("path");
-var storage = multer.diskStorage({
-  // destination: function (req, file, callback) {
-  //   callback(
-  //     null,
-  //     "C:/Users/AM/Desktop/CollectiveCoin/Frontend/CollectiveCoin/src/assets"
-  //   );
-  // },
 
+//configuring the multer middleware to store the data with specific name
+var storage = multer.diskStorage({
   filename: function (req, file, callback) {
     var fname = "user" + uuidv4() + path.extname(file.originalname);
 

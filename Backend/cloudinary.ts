@@ -1,6 +1,6 @@
 import { v2 as cloudinary } from "cloudinary";
-import { NextFunction } from "express";
 
+//configuration for cloudinary middleware
 export const cloudinaryconfig = () => {
   cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUDNAME,

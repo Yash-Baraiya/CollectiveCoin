@@ -73,6 +73,14 @@ export const membersReducer = createReducer(
         }
       }),
     ],
+  })),
+  on(MembersActions.emailAdminSuccess, (state) => ({
+    ...state,
+    members: state.members,
+  })),
+  on(MembersActions.emailAdminFailure, (state) => ({
+    ...state,
+    members: state.members,
   }))
 );
 

@@ -1,7 +1,5 @@
 import { Component, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { myTheme } from '../../../environments/environment';
-import { LoginDataService } from '../login-data.service';
 import { FormGroup } from '@angular/forms';
 
 @Component({
@@ -27,7 +25,6 @@ export class SidebarComponent implements OnInit {
   ngOnInit(): void {}
 
   clearStorage() {
-    console.log('click happened');
     localStorage.clear();
   }
 }

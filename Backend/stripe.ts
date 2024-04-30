@@ -5,6 +5,9 @@ import Expense from "./models/expenseModel";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import User from "./models/userModel";
 
+
+
+//stripe method for creating the checkout session
 const stripeInstance = new stripe(
   "sk_test_51P7XldSCqlnBTgeBB3yyoExsvWe4JEsuXdJPUVqjDKXLZJ6Q8cVYOTS6gkWekx2Qh42RkezGuHiNa7kdlZGuDeZ000JkqXeA61"
 );
@@ -72,6 +75,8 @@ export const createCheckOutSession = async (req: Request, res: Response) => {
   }
 };
 
+
+//for updating the expense's after the payment has been done
 export const handleStripeEvent = async (req: Request, res: Response) => {
   try {
     const payload = (req as any).rawBody;

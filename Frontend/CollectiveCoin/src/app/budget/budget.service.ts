@@ -41,10 +41,6 @@ export class BudgetService {
       date: new FormControl('', [Validators.required]),
     });
   }
-
-  ngOnInit(): void {
-    this.getBudgets();
-  }
   addBudget() {
     let bodyData = this.budgetForm.value;
     console.log(bodyData);
@@ -169,6 +165,8 @@ export class BudgetService {
         );
     }
   }
+
+  //showing alert  message using angular material
   showMessage(message: any) {
     this.snackBar.open(message || 'An error occurred', 'Close', {
       duration: 5000,
