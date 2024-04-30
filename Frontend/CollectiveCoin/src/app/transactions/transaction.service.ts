@@ -59,6 +59,7 @@ export class TransactionService {
             type: 'expense',
             description: expense.description,
             addedBy: expense.addedBy,
+            markAsPaid: expense.markAsPaid,
           }));
 
           this.alltransactions = this.incomedata.concat(this.expensedata);
@@ -77,6 +78,7 @@ export class TransactionService {
           });
           this.maxincome = this.incomedata.shift().amount;
           this.minincome = this.incomedata.pop().amount;
+
           this.maxexpense = this.expensedata.shift().amount;
           this.minexpense = this.expensedata.pop().amount;
         } catch (error) {

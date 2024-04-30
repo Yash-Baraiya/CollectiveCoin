@@ -9,7 +9,6 @@ export interface UserIn extends Document {
   passwordConfirm: string;
   familycode: string;
   deleteduser: any[];
-  permittedadmin: any[];
   passwordChangedAt?: Date;
   passwordResetToken?: string;
   passwordResetExpires?: Date;

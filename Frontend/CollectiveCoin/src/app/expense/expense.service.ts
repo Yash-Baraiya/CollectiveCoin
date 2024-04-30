@@ -66,8 +66,9 @@ export class ExpenseService {
           }
         },
         (error) => {
-          if (error.error.messege) {
-            this.showMessage(error.error.messege);
+          console.log(error);
+          if (error.error.message) {
+            this.showMessage(error.error.message);
             this.expenseForm.reset();
           } else {
             this.showMessage('something went wrong plase');
@@ -202,7 +203,6 @@ export class ExpenseService {
             alert(error.error.message);
           } else {
             alert('There was a problem loading this page. Please login again.');
-            //this.router.navigate(['/login']);
           }
           if (error.error.message === 'Please login first') {
             this.router.navigate(['/login']);

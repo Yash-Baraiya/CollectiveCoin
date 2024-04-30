@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { LoginDataService } from '../shared/login-data.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ExpenseService } from '../expense/expense.service';
+import { TransactionService } from '../transactions/transaction.service';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +23,8 @@ export class LoginComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private loginDataServeice: LoginDataService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private expenseservice: ExpenseService
   ) {}
 
   ngOnInit(): void {
@@ -66,6 +69,13 @@ export class LoginComponent implements OnInit {
 
               this.showMessage('loggedin successfully');
               this.router.navigate(['/DashBoard']);
+              this.expenseservice.getExpense();
+
+              this.expenseservice.data.forEach((expense: any) => {
+                if (expense.markAspaid === false) {
+                  this.showMessage(`some expenses are due to pay `);
+                }
+              });
             } catch (error) {
               console.log(error);
               this.showMessage(resultData.error.message);

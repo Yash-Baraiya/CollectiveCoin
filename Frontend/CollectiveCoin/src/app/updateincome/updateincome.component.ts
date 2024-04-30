@@ -4,7 +4,6 @@ import { ActivatedRoute } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { DatePipe } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -64,6 +63,7 @@ export class UpdateincomeComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy(): void {
     this.incomeData = {};
+    this.updateIncomeForm.reset();
   }
 
   Updateincome(id: any): Observable<any> {

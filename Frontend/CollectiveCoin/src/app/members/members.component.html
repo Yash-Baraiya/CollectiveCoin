@@ -6,7 +6,7 @@
       <main>
         <div class="incomes">
           <div
-            *ngFor="let i of allmembers"
+            *ngFor="let i of allmembers$ | async"
             class="income-item"
             style="
               background: #fcf6f9;
@@ -154,7 +154,7 @@
                     border-radius: 18px;
                     position: sticky;
                   "
-                  (click)="makeEarner(i.id)"
+                  (click)="makeEarner(i._id)"
                 >
                   <span *ngIf="i.isEarning === false">Make Earner</span>
                   <span *ngIf="i.isEarning === true">Make non-Earner</span>
@@ -174,7 +174,7 @@
                     border-radius: 18px;
                     position: sticky;
                   "
-                  (click)="makeAdmin(i.id)"
+                  (click)="makeAdmin(i._id)"
                 >
                   <span *ngIf="i.role === 'user'"> Make Admin</span>
                   <span *ngIf="i.role === 'admin'"> Make User</span>
@@ -189,7 +189,7 @@
                       border: none;
                     "
                     [id]="i.id"
-                    (click)="deleteMember(i.id)"
+                    (click)="deleteMember(i._id)"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -283,7 +283,7 @@
               border-radius: 50px;
               position: sticky;
             "
-            (click)="confirmdelete()"
+            (click)="deletefamily()"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

@@ -66,6 +66,7 @@ export class UpdateexpenseComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy(): void {
     this.expenseData = {};
+    this.updateExpenseForm.reset();
   }
 
   UpdateExpense(id: any): Observable<any> {

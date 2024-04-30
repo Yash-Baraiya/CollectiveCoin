@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ExpenseService } from './expense.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -9,7 +9,7 @@ import Stripe from 'stripe';
   templateUrl: './expense.component.html',
   styleUrl: './expense.component.css',
 })
-export class ExpenseComponent implements OnInit {
+export class ExpenseComponent implements OnInit, OnDestroy {
   expensedatapop: any;
   showAdditionalFields: boolean = false;
   stripePromise: Promise<Stripe>;
@@ -24,6 +24,9 @@ export class ExpenseComponent implements OnInit {
     this.expenseservice.getExpense().subscribe(() => {
       console.log('getting expense');
     });
+  }
+  ngOnDestroy(): void {
+    this.expenseservice.expenseForm.reset();
   }
 
   openbox4(id: any) {

@@ -26,20 +26,7 @@ export const addExpense = async (req: Request, res: Response) => {
     throw new Error("user not found");
   }
 
-  const expense = await Expense.create({
-    title,
-    amount,
-    category,
-    description,
-    date,
-    addedBy: user.name,
-    familycode: user.familycode,
-    markAspaid: markAspaid,
-    duedate: duedate,
-  });
-
   try {
-    //validations
     if (!title || !category || !description || !date) {
       return res.status(400).json({ message: "All fields are required!" });
     }
@@ -48,9 +35,23 @@ export const addExpense = async (req: Request, res: Response) => {
         .status(400)
         .json({ message: "Amount must be a positive number!" });
     }
+    let currenttime = new Date(date).getTime();
+    if (duedate && new Date(duedate).getTime() < currenttime) {
+      throw new Error(" you bill is dued please mark it as paid");
+    }
+    const expense = await Expense.create({
+      title,
+      amount,
+      category,
+      description,
+      date,
+      addedBy: user.name,
+      familycode: user.familycode,
+      markAspaid: markAspaid,
+      duedate: duedate,
+    });
 
-    if (markAspaid === false) {
-      //to not block the response
+    if (markAspaid === false && category === "monthlybills") {
       setTimeout(async () => {
         const users = await User.find({ familycode: user.familycode });
         for (const u of users) {
@@ -82,8 +83,12 @@ export const addExpense = async (req: Request, res: Response) => {
       message: "Expense Added",
       expense,
     });
-  } catch (error) {
-    res.status(500).json({ message: "Server Error" });
+  } catch (error: any) {
+    console.log(error);
+    res.status(500).json({
+      status: "failed",
+      message: error.message,
+    });
   }
 };
 

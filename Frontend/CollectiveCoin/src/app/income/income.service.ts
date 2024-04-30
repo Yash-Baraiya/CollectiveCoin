@@ -107,7 +107,7 @@ export class IncomeService {
 
                   return dateA.getTime() - dateB.getTime();
                 });
-              console.log('coming from getincome', this.incamounts);
+
               this.data = this.data.sort((a, b) => {
                 const dateA = new Date(a.date);
                 const dateB = new Date(b.date);

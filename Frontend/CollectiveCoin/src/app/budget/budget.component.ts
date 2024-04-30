@@ -1,4 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { BudgetService } from './budget.service';
 import {
   animate,
@@ -46,7 +52,7 @@ import { LoginDataService } from '../shared/login-data.service';
     ]),
   ],
 })
-export class BudgetComponent implements OnInit {
+export class BudgetComponent implements OnInit, OnDestroy {
   @ViewChild('scrollContainer') scrollContainer: ElementRef;
   budgetdatapop: any;
   isEarning: any;
@@ -55,8 +61,7 @@ export class BudgetComponent implements OnInit {
   constructor(
     public budgetservice: BudgetService,
     private router: Router,
-    private route: ActivatedRoute,
-    private loginservice: LoginDataService
+    private route: ActivatedRoute
   ) {
     this.isEarning = localStorage.getItem('isEarning');
   }
@@ -77,6 +82,9 @@ export class BudgetComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(): void {
+    this.budgetservice.budgetForm.reset();
+  }
   save() {
     if (this.budgetservice.budgetForm.valid) {
       this.budgetservice.addBudget();

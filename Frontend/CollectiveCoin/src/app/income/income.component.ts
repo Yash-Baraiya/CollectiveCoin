@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { IncomeService } from './income.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,7 +9,7 @@ import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
   templateUrl: './income.component.html',
   styleUrl: './income.component.css',
 })
-export class IncomeComponent implements OnInit {
+export class IncomeComponent implements OnInit, OnDestroy {
   incomedatapop: any;
   isEarning: any;
   data: any;
@@ -17,8 +17,7 @@ export class IncomeComponent implements OnInit {
   constructor(
     public incomeservice: IncomeService,
     private router: Router,
-    private route: ActivatedRoute,
-    private loginservice: LoginDataService
+    private route: ActivatedRoute
   ) {
     this.isEarning = localStorage.getItem('isEarning');
     this.bsConfig = Object.assign(
@@ -29,11 +28,13 @@ export class IncomeComponent implements OnInit {
       }
     );
   }
-
   ngOnInit(): void {
     this.incomeservice.getIncome().subscribe(() => {
       console.log(' subscriberd method is getting called');
     });
+  }
+  ngOnDestroy() {
+    this.incomeservice.incomeForm.reset();
   }
 
   openbox3(id: any) {

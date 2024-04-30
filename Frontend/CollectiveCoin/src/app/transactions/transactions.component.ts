@@ -39,13 +39,17 @@ export class TransactionsComponent implements OnInit {
             (transaction: any) => {
               if (transaction.type === 'income') {
                 doc.text(
-                  `Income: ${transaction.title}, Amount: ${transaction.amount}, Date: ${transaction.date}`,
+                  `Income: ${transaction.title}, 
+                         Amount: ${transaction.amount}, 
+                         Date: ${transaction.date}`,
                   10,
                   yOffset
                 );
               } else {
                 doc.text(
-                  `Expense: ${transaction.title}, Amount: ${transaction.amount}, Date: ${transaction.date}`,
+                  `Expense: ${transaction.title}, 
+                          Amount: ${transaction.amount},
+                          Date: ${transaction.date}`,
                   10,
                   yOffset
                 );

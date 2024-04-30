@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BudgetService } from '../budget/budget.service';
 import { HttpClient } from '@angular/common/http';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -12,7 +12,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './updatebudget.component.html',
   styleUrl: './updatebudget.component.css',
 })
-export class UpdatebudgetComponent {
+export class UpdatebudgetComponent implements OnInit, OnDestroy {
   budgetId = '';
   updateBudgetForm: FormGroup;
   budgetData: any = {};
@@ -69,6 +69,7 @@ export class UpdatebudgetComponent {
   }
   ngOnDestroy(): void {
     this.budgetData = {};
+    this.updateBudgetForm.reset();
   }
 
   Updateincome(id: any): Observable<any> {

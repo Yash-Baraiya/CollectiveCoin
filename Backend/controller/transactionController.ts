@@ -127,54 +127,45 @@ export const downloadTransactionsPDF = async (
 ): Promise<void> => {
   try {
     const { incomes, expenses } = await getalltransactions(req, res);
-
-    // Create a new PDF document
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      'attachment; filename="transactions.pdf"'
+    );
     const doc = new PDFDocument();
-
-    // Set font size and line height
-    doc.fontSize(12);
-    doc.lineGap(10);
-
-    // Add incomes heading
+    doc.fontSize(15);
+    doc.lineGap(20);
     doc
       .font("Helvetica-Bold")
       .text("Incomes", { align: "center" })
       .font("Helvetica");
 
-    // Add incomes data to the PDF
     incomes.forEach((income: any) => {
       doc.text(
-        `Title: ${income.title}, Amount: ${income.amount}, Date: ${new Date(
-          income.date
-        ).toLocaleDateString()}`
+        `Title: ${income.title},
+              Amount: ${income.amount}, 
+              Date: ${new Date(income.date).toLocaleDateString()}`
       );
       doc.moveDown();
     });
 
-    // Add expenses heading
     doc
       .addPage()
       .font("Helvetica-Bold")
       .text("Expenses", { align: "center" })
       .font("Helvetica");
 
-    // Add expenses data to the PDF
     expenses.forEach((expense: any) => {
       doc.text(
-        `Title: ${expense.title}, Amount: ${expense.amount}, Date: ${new Date(
-          expense.date
-        ).toLocaleDateString()}`
+        `Title: ${expense.title}, 
+              Amount: ${expense.amount}, 
+              Date: ${new Date(expense.date).toLocaleDateString()}`
       );
       doc.moveDown();
     });
 
-    res.setHeader("Content-Type", "application/pdf");
-    res.setHeader(
-      "Content-Disposition",
-      'attachment; filename="transactions.pdf"'
-    );
     doc.pipe(res);
-    doc.end(); // End the PDF document
+    doc.end();
   } catch (error: any) {
     console.log(error);
     res.status(500).json({
