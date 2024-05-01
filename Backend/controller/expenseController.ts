@@ -9,7 +9,7 @@ import sendEmail from "../email";
 export const addExpense = async (req: Request, res: Response) => {
   const { title, amount, category, description, date, markAspaid, duedate } =
     req.body;
-
+  console.log(category);
   const auth = req.headers.authorization;
   if (!auth) {
     throw new Error("not authorized");
@@ -51,7 +51,10 @@ export const addExpense = async (req: Request, res: Response) => {
       duedate: duedate,
     });
 
-    if (markAspaid === false && category === "monthlybills") {
+    if (
+      new Date(duedate).getTime() > new Date(date).getTime() &&
+      markAspaid === false
+    ) {
       setTimeout(async () => {
         const users = await User.find({ familycode: user.familycode });
         for (const u of users) {

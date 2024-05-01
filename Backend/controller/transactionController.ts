@@ -116,56 +116,7 @@ export const deleteTransaction = async (
   next();
 };
 
-//method for exporting  transactions as pdf
-export const downloadTransactionsPDF = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  try {
-    const { incomes, expenses } = await getalltransactions(req, res);
-    res.setHeader("Content-Type", "application/pdf");
-    res.setHeader(
-      "Content-Disposition",
-      'attachment; filename="transactions.pdf"'
-    );
-    const doc = new PDFDocument();
-    doc.fontSize(15);
-    doc.lineGap(20);
-    doc
-      .font("Helvetica-Bold")
-      .text("Incomes", { align: "center" })
-      .font("Helvetica");
 
-    incomes.forEach((income: any) => {
-      doc.text(
-        `Title: ${income.title},
-              Amount: ${income.amount}, 
-              Date: ${new Date(income.date).toLocaleDateString()}`
-      );
-      doc.moveDown();
-    });
-
-    doc
-      .addPage()
-      .font("Helvetica-Bold")
-      .text("Expenses", { align: "center" })
-      .font("Helvetica");
-
-    expenses.forEach((expense: any) => {
-      doc.text(
-        `Title: ${expense.title}, 
-              Amount: ${expense.amount}, 
-              Date: ${new Date(expense.date).toLocaleDateString()}`
-      );
-      doc.moveDown();
-    });
-
-    doc.pipe(res);
-    doc.end();
-  } catch (error: any) {
-    console.log(error);
-  }
-};
 
 //method for filtering the transaactions
 export const getFilteredTransactions = async (
@@ -218,30 +169,31 @@ export const getFilteredTransactions = async (
       }
 
       if (startDate && endDate && startDate !== "null" && endDate !== "null") {
-        const parsedStartDate = new Date(startDate as string);
-        const parsedEndDate = new Date(endDate as string);
-        if (
-          isNaN(parsedStartDate.getTime()) ||
-          isNaN(parsedEndDate.getTime())
-        ) {
-          throw new Error("Invalid date format");
+        const StartDateD = new Date(startDate as string);
+        const EndDateD = new Date(endDate as string);
+        if (isNaN(StartDateD.getTime()) || isNaN(EndDateD.getTime())) {
+          throw new Error("Invalid date");
+        }
+
+        if (StartDateD.getTime() > EndDateD.getTime()) {
+          throw new Error("start date can not be greater then end date");
         }
         query.date = {
-          $gte: parsedStartDate,
-          $lte: parsedEndDate,
+          $gte: StartDateD,
+          $lte: EndDateD,
         };
       } else if (startDate && endDate === "null") {
-        const parsedStartDate = new Date(startDate as string);
-        if (isNaN(parsedStartDate.getTime())) {
+        const StartDateD = new Date(startDate as string);
+        if (isNaN(StartDateD.getTime())) {
           throw new Error("Invalid date");
         }
-        query.date = { $gte: parsedStartDate };
+        query.date = { $gte: StartDateD };
       } else if (endDate && startDate === "null") {
-        const parsedEndDate = new Date(endDate as string);
-        if (isNaN(parsedEndDate.getTime())) {
+        const EndDateD = new Date(endDate as string);
+        if (isNaN(EndDateD.getTime())) {
           throw new Error("Invalid date");
         }
-        query.date = { $lte: parsedEndDate };
+        query.date = { $lte: EndDateD };
       }
 
       if (query.type) {
@@ -273,68 +225,3 @@ export const getFilteredTransactions = async (
     });
   }
 };
-
-// export const downloadTransactionsPDF2 = async (
-//   req: Request,
-//   res: Response
-// ): Promise<void> => {
-//   try {
-//     const { incomes, expenses } = await getalltransactions(req, res);
-
-//     // Create PDF content dynamically
-//     const content: any[] = [];
-
-//     // Add header for incomes
-//     content.push({ text: "Incomes", style: "header" });
-
-//     // Add incomes data
-//     for (const income of incomes) {
-//       const formattedDate = new Date(income.date).toLocaleDateString();
-//       const incomeText = `Title: ${income.title}, Amount: ${income.amount}, Date: ${formattedDate}`;
-//       content.push({ text: incomeText, margin: [0, 0, 0, 10] });
-//     }
-
-//     // Add header for expenses
-//     content.push({ text: "Expenses", style: "header", pageBreak: "before" });
-
-//     // Add expenses data
-//     for (const expense of expenses) {
-//       const formattedDate = new Date(expense.date).toLocaleDateString();
-//       const expenseText = `Title: ${expense.title}, Amount: ${expense.amount}, Date: ${formattedDate}`;
-//       content.push({ text: expenseText, margin: [0, 0, 0, 10] });
-//     }
-
-//     // Create PDF document definition
-//     const docDefinition: any = {
-//       content,
-//       styles: {
-//         header: {
-//           fontSize: 18,
-//           bold: true,
-//           margin: [0, 0, 0, 10],
-//         },
-//       },
-//       // Use vfs directly here
-//       defaultStyle: {
-//         font: "Helvetica",
-//       },
-//       pageSize: "A4",
-//       pageOrientation: "portrait",
-//     };
-
-//     // Create PDF
-//     const pdfDoc = pdfMake.createPdf(docDefinition);
-
-//     // Set response headers
-//     res.setHeader("Content-Type", "application/pdf");
-//     res.setHeader(
-//       "Content-Disposition",
-//       'attachment; filename="transactions.pdf"'
-//     );
-
-//     // Pipe PDF to response
-//     pdfDoc.getStream().pipe(res);
-//   } catch (error: any) {
-//     console.log(error);
-//   }
-// };

@@ -32,12 +32,8 @@
             save
           </button>
         </div>
-        <div
-          class="filters"
-          *ngIf="showFilters"
-          style="display: flex; align-items: center"
-        >
-          <form class="exenseform" [formGroup]="transactionservice.filtersForm">
+        <div class="button-container" *ngIf="showFilters">
+          <form class="filterform" [formGroup]="transactionservice.filtersForm">
             <div class="selects input-control">
               <label for="type">Type:</label>
               <select
@@ -69,6 +65,8 @@
                     color: #fcf6f9;
                     border: none;
                     border-radius: 16px;
+                    margin-bottom: 11px;
+                    margin-top: -13px;
                   "
                   (click)="transactionservice.getFilteredTransactions()"
                 >
@@ -84,6 +82,8 @@
                     color: #fcf6f9;
                     border: none;
                     border-radius: 16px;
+                    margin-bottom: 11px;
+                    margin-top: -13px;
                   "
                   (click)="clearFilters()"
                 >

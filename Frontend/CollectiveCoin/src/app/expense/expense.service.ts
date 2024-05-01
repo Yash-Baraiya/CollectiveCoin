@@ -60,6 +60,10 @@ export class ExpenseService {
               console.log('getting expense again');
             });
             this.expenseForm.reset();
+            let checkbox = document.getElementById(
+              'markAsPaid'
+            ) as HTMLInputElement;
+            checkbox.checked = true;
           } catch (error) {
             console.log(error);
             this.expenseForm.reset();
@@ -70,6 +74,10 @@ export class ExpenseService {
           if (error.error.message) {
             this.showMessage(error.error.message);
             this.expenseForm.reset();
+            let checkbox = document.getElementById(
+              'markAsPaid'
+            ) as HTMLInputElement;
+            checkbox.checked = true;
           } else {
             this.showMessage('something went wrong plase');
           }

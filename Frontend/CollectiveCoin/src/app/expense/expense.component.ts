@@ -9,9 +9,9 @@ import Stripe from 'stripe';
   templateUrl: './expense.component.html',
   styleUrl: './expense.component.css',
 })
-export class ExpenseComponent implements OnInit, OnDestroy {
+export class ExpenseComponent implements OnInit {
   expensedatapop: any;
-  showAdditionalFields: boolean = false;
+  showCheckbox: boolean = false;
   stripePromise: Promise<Stripe>;
 
   constructor(
@@ -25,9 +25,6 @@ export class ExpenseComponent implements OnInit, OnDestroy {
       console.log('getting expense');
     });
   }
-  ngOnDestroy(): void {
-    this.expenseservice.expenseForm.reset();
-  }
 
   updateExpense(id: any) {
     this.router.navigate([`update-expense/${id}`], { relativeTo: this.route });
@@ -36,7 +33,7 @@ export class ExpenseComponent implements OnInit, OnDestroy {
     const selectedCategory = event.target.value.trim();
     console.log('Selected Category:', selectedCategory);
     console.log('Is Monthly Bills?', selectedCategory === 'monthlybills');
-    this.showAdditionalFields = selectedCategory === 'monthlybills';
+    this.showCheckbox = selectedCategory === 'monthlybills';
   }
 
   saveadd() {

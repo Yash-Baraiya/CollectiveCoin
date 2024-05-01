@@ -476,3 +476,73 @@ export const toggleEarningState = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const updateprofile = async (req: Request, res: Response) => {
+  try {
+    const auth = req.headers.authorization;
+    if (!auth) {
+      throw new Error("not Authorized");
+    }
+    const token = auth.split(" ")[1];
+    const decodedtoken = jwt.decode(token) as JwtPayload;
+    if (!decodedtoken) {
+      throw new Error("token not found");
+    }
+    const userId = decodedtoken.id;
+
+    const admin = await User.findById(userId);
+    if (!admin) {
+      throw new Error("admin not found");
+    }
+    let file = req.file;
+
+    if (!file) throw new Error("please upload file");
+
+    console.log(file);
+
+    let photo = `${file.filename}`;
+
+    const cloudinaryUpload = new Promise((resolve, reject) => {
+      const options = {
+        public_id: photo,
+      };
+      cloudinaryconfig();
+      cloudinary.uploader.upload(
+        file.path,
+        options,
+        (error: any, result: any) => {
+          if (error) {
+            console.log(error);
+            reject(error);
+          } else {
+            photo = result.url;
+            resolve(result);
+          }
+        }
+      );
+    });
+
+    const result = await cloudinaryUpload;
+
+    console.log(photo);
+
+    const updatedUser = await User.findByIdAndUpdate(
+      { _id: userId },
+      {
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password,
+        passwordConfirm: req.body.passwordConfirm,
+        photo: photo,
+      }
+    );
+
+    // Create and send JWT token
+  } catch (error: any) {
+    console.log(error);
+    res.status(200).json({
+      status: "failed",
+      message: error.message,
+    });
+  }
+};

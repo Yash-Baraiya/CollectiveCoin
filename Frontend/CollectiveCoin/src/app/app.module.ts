@@ -22,6 +22,7 @@ import { StoreModule } from '@ngrx/store';
 import { reducer } from './members/memberstore/members.reducer';
 import { MembersEffects } from './members/memberstore/members.effects';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { UpdateprofileComponent } from './updateprofile/updateprofile.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     ResetpasswordComponent,
     LineChartComponent,
     CoverpageComponent,
+    UpdateprofileComponent,
   ],
   imports: [
     BrowserModule,

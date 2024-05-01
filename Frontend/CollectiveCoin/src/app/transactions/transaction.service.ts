@@ -20,11 +20,7 @@ export class TransactionService {
   recenthistory: Array<any> = [];
   filtersForm: FormGroup;
 
-  constructor(
-    private http: HttpClient,
-    private router: Router,
-    private snackBar: MatSnackBar
-  ) {
+  constructor(private http: HttpClient, private snackBar: MatSnackBar) {
     this.filtersForm = new FormGroup({
       type: new FormControl('', Validators.required),
       startDate: new FormControl(''),
@@ -45,7 +41,7 @@ export class TransactionService {
             category: income.category,
             date: income.date.split('T')[0],
             id: income._id,
-            type: 'income',
+            type: income.type,
             description: income.description,
             addedBy: income.addedBy,
           }));
@@ -56,7 +52,7 @@ export class TransactionService {
             category: expense.category,
             date: expense.date.split('T')[0],
             id: expense._id,
-            type: 'expense',
+            type: expense.type,
             description: expense.description,
             addedBy: expense.addedBy,
             markAsPaid: expense.markAsPaid,
@@ -129,7 +125,25 @@ export class TransactionService {
         (filteredData) => {
           try {
             console.log(filteredData);
-            this.alltransactions = filteredData.transactions;
+
+            this.alltransactions = filteredData.transactions.map(
+              (transaction: any) => ({
+                title: transaction.title,
+                amount: transaction.amount[0],
+                category: transaction.category,
+                type: transaction.type,
+                date: transaction.date.split('T')[0],
+                id: transaction._id,
+                description: transaction.description,
+                addedBy: transaction.addedBy,
+              })
+            );
+            this.alltransactions.sort((a, b) => {
+              const dateA = new Date(a.date);
+              const dateB = new Date(b.date);
+
+              return dateB.getTime() - dateA.getTime();
+            });
           } catch (error) {
             console.log(error);
           }

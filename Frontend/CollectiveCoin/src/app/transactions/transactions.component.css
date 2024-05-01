@@ -280,7 +280,7 @@ h1 {
   background: var(--color-green) !important;
 }
 
-.exenseform {
+.filterform {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -290,9 +290,9 @@ h1 {
   flex-direction: column;
   gap: 2rem;
 }
-.exenseform input,
-.exenseform textarea,
-.exenseform select {
+.filterform input,
+.filterform textarea,
+.filterform select {
   font-family: inherit;
   font-size: inherit;
   outline: none;
@@ -305,31 +305,31 @@ h1 {
   box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
   color: rgba(34, 34, 96, 0.9);
 }
-.exenseform input::-webkit-input-placeholder,
-.exenseform textarea::-webkit-input-placeholder,
-.exenseform select::-webkit-input-placeholder {
+.filterform input::-webkit-input-placeholder,
+.filterform textarea::-webkit-input-placeholder,
+.filterform select::-webkit-input-placeholder {
   color: rgba(34, 34, 96, 0.4);
 }
-.exenseform input::-moz-placeholder,
-.exenseform textarea::-moz-placeholder,
-.exenseform select::-moz-placeholder {
+.filterform input::-moz-placeholder,
+.filterform textarea::-moz-placeholder,
+.filterform select::-moz-placeholder {
   color: rgba(34, 34, 96, 0.4);
 }
-.exenseform input:-ms-input-placeholder,
-.exenseform textarea:-ms-input-placeholder,
-.exenseform select:-ms-input-placeholder {
+.filterform input:-ms-input-placeholder,
+.filterform textarea:-ms-input-placeholder,
+.filterform select:-ms-input-placeholder {
   color: rgba(34, 34, 96, 0.4);
 }
-.exenseform input::placeholder,
-.exenseform textarea::placeholder,
-.exenseform select::placeholder {
+.filterform input::placeholder,
+.filterform textarea::placeholder,
+.filterform select::placeholder {
   color: rgba(34, 34, 96, 0.4);
 }
-.exenseform .input-control input {
+.filterform .input-control input {
   width: 100%;
 }
 
-.exenseform .selects {
+.filterform .selects {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -339,21 +339,22 @@ h1 {
   -ms-flex-pack: end;
   justify-content: flex-end;
 }
-.exenseform .selects select {
+.filterform .selects select {
   color: rgba(34, 34, 96, 0.4);
 }
-.exenseform .selects select:focus,
-.exenseform .selects select:active {
+.filterform .selects select:focus,
+.filterform .selects select:active {
   color: rgba(34, 34, 96, 1);
 }
-.exenseform .submit-btn button {
+.filterform .submit-btn button {
   box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
 }
-.exenseform .submit-btn button:hover {
+.filterform .submit-btn button:hover {
   background: var(--color-green) !important;
 }
 
 .button-container {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }

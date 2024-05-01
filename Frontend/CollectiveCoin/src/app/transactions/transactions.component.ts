@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { TransactionService } from './transaction.service';
-import { jsPDF } from 'jspdf';
+import * as jspdf from 'jspdf';
 import { HttpClient } from '@angular/common/http';
-
+import 'jspdf-autotable';
 @Component({
   selector: 'app-transactions',
   templateUrl: './transactions.component.html',
@@ -25,38 +25,33 @@ export class TransactionsComponent implements OnInit {
     this.transactionservice.gettAllTransactions();
   }
   downloadTransactionsPDF(): void {
-    // Make a GET request to the backend endpoint
-    this.http
-      .get(
-        'http://localhost:8000/api/v1/CollectiveCoin/user/transactions/all-transactions/downloadpdf',
-        {
-          responseType: 'blob', // Set the response type to blob
-        }
-      )
-      .subscribe(
-        (blob: Blob) => {
-          // Create a URL for the blob
-          const url = window.URL.createObjectURL(blob);
+    try {
+      const pdf = new jspdf.jsPDF();
 
-          // Create a link element
-          const link = document.createElement('a');
-          link.href = url;
-          link.download = 'transactions.pdf';
+      const columns = ['Title', 'Type', 'Amount', 'Date', 'Added By'];
 
-          // Append the link to the body
-          document.body.appendChild(link);
-
-          // Click the link to trigger the download
-          link.click();
-
-          // Cleanup
-          window.URL.revokeObjectURL(url);
-          document.body.removeChild(link);
-        },
-        (error) => {
-          console.error('Error downloading PDF:', error);
-        }
+      const rows = this.transactionservice.alltransactions.map(
+        (transaction: any) => [
+          transaction.title,
+          transaction.type,
+          transaction.amount,
+          transaction.date,
+          transaction.addedBy,
+        ]
       );
+
+      pdf.text('CollectiveCoin', 20, 20);
+
+      (pdf as any).autoTable({
+        startY: 30,
+        head: [columns],
+        body: rows,
+      });
+
+      pdf.save('transactions.pdf');
+    } catch (error) {
+      console.error('Error downloading transactions PDF:', error);
+    }
   }
 
   clearFilters() {
