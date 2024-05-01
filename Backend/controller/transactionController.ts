@@ -4,6 +4,8 @@ import User from "../models/userModel";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import Income from "../models/incomeModel";
 import PDFDocument from "pdfkit";
+import * as pdfMake from "pdfmake/build/pdfmake";
+import * as pdfFonts from "pdfmake/build/vfs_fonts";
 
 //method for getting all the transactions
 export const getalltransactions = async (
@@ -162,10 +164,6 @@ export const downloadTransactionsPDF = async (
     doc.end();
   } catch (error: any) {
     console.log(error);
-    res.status(500).json({
-      status: "failed",
-      message: error.message,
-    });
   }
 };
 
@@ -175,6 +173,8 @@ export const getFilteredTransactions = async (
   res: Response
 ): Promise<void> => {
   try {
+    let transactions: Array<any>;
+    let incomes: Array<any>, expenses: Array<any>;
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("Not authorized");
@@ -195,63 +195,76 @@ export const getFilteredTransactions = async (
 
     const { type, startDate, endDate } = req.query;
 
-    let query: any = { familycode: familyCode };
-
-    console.log("type :", type);
-    if (type && type !== "null" && type !== null && type !== "") {
-      if (type !== "income" && type !== "expense") {
-        throw new Error(
-          "Invalid 'type' parameter. It should be 'income' or 'expense'."
-        );
-      }
-      query.type = type;
-    }
-
-    if (startDate && endDate) {
-      const parsedStartDate = new Date(startDate as string);
-      const parsedEndDate = new Date(endDate as string);
-      if (isNaN(parsedStartDate.getTime()) || isNaN(parsedEndDate.getTime())) {
-        throw new Error("Invalid date format");
-      }
-      query.date = {
-        $gte: parsedStartDate,
-        $lte: parsedEndDate,
-      };
-    } else if (startDate) {
-      const parsedStartDate = new Date(startDate as string);
-      if (isNaN(parsedStartDate.getTime())) {
-        throw new Error("Invalid start date format");
-      }
-      query.date = { $gte: parsedStartDate };
-    } else if (endDate) {
-      const parsedEndDate = new Date(endDate as string);
-      if (isNaN(parsedEndDate.getTime())) {
-        throw new Error("Invalid end date format");
-      }
-      query.date = { $lte: parsedEndDate };
-    }
-
-    console.log(query);
-    let transactions;
-
-    if (query.type) {
-      if (query.type === "income") {
-        transactions = await Income.find(query);
-      } else {
-        transactions = await Expense.find(query);
-      }
+    if (type === "null" && startDate === "null" && endDate === "null") {
+      incomes = await Income.find({ familycode: familyCode });
+      expenses = await Expense.find({ familycode: familyCode });
+      transactions = incomes.concat(expenses);
+      res.status(200).json({
+        status: "success",
+        transactions,
+      });
     } else {
-      transactions = await Promise.all([
-        Income.find(query.date ? { ...query, date: query.date } : query),
-        Expense.find(query.date ? { ...query, date: query.date } : query),
-      ]);
-    }
+      console.log(req.query);
+      let query: any = { familycode: familyCode };
 
-    // console.log("transactions :", transactions);
-    res.status(200).json({
-      status: "success",
-      transactions,
-    });
+      console.log("type :", type);
+      if (type && type !== "null" && type !== null && type !== "") {
+        if (type !== "income" && type !== "expense") {
+          throw new Error(
+            "Invalid 'type' parameter. It should be 'income' or 'expense'."
+          );
+        }
+        query.type = type;
+      }
+
+      if (startDate && endDate && startDate !== "null" && endDate !== "null") {
+        const parsedStartDate = new Date(startDate as string);
+        const parsedEndDate = new Date(endDate as string);
+        if (
+          isNaN(parsedStartDate.getTime()) ||
+          isNaN(parsedEndDate.getTime())
+        ) {
+          throw new Error("Invalid date format");
+        }
+        query.date = {
+          $gte: parsedStartDate,
+          $lte: parsedEndDate,
+        };
+      } else if (startDate && endDate === "null") {
+        const parsedStartDate = new Date(startDate as string);
+        if (isNaN(parsedStartDate.getTime())) {
+          throw new Error("Invalid date");
+        }
+        query.date = { $gte: parsedStartDate };
+      } else if (endDate && startDate === "null") {
+        const parsedEndDate = new Date(endDate as string);
+        if (isNaN(parsedEndDate.getTime())) {
+          throw new Error("Invalid date");
+        }
+        query.date = { $lte: parsedEndDate };
+      }
+
+      if (query.type) {
+        if (query.type === "income") {
+          transactions = await Income.find(query);
+        } else {
+          transactions = await Expense.find(query);
+        }
+      } else {
+        (incomes = await Income.find(
+          query.date ? { ...query, date: query.date } : query
+        )),
+          (expenses = await Expense.find(
+            query.date ? { ...query, date: query.date } : query
+          )),
+          (transactions = incomes.concat(expenses));
+      }
+
+      res.status(200).json({
+        status: "success",
+        transactions,
+      });
+    }
   } catch (error: any) {
     console.error(error);
     res.status(400).json({
@@ -260,3 +273,68 @@ export const getFilteredTransactions = async (
     });
   }
 };
+
+// export const downloadTransactionsPDF2 = async (
+//   req: Request,
+//   res: Response
+// ): Promise<void> => {
+//   try {
+//     const { incomes, expenses } = await getalltransactions(req, res);
+
+//     // Create PDF content dynamically
+//     const content: any[] = [];
+
+//     // Add header for incomes
+//     content.push({ text: "Incomes", style: "header" });
+
+//     // Add incomes data
+//     for (const income of incomes) {
+//       const formattedDate = new Date(income.date).toLocaleDateString();
+//       const incomeText = `Title: ${income.title}, Amount: ${income.amount}, Date: ${formattedDate}`;
+//       content.push({ text: incomeText, margin: [0, 0, 0, 10] });
+//     }
+
+//     // Add header for expenses
+//     content.push({ text: "Expenses", style: "header", pageBreak: "before" });
+
+//     // Add expenses data
+//     for (const expense of expenses) {
+//       const formattedDate = new Date(expense.date).toLocaleDateString();
+//       const expenseText = `Title: ${expense.title}, Amount: ${expense.amount}, Date: ${formattedDate}`;
+//       content.push({ text: expenseText, margin: [0, 0, 0, 10] });
+//     }
+
+//     // Create PDF document definition
+//     const docDefinition: any = {
+//       content,
+//       styles: {
+//         header: {
+//           fontSize: 18,
+//           bold: true,
+//           margin: [0, 0, 0, 10],
+//         },
+//       },
+//       // Use vfs directly here
+//       defaultStyle: {
+//         font: "Helvetica",
+//       },
+//       pageSize: "A4",
+//       pageOrientation: "portrait",
+//     };
+
+//     // Create PDF
+//     const pdfDoc = pdfMake.createPdf(docDefinition);
+
+//     // Set response headers
+//     res.setHeader("Content-Type", "application/pdf");
+//     res.setHeader(
+//       "Content-Disposition",
+//       'attachment; filename="transactions.pdf"'
+//     );
+
+//     // Pipe PDF to response
+//     pdfDoc.getStream().pipe(res);
+//   } catch (error: any) {
+//     console.log(error);
+//   }
+// };

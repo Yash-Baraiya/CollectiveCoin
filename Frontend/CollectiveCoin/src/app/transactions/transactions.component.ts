@@ -25,48 +25,44 @@ export class TransactionsComponent implements OnInit {
     this.transactionservice.gettAllTransactions();
   }
   downloadTransactionsPDF(): void {
-    console.log('button clicked');
+    // Make a GET request to the backend endpoint
     this.http
-      .get<any>(
-        'http://localhost:8000/api/v1/CollectiveCoin/user/transactions/all-transactions/downloadpdf'
-      )
-      .subscribe((resultData: any) => {
-        try {
-          const doc = new jsPDF();
-
-          let yOffset = 10;
-          this.transactionservice.alltransactions.forEach(
-            (transaction: any) => {
-              if (transaction.type === 'income') {
-                doc.text(
-                  `Income: ${transaction.title}, 
-                         Amount: ${transaction.amount}, 
-                         Date: ${transaction.date}`,
-                  10,
-                  yOffset
-                );
-              } else {
-                doc.text(
-                  `Expense: ${transaction.title}, 
-                          Amount: ${transaction.amount},
-                          Date: ${transaction.date}`,
-                  10,
-                  yOffset
-                );
-              }
-              yOffset += 10;
-            }
-          );
-
-          doc.save('transactions.pdf');
-        } catch (error) {
-          console.error(error);
+      .get(
+        'http://localhost:8000/api/v1/CollectiveCoin/user/transactions/all-transactions/downloadpdf',
+        {
+          responseType: 'blob', // Set the response type to blob
         }
-      });
+      )
+      .subscribe(
+        (blob: Blob) => {
+          // Create a URL for the blob
+          const url = window.URL.createObjectURL(blob);
+
+          // Create a link element
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = 'transactions.pdf';
+
+          // Append the link to the body
+          document.body.appendChild(link);
+
+          // Click the link to trigger the download
+          link.click();
+
+          // Cleanup
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(link);
+        },
+        (error) => {
+          console.error('Error downloading PDF:', error);
+        }
+      );
   }
 
   clearFilters() {
     console.log('button is clicked');
+
     this.transactionservice.filtersForm.reset();
+    this.transactionservice.gettAllTransactions();
   }
 }

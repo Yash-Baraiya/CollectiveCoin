@@ -13,7 +13,7 @@
             <div class="income-content">
               <div class="form-container">
                 <form
-                  *ngIf="isEarning"
+                  *ngIf="isEarning === 'true'"
                   class="formcon"
                   [formGroup]="incomeservice.incomeForm"
                 >
@@ -182,7 +182,7 @@
                   </div>
                   <div class="submit-btn">
                     <button
-                      class="sc- formbtn"
+                      class="formbtn"
                       style="
                         background-color: rgb(228, 18, 204);
                         padding: 0.8rem 1.6rem;

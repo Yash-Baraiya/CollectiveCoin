@@ -202,61 +202,158 @@ h1 {
   color: #222260;
 }
 
-/* Styles for the filters section */
-.filters {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap; /* Allow wrapping if content overflows */
-}
-
-/* Styles for the form group */
-.filters form {
-  display: flex;
-  flex-wrap: wrap; /* Allow wrapping if content overflows */
-}
-
-/* Styles for the form group 
-/* .filters .form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  flex: 1; /* Let form groups take available space 
-}
-
-/* Styles for the label 
-.filters label {
-  color: #222260;
-  margin-right: 0.5rem; /* Add space between label and input 
-}
-
-/* Styles for the select input 
-.filters select,
-.filters input[type="date"] {
-  flex: 1; /* Let input fields take available space 
-  padding: 0.5rem;
-  border-radius: 5px;
-  border: 2px solid #fff;
-  background: transparent;
-  color: #222260;
-} */
-
-/* Styles for the filter buttons */
-/* .filters .filter-item button {
+.formbtn {
   padding: 1rem;
-  background: #222260;
   color: #fcf6f9;
   border: none;
   border-radius: 16px;
-  cursor: pointer;
-  margin-left: 0.5rem; /* Add space between buttons 
-} */
-
-/* Styles for the clear button */
-/* .filters .filter-item button.clear {
-  background: #aaa;
+}
+.formcon {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  gap: 2rem;
+}
+.formcon input,
+.formcon textarea,
+.formcon select {
+  font-family: inherit;
+  font-size: inherit;
+  outline: none;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  border: 2px solid #fff;
+  background: transparent;
+  resize: none;
+  box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
+  color: rgba(34, 34, 96, 0.9);
+}
+.formcon input::-webkit-input-placeholder,
+.formcon textarea::-webkit-input-placeholder,
+.formcon select::-webkit-input-placeholder {
+  color: rgba(34, 34, 96, 0.4);
+}
+.formcon input::-moz-placeholder,
+.formcon textarea::-moz-placeholder,
+.formcon select::-moz-placeholder {
+  color: rgba(34, 34, 96, 0.4);
+}
+.formcon input:-ms-input-placeholder,
+.formcon textarea:-ms-input-placeholder,
+.formcon select:-ms-input-placeholder {
+  color: rgba(34, 34, 96, 0.4);
+}
+.formcon input::placeholder,
+.formcon textarea::placeholder,
+.formcon select::placeholder {
+  color: rgba(34, 34, 96, 0.4);
+}
+.formcon .input-control input {
+  width: 100%;
+}
+.formcon .selects {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+}
+.formcon .selects select {
+  color: rgba(34, 34, 96, 0.4);
+}
+.formcon .selects select:focus,
+.formcon .selects select:active {
+  color: rgba(34, 34, 96, 1);
+}
+.formcon .submit-btn button {
+  box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
+}
+.formcon .submit-btn button:hover {
+  background: var(--color-green) !important;
 }
 
-/* Hover effect for filter buttons 
-.filters .filter-item button:hover {
-  background: #000;
-} */
+.exenseform {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  gap: 2rem;
+}
+.exenseform input,
+.exenseform textarea,
+.exenseform select {
+  font-family: inherit;
+  font-size: inherit;
+  outline: none;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  border: 2px solid #fff;
+  background: transparent;
+  resize: none;
+  box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
+  color: rgba(34, 34, 96, 0.9);
+}
+.exenseform input::-webkit-input-placeholder,
+.exenseform textarea::-webkit-input-placeholder,
+.exenseform select::-webkit-input-placeholder {
+  color: rgba(34, 34, 96, 0.4);
+}
+.exenseform input::-moz-placeholder,
+.exenseform textarea::-moz-placeholder,
+.exenseform select::-moz-placeholder {
+  color: rgba(34, 34, 96, 0.4);
+}
+.exenseform input:-ms-input-placeholder,
+.exenseform textarea:-ms-input-placeholder,
+.exenseform select:-ms-input-placeholder {
+  color: rgba(34, 34, 96, 0.4);
+}
+.exenseform input::placeholder,
+.exenseform textarea::placeholder,
+.exenseform select::placeholder {
+  color: rgba(34, 34, 96, 0.4);
+}
+.exenseform .input-control input {
+  width: 100%;
+}
+
+.exenseform .selects {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+}
+.exenseform .selects select {
+  color: rgba(34, 34, 96, 0.4);
+}
+.exenseform .selects select:focus,
+.exenseform .selects select:active {
+  color: rgba(34, 34, 96, 1);
+}
+.exenseform .submit-btn button {
+  box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
+}
+.exenseform .submit-btn button:hover {
+  background: var(--color-green) !important;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+}

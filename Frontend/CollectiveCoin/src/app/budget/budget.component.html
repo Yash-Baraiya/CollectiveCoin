@@ -29,7 +29,7 @@
             <div class="income-content">
               <div class="form-container">
                 <form
-                  *ngIf="isEarning"
+                  *ngIf="isEarning === 'true'"
                   class="formcon"
                   [formGroup]="budgetservice.budgetForm"
                 >

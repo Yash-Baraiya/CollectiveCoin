@@ -20,13 +20,6 @@ export class IncomeComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute
   ) {
     this.isEarning = localStorage.getItem('isEarning');
-    this.bsConfig = Object.assign(
-      {},
-      {
-        containerClass: 'theme-dark-blue',
-        style: 'background-color : blue ',
-      }
-    );
   }
   ngOnInit(): void {
     this.incomeservice.getIncome().subscribe(() => {
