@@ -13,6 +13,7 @@
               border: none;
               margin-right: 2%;
               border-radius: 16px;
+              margin-bottom: 7px;
             "
             (click)="toggleFilters()"
           >
@@ -26,70 +27,54 @@
               border: none;
               margin-right: 1%;
               border-radius: 16px;
+              margin-bottom: 7px;
             "
             (click)="downloadTransactionsPDF()"
           >
             save
           </button>
         </div>
-        <div class="button-container" *ngIf="showFilters">
+        <div *ngIf="showFilters">
           <form class="filterform" [formGroup]="transactionservice.filtersForm">
-            <div class="selects input-control">
-              <label for="type">Type:</label>
-              <select
-                required=""
-                name="category"
-                id="type"
-                formControlName="type"
-              >
-                <option value="income">Income</option>
-                <option value="expense">Expense</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="startDate">Start Date:</label>
-
-              <input type="date" id="startDate" formControlName="startDate" />
-            </div>
-            <div class="form-group">
-              <label for="endDate">End Date:</label>
-              <input type="date" id="endDate" formControlName="endDate" />
+            <div class="form-row">
+              <div class="selects input-control">
+                <label
+                  style="font-size: 18px; margin-top: 10px; margin-right: 5px"
+                  for="type"
+                  >Type:</label
+                >
+                <select
+                  required=""
+                  name="category"
+                  id="type"
+                  formControlName="type"
+                  style="margin-right: 105px"
+                >
+                  <option value="income">Income</option>
+                  <option value="expense">Expense</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="startDate" style="font-size: 18px"
+                  >Start Date:</label
+                >
+                <input type="date" id="startDate" formControlName="startDate" />
+              </div>
+              <div class="form-group">
+                <label for="endDate" style="font-size: 18px">End Date:</label>
+                <input type="date" id="endDate" formControlName="endDate" />
+              </div>
             </div>
             <div class="button-container">
-              <div class="filter-item">
-                <button
-                  class="formbtn"
-                  style="
-                    padding: 1rem;
-                    background: #222260;
-                    color: #fcf6f9;
-                    border: none;
-                    border-radius: 16px;
-                    margin-bottom: 11px;
-                    margin-top: -13px;
-                  "
-                  (click)="transactionservice.getFilteredTransactions()"
-                >
-                  Apply
-                </button>
-              </div>
-              <div class="filter-item">
-                <button
-                  class="formbtn"
-                  style="
-                    padding: 1rem;
-                    background: #aaa;
-                    color: #fcf6f9;
-                    border: none;
-                    border-radius: 16px;
-                    margin-bottom: 11px;
-                    margin-top: -13px;
-                  "
-                  (click)="clearFilters()"
-                >
-                  Clear
-                </button>
-              </div>
+              <button
+                class="formbtn apply-btn"
+                (click)="transactionservice.getFilteredTransactions()"
+              >
+                Apply
+              </button>
+              <button class="formbtn clear-btn" (click)="clearFilters()">
+                Clear
+              </button>
             </div>
           </form>
         </div>
@@ -111,7 +96,7 @@
             color: #222260;
             height: 100px;
           "
-          (dblclick)="openbox5(i.id)"
+          (dblclick)="updateTransaction(i.id, i.type)"
         >
           <div
             class="icon"

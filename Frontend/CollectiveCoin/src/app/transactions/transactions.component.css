@@ -358,3 +358,37 @@ h1 {
   justify-content: space-between;
   align-items: center;
 }
+
+.form-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.selects,
+.form-group {
+  flex: 1;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.formbtn {
+  padding: 1rem;
+  color: #fcf6f9;
+  border: none;
+  border-radius: 16px;
+  margin-bottom: 11px;
+}
+
+.apply-btn {
+  background: #222260;
+  margin-left: 400px;
+}
+
+.clear-btn {
+  background: #aaa;
+  margin-right: 450px;
+}

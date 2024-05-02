@@ -37,23 +37,20 @@ import { ActivatedRoute, Router } from '@angular/router';
       state(
         'start',
         style({
-          transform: 'translateX(125%)',
+          transform: 'translateX(-100%)',
         })
       ),
       state(
         'end',
         style({
-          transform: 'translateX(-125%)',
+          transform: 'translateX(+100%)',
         })
       ),
-      transition('start => end', animate('10s')),
-      transition('end => start', animate('0s')),
+      transition('start <=> end', animate('10s linear')),
     ]),
   ],
 })
 export class BudgetComponent implements OnInit, OnDestroy {
-  @ViewChild('scrollContainer') scrollContainer: ElementRef;
-  budgetdatapop: any;
   isEarning: any;
   animationState = 'start';
   data: any;
@@ -69,7 +66,7 @@ export class BudgetComponent implements OnInit, OnDestroy {
   }
   scrollTicker() {
     console.log('animation called again');
-    setInterval(() => {
+    setTimeout(() => {
       console.log('animation reseted');
       this.animationState = this.animationState === 'start' ? 'end' : 'start';
     }, 5000);

@@ -424,3 +424,18 @@ h1 {
   margin: 0;
   color: #222260;
 }
+
+@keyframes scroll {
+  0% {
+    transform: translateX(+125%);
+  }
+  100% {
+    transform: translateX(-125%);
+  }
+}
+
+.scroll-container {
+  white-space: nowrap;
+  overflow: hidden;
+  animation: scroll 10s linear infinite;
+}

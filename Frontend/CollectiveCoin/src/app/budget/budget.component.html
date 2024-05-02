@@ -9,15 +9,11 @@
             <h2
               class="total-income"
               *ngIf="budgetservice.overbudget.length > 0"
+              style="overflow: hidden"
             >
-              <ul
-                #scrollContainer
-                style="display: inline-block"
-                [@scrollAnimation]="animationState"
-                (@scrollAnimation.done)="scrollTicker()"
-              >
+              <ul style="width: 100%" class="scroll-container">
                 <li
-                  style="color: #222260"
+                  style="color: #222260; display: flex"
                   *ngFor="let obj of budgetservice.overbudget"
                 >
                   you are going over budget for
