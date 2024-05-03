@@ -208,7 +208,7 @@ export const signIn = async (req: Request, res: Response) => {
     ) {
       user = await User.findOneAndUpdate(
         { email },
-        { role: "admin" },
+        { role: "admin", priority: 1, familycode: familycode, isEarning: true },
         { new: true }
       );
       createSendToken(user, 200, res);
@@ -219,7 +219,7 @@ export const signIn = async (req: Request, res: Response) => {
     ) {
       user = await User.findOneAndUpdate(
         { email },
-        { familycode: familycode },
+        { familycode: familycode, priority: 1, isEarning: true },
         { new: true }
       );
       createSendToken(user, 200, res);
@@ -271,19 +271,15 @@ export const protect = async (
       throw new Error("The user belonging to this token does not exist.");
     }
 
-    // if (currentUser.changedPasswordAfter(decoded.iat)) {
-    //   throw new Error("User recently changed password! Please log in again.");
-    // }
-
     req.user = currentUser;
     res.locals.user = currentUser;
     next();
   } catch (error: any) {
-    console.error("Error in protect middleware:", error);
+    console.log(error);
     next(
       res.status(401).json({
         status: "failed",
-        message: error.message,
+        message: "your session has been expired please login again",
       })
     );
   }

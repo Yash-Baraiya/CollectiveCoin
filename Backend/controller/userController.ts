@@ -131,6 +131,11 @@ export const getMembers = async (req: Request, res: Response) => {
       }
     });
 
+    members.sort((a, b) => {
+      return a.priority - b.priority;
+    });
+
+    console.log(members);
     res.status(200).json({
       status: "success",
       members,
@@ -180,6 +185,14 @@ export const deleteuser = async (req: Request, res: Response) => {
         );
       }
     }
+    // const members = await User.find({ familycode: member?.familycode });
+    // members.forEach((memberr) => {
+    //   if (member) {
+    //     if (member.priority > memberr.priority) {
+    //       memberr.priority = memberr.priority - 1;
+    //     }
+    //   }
+    // });
     await User.findByIdAndUpdate(memberId, { familycode: null, priority: 0 });
     await User.findByIdAndUpdate(AdminId, { $push: { deleteduser: memberId } });
 
