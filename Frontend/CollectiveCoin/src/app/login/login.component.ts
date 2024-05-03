@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoginDataService } from '../shared/login-data.service';
+import { LoginDataService } from '../shared/services/login-data.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ExpenseService } from '../expense/expense.service';
-import { TransactionService } from '../transactions/transaction.service';
+import { ExpenseService } from '../shared/services/expense.service';
+import { TransactionService } from '../shared/services/transaction.service';
 
 @Component({
   selector: 'app-login',

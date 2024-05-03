@@ -17,12 +17,12 @@ import { LineChartComponent } from './line-chart/line-chart.component';
 import { DatePipe } from '@angular/common';
 import { SharedModule } from './shared/shared.module';
 import { CoverpageComponent } from './coverpage/coverpage.component';
-import { EffectsModule, mergeEffects } from '@ngrx/effects';
+import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { reducer } from './members/memberstore/members.reducer';
 import { MembersEffects } from './members/memberstore/members.effects';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { UpdateprofileComponent } from './updateprofile/updateprofile.component';
+import { InvestmentsComponent } from './investments/investments.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +35,7 @@ import { UpdateprofileComponent } from './updateprofile/updateprofile.component'
     ResetpasswordComponent,
     LineChartComponent,
     CoverpageComponent,
-    UpdateprofileComponent,
+    InvestmentsComponent,
   ],
   imports: [
     BrowserModule,

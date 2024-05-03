@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { IncomeService } from '../income/income.service';
-import { ExpenseService } from '../expense/expense.service';
-import { TransactionService } from '../transactions/transaction.service';
+import { IncomeService } from '../shared/services/income.service';
+import { ExpenseService } from '../shared/services/expense.service';
+import { TransactionService } from '../shared/services/transaction.service';
 
 @Component({
   selector: 'app-dashboard',

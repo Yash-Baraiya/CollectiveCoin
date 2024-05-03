@@ -1,6 +1,6 @@
 import { Component, HostListener, ViewChild } from '@angular/core';
-import { ClearStorageService } from './shared/clear-storage.service';
-import { LoginDataService } from './shared/login-data.service';
+import { ClearStorageService } from './shared/services/clear-storage.service';
+import { LoginDataService } from './shared/services/login-data.service';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
 
 @Component({

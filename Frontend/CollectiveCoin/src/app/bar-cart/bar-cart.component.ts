@@ -1,6 +1,6 @@
 import { Component, Output } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
-import { BudgetService } from '../budget/budget.service';
+import { BudgetService } from '../shared/services/budget.service';
 import { Observable } from 'rxjs';
 
 @Component({

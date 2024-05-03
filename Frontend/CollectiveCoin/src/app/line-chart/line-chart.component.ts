@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
-import { IncomeService } from '../income/income.service';
-import { ExpenseService } from '../expense/expense.service';
+import { IncomeService } from '../shared/services/income.service';
+import { ExpenseService } from '../shared/services/expense.service';
 import { Observable, timestamp } from 'rxjs';
 
 @Component({
@@ -101,7 +101,6 @@ export class LineChartComponent implements OnInit {
           y: {
             min: 0,
           },
-          x: {},
         },
         responsive: true,
       },

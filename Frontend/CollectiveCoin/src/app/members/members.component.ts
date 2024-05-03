@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { AppState } from './memberstore/members.reducer';
 import * as MembersActions from './memberstore/members.action';
-import { LoginDataService } from '../shared/login-data.service';
+import { LoginDataService } from '../shared/services/login-data.service';
 
 @Component({
   selector: 'app-members',

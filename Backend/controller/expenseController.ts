@@ -227,7 +227,7 @@ export const updateExpense = async (req: Request, res: Response) => {
     console.log(expense);
     if (expense?.addedBy !== user.name) {
       throw new Error(
-        `This income is added by ${expense.addedBy}. You are not allowed to delete it`
+        `This income is added by ${expense.addedBy}. You are not allowed to update it`
       );
     }
     expense = await Expense.findByIdAndUpdate(

@@ -8,7 +8,6 @@ import { MembersComponent } from './members/members.component';
 import { RouteGuard } from './shared/route.guard';
 import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
 import { CoverpageComponent } from './coverpage/coverpage.component';
-import { UpdateprofileComponent } from './updateprofile/updateprofile.component';
 
 const routes: Routes = [
   {
@@ -23,14 +22,14 @@ const routes: Routes = [
   {
     path: 'Income',
     loadChildren: async () => {
-      const module = await import('./income/income.module');
+      const module = await import('./incomeModule/income.module');
       return module.IncomeModule;
     },
   },
   {
     path: 'Expense',
     loadChildren: async () => {
-      const module = await import('./expense/expense.module');
+      const module = await import('./expenseModule/expense.module');
       return module.ExpenseModule;
     },
   },
@@ -60,14 +59,9 @@ const routes: Routes = [
   {
     path: 'Budget',
     loadChildren: async () => {
-      const module = await import('./budget/budget.module');
+      const module = await import('./budgetModule/budget.module');
       return module.BudgetModule;
     },
-  },
-  {
-    path: 'updateProfile',
-    component: UpdateprofileComponent,
-    canActivate: [RouteGuard],
   },
 ];
 
