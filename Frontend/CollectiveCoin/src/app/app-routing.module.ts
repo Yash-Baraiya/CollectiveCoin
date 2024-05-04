@@ -2,14 +2,14 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { TransactionsComponent } from './transactions/transactions.component';
-import { LoginComponent } from './login/login.component';
-import { SignupComponent } from './signup/signup.component';
+import { LoginComponent } from './user/login/login.component';
+import { SignupComponent } from './user/signup/signup.component';
 import { MembersComponent } from './members/members.component';
 import { RouteGuard } from './shared/route.guard';
 import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
 import { CoverpageComponent } from './coverpage/coverpage.component';
 import { InvokeFunctionExpr } from '@angular/compiler';
-import { UpdateProfileComponent } from './updateProfile/updateProfile.component';
+import { UpdateProfileComponent } from './user/updateProfile/updateProfile.component';
 
 const routes: Routes = [
   {
