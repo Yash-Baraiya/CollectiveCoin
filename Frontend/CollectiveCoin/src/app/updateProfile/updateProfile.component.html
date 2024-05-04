@@ -1,0 +1,150 @@
+<div class="container">
+  <div class="row gutters">
+    <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+      <div class="card h-100">
+        <div class="card-body">
+          <div class="account-settings">
+            <div class="user-profile">
+              <div class="user-avatar">
+                <img [src]="photo" alt="Maxwell Admin" />
+              </div>
+              <h5 class="user-name">{{ username }}</h5>
+              <h6 class="user-email">yu.com</h6>
+              <input
+                type="file"
+                (change)="updateImage($event)"
+                class="btn btn-primary"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+      <div class="card h-100">
+        <div class="card-body">
+          <form action="" [formGroup]="updateProfileForm">
+            <div class="row gutters">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <h3 class="mb-2 text-primary">Update Profile</h3>
+              </div>
+              <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                <div class="form-group">
+                  <label for="fullName">Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="fullName"
+                    placeholder="Enter full name"
+                    formControlName="name"
+                  />
+                </div>
+              </div>
+              <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                <div class="form-group">
+                  <label for="eMail">Email</label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="eMail"
+                    placeholder="Enter email ID"
+                    formControlName="email"
+                  />
+                </div>
+              </div>
+              <div class="row gutters">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                  <div class="text-right">
+                    <button
+                      type="button"
+                      id="submit"
+                      name="submit"
+                      class="btn btn-secondary"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      id="submit"
+                      name="submit"
+                      class="btn btn-primary"
+                      (click)="updateProfile()"
+                    >
+                      Update
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+          <form action="" [formGroup]="updatePasswordForm">
+            <div class="row gutters">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <h3 class="mt-3 mb-2 text-primary">Update Password</h3>
+              </div>
+              <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                <div class="form-group">
+                  <label for="Street">Current Password</label>
+                  <input
+                    type="name"
+                    class="form-control"
+                    id="Street"
+                    placeholder="Current Password"
+                    formControlName="passwordCurrent"
+                  />
+                </div>
+              </div>
+              <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                <div class="form-group">
+                  <label for="ciTy">New Password</label>
+                  <input
+                    type="name"
+                    class="form-control"
+                    id="ciTy"
+                    placeholder="New Password"
+                    formControlName="password"
+                  />
+                </div>
+              </div>
+              <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                <div class="form-group">
+                  <label for="sTate">Confirm new Password</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="sTate"
+                    placeholder="Confirm Password"
+                    formControlName="passwordConfirm"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="row gutters">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="text-right">
+                  <button
+                    type="button"
+                    id="submit"
+                    name="submit"
+                    class="btn btn-secondary"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    id="submit"
+                    name="submit"
+                    class="btn btn-primary"
+                    (click)="updatePassword()"
+                  >
+                    Update
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

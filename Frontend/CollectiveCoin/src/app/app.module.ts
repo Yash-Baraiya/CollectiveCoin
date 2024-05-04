@@ -22,7 +22,7 @@ import { StoreModule } from '@ngrx/store';
 import { reducer } from './members/memberstore/members.reducer';
 import { MembersEffects } from './members/memberstore/members.effects';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { InvestmentsComponent } from './investments/investments.component';
+import { UpdateProfileComponent } from './updateProfile/updateProfile.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +35,7 @@ import { InvestmentsComponent } from './investments/investments.component';
     ResetpasswordComponent,
     LineChartComponent,
     CoverpageComponent,
-    InvestmentsComponent,
+    UpdateProfileComponent,
   ],
   imports: [
     BrowserModule,

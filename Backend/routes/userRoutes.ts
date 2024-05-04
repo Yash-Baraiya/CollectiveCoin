@@ -7,6 +7,8 @@ import {
   restrictTo,
   forgotPassword,
   restrictToAdd,
+  updateUser,
+  updatePassword,
 } from "../controller/authController";
 import {
   uploadImage,
@@ -43,6 +45,8 @@ router.patch("/delete-member/:id", protect, restrictToAdd, deleteuser);
 router.delete("/deletefamily", protect, deletefamily);
 router.post("/forgotpassword", forgotPassword);
 router.patch("/resetPassword/:token", resetPassword);
+router.patch("/updateprofile", protect, updateUser);
+router.patch("/updatepassword", protect, updatePassword);
 
 router.patch("/uploadimage", protect, upload.single("photo"), uploadImage);
 router.post("/sendmail", protect, sendmailAdmin);

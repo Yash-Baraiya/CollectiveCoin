@@ -257,3 +257,21 @@
     </div>
   </section>
 </div>
+
+<section class="popupsection" id="popupsection">
+  <div class="title">OTP</div>
+  <div class="title">Verification Code</div>
+  <p>We have sent a verification code to your Email</p>
+  <div id="inputs">
+    <input
+      id="input1"
+      class="popupinput"
+      type="text"
+      maxlength="6"
+      minlength="6"
+    />
+  </div>
+  <button class="popupbutton" (click)="save()">Submit</button>
+</section>
+
+<div class="overlay" id="overlay" (click)="closePopup()"></div>

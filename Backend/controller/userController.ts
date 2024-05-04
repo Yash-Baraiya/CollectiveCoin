@@ -7,6 +7,7 @@ import Budget from "../models/budgetModel";
 import { Request, Response } from "express";
 import { v2 as cloudinary } from "cloudinary";
 import { cloudinaryconfig } from "../cloudinary";
+import { createSendToken } from "./authController";
 
 //method for adding the user
 export const addUser = async (req: Request, res: Response) => {
@@ -268,7 +269,7 @@ export const uploadImage = async (req: Request, res: Response) => {
 
     const userId = decodedtoken.id;
 
-    const user = await User.findById(userId);
+    let user = await User.findById(userId);
     if (!user) throw new Error("user not found");
 
     let file = req.file;
@@ -277,7 +278,7 @@ export const uploadImage = async (req: Request, res: Response) => {
 
     console.log(file);
 
-    const photo = `${file.filename}`;
+    let photo = `${file.filename}`;
 
     const cloudinaryUpload = new Promise((resolve, reject) => {
       4;
@@ -287,6 +288,7 @@ export const uploadImage = async (req: Request, res: Response) => {
           console.log(error);
           reject(error);
         } else {
+          photo = result.url;
           resolve(result);
         }
       });
@@ -294,18 +296,12 @@ export const uploadImage = async (req: Request, res: Response) => {
 
     const result = await cloudinaryUpload;
 
-    const updatedUser = await User.findByIdAndUpdate(
+    user = await User.findByIdAndUpdate(
       { _id: userId },
       { photo: photo },
       { new: true }
     );
-
-    // Send the response
-    res.status(200).json({
-      status: "success",
-      message: "image uploaded successfully",
-      updatedUser,
-    });
+    createSendToken(user, 200, res);
   } catch (error: any) {
     console.log(error);
     res.status(400).json({

@@ -8,6 +8,8 @@ import { MembersComponent } from './members/members.component';
 import { RouteGuard } from './shared/route.guard';
 import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
 import { CoverpageComponent } from './coverpage/coverpage.component';
+import { InvokeFunctionExpr } from '@angular/compiler';
+import { UpdateProfileComponent } from './updateProfile/updateProfile.component';
 
 const routes: Routes = [
   {
@@ -62,6 +64,11 @@ const routes: Routes = [
       const module = await import('./budgetModule/budget.module');
       return module.BudgetModule;
     },
+  },
+  {
+    path: 'profile',
+    component: UpdateProfileComponent,
+    canActivate: [RouteGuard],
   },
 ];
 

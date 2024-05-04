@@ -88,6 +88,16 @@ export class SignupComponent implements OnInit {
     }
   }
 
+  openPopup() {
+    document.getElementById('popupsection').style.display = 'flex';
+    document.getElementById('overlay').style.display = 'block';
+  }
+
+  closePopup() {
+    document.getElementById('popupsection').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
+  }
+
   showMessage(message: any) {
     this.snackBar.open(message || 'An error occurred', 'Close', {
       duration: 5000,

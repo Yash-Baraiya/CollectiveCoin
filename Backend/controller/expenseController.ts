@@ -4,6 +4,7 @@ import User from "../models/userModel";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
 import sendEmail from "../email";
+import * as cron from "node-cron";
 
 //method for adding the expense
 export const addExpense = async (req: Request, res: Response) => {
@@ -227,7 +228,7 @@ export const updateExpense = async (req: Request, res: Response) => {
     console.log(expense);
     if (expense?.addedBy !== user.name) {
       throw new Error(
-        `This income is added by ${expense.addedBy}. You are not allowed to update it`
+        `This expense is added by ${expense.addedBy}. You are not allowed to update it`
       );
     }
     expense = await Expense.findByIdAndUpdate(
@@ -244,7 +245,7 @@ export const updateExpense = async (req: Request, res: Response) => {
 
     res.status(200).json({
       status: "success",
-      messasge: "income updated successfully",
+      messasge: "expense updated successfully",
       expense,
     });
   } catch (error: any) {
@@ -255,3 +256,31 @@ export const updateExpense = async (req: Request, res: Response) => {
     });
   }
 };
+
+cron.schedule("0 0 1 * *", async () => {
+  try {
+    const expenses = await Expense.find({ category: "subscriptions" });
+
+    const currentDate = new Date();
+    const firstDayOfMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      1
+    );
+
+    expenses.forEach((expense) => {
+      Expense.create({
+        title: expense.title,
+        amount: expense.amount,
+        category: "subscriptions",
+        description: expense.description,
+        date: firstDayOfMonth,
+        addedBy: expense.addedBy,
+        familycode: expense.familycode,
+      });
+      console.log("Monthly subscriptions expense added successfully.");
+    });
+  } catch (error) {
+    console.error("Error adding monthly subscriptions expense:", error);
+  }
+});
