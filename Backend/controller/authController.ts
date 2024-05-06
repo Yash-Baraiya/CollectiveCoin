@@ -533,11 +533,42 @@ export const updatePassword = async (req: Request, res: Response) => {
 
     console.log("user updated successfully", user);
     createSendToken(user, 200, res);
-  } catch (error) {
+  } catch (error: any) {
     console.log(error);
-    res.status(200).json({
+    res.status(400).json({
       status: "failed",
-      messege: "internal server error",
+      messege: error.message,
+    });
+  }
+};
+
+export const isLoggedin = async (req: Request, res: Response) => {
+  try {
+    const auth = req.headers.authorization;
+    if (!auth) {
+      throw new Error("not authorized");
+    }
+    const token = auth.split(" ")[1];
+    const decodedtoken = jwt.decode(token) as JwtPayload;
+    if (!decodedtoken) {
+      throw new Error("token not found");
+    }
+    const userId = decodedtoken.id;
+    console.log(userId);
+
+    const user = await User.findById({ _id: userId });
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        user,
+      },
+    });
+  } catch (error: any) {
+    console.log(error);
+    res.status(400).json({
+      status: "failed",
+      message: error.message,
     });
   }
 };

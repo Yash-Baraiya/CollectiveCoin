@@ -8,7 +8,6 @@ import { MembersComponent } from './members/members.component';
 import { RouteGuard } from './shared/route.guard';
 import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
 import { CoverpageComponent } from './coverpage/coverpage.component';
-import { InvokeFunctionExpr } from '@angular/compiler';
 import { UpdateProfileComponent } from './user/updateProfile/updateProfile.component';
 
 const routes: Routes = [
@@ -19,6 +18,16 @@ const routes: Routes = [
   {
     path: 'DashBoard',
     component: DashboardComponent,
+    canActivate: [RouteGuard],
+  },
+  {
+    path: 'Transactions',
+    component: TransactionsComponent,
+    canActivate: [RouteGuard],
+  },
+  {
+    path: 'Members',
+    component: MembersComponent,
     canActivate: [RouteGuard],
   },
   {
@@ -35,16 +44,7 @@ const routes: Routes = [
       return module.ExpenseModule;
     },
   },
-  {
-    path: 'Transactions',
-    component: TransactionsComponent,
-    canActivate: [RouteGuard],
-  },
-  {
-    path: 'Members',
-    component: MembersComponent,
-    canActivate: [RouteGuard],
-  },
+
   {
     path: 'signup',
     component: SignupComponent,

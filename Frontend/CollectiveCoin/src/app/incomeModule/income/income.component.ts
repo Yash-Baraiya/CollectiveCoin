@@ -4,6 +4,7 @@ import { IncomeService } from '../../shared/services/income.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+import { LoginDataService } from '../../shared/services/login-data.service';
 @Component({
   selector: 'app-income',
   templateUrl: './income.component.html',
@@ -17,9 +18,12 @@ export class IncomeComponent implements OnInit, OnDestroy {
   constructor(
     public incomeservice: IncomeService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private logindataservice: LoginDataService
   ) {
-    this.isEarning = localStorage.getItem('isEarning');
+    this.logindataservice.isLoggedin().subscribe(() => {
+      this.isEarning = this.logindataservice.isEarning;
+    });
   }
   ngOnInit(): void {
     this.incomeservice.getIncome().subscribe(() => {

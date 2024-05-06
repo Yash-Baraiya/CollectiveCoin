@@ -1,6 +1,7 @@
 import { Component, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
+import { LoginDataService } from '../services/login-data.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -13,16 +14,22 @@ export class SidebarComponent implements OnInit {
   name: string = '';
   photo: any = '';
 
-  constructor(private router: Router) {
-    this.name = localStorage.getItem('username');
-    this.photo = localStorage.getItem('photo');
-  }
+  constructor(
+    private router: Router,
+    private logindataservice: LoginDataService
+  ) {}
 
   isActive(Route: string) {
     return this.router.isActive(Route, true);
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.logindataservice.isLoggedin().subscribe((resultData) => {
+      this.name = this.logindataservice.username;
+      this.photo = this.logindataservice.photo;
+      console.log(this.name, this.photo);
+    });
+  }
 
   clearStorage() {
     localStorage.clear();

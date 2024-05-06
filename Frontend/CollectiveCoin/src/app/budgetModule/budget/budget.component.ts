@@ -1,20 +1,14 @@
-import {
-  Component,
-  ElementRef,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BudgetService } from '../../shared/services/budget.service';
 import {
   animate,
-  keyframes,
   state,
   style,
   transition,
   trigger,
 } from '@angular/animations';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoginDataService } from '../../shared/services/login-data.service';
 @Component({
   selector: 'app-budget',
   templateUrl: './budget.component.html',
@@ -44,10 +38,9 @@ export class BudgetComponent implements OnInit, OnDestroy {
   constructor(
     public budgetservice: BudgetService,
     private router: Router,
-    private route: ActivatedRoute
-  ) {
-    this.isEarning = localStorage.getItem('isEarning');
-  }
+    private route: ActivatedRoute,
+    private logindataservice: LoginDataService
+  ) {}
   updateBudget(id: any) {
     this.router.navigate([`update-budget/${id}`], { relativeTo: this.route });
   }
@@ -60,6 +53,9 @@ export class BudgetComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.logindataservice.isLoggedin().subscribe(() => {
+      this.isEarning = this.logindataservice.isEarning;
+    });
     this.budgetservice.getBudgets().subscribe(() => {
       console.log('getting budgets');
     });

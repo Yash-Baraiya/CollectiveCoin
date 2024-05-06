@@ -9,6 +9,7 @@ import {
   restrictToAdd,
   updateUser,
   updatePassword,
+  isLoggedin,
 } from "../controller/authController";
 import {
   uploadImage,
@@ -52,4 +53,5 @@ router.patch("/uploadimage", protect, upload.single("photo"), uploadImage);
 router.post("/sendmail", protect, sendmailAdmin);
 router.patch("/makeadmin/:id", protect, restrictToAdd, makeAdmin);
 router.patch("/makeearner/:id", protect, restrictToAdd, toggleEarningState);
+router.get("/isloggedin", protect, isLoggedin);
 export default router;

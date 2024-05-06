@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { TransactionService } from './transaction.service';
+
 import * as jspdf from 'jspdf';
 import { HttpClient } from '@angular/common/http';
 import 'jspdf-autotable';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TransactionService } from '../shared/services/transaction.service';
 @Component({
   selector: 'app-transactions',
   templateUrl: './transactions.component.html',

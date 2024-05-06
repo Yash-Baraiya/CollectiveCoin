@@ -38,11 +38,13 @@ export class MembersComponent implements OnInit {
       ]),
     });
 
-    this.role = localStorage.getItem('role');
-    this.priority = localStorage.getItem('priority');
-    this.allmembers$ = this.store.select((state) => state.members.members);
+    this.logindataservice.isLoggedin().subscribe(() => {
+      this.role = this.logindataservice.role;
+      this.priority = this.logindataservice.priority;
+      this.allmembers$ = this.store.select((state) => state.members.members);
 
-    this.store.dispatch(MembersActions.loadMembers());
+      this.store.dispatch(MembersActions.loadMembers());
+    });
   }
 
   addmember() {

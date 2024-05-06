@@ -17,6 +17,7 @@ export class UpdateProfileComponent implements OnInit {
   updatePasswordForm: FormGroup;
   photo: any;
   username: any;
+  email: any;
   constructor(
     private http: HttpClient,
     private loginDataService: LoginDataService,
@@ -25,11 +26,19 @@ export class UpdateProfileComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.photo = localStorage.getItem('photo');
-    this.username = localStorage.getItem('username');
+    this.loginDataService.isLoggedin().subscribe(() => {
+      this.photo = this.loginDataService.photo;
+      this.username = this.loginDataService.username;
+      this.email = this.loginDataService.email;
+    });
+
     this.updateProfileForm = new FormGroup({
       name: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required, Validators.email]),
+    });
+    this.updateProfileForm.patchValue({
+      name: this.loginDataService.username,
+      email: this.loginDataService.email,
     });
 
     this.updatePasswordForm = new FormGroup({
@@ -59,8 +68,10 @@ export class UpdateProfileComponent implements OnInit {
       .subscribe(
         (resultData: any) => {
           if (resultData.status === 'success') {
-            this.loginDataService.setData(resultData);
-            this.username = localStorage.getItem('username');
+            this.loginDataService.isLoggedin().subscribe(() => {
+              this.username = this.loginDataService.username;
+              this.email = this.loginDataService.email;
+            });
             this.showMessage('updated successfully');
           } else {
             this.showMessage(resultData.message);
@@ -93,9 +104,9 @@ export class UpdateProfileComponent implements OnInit {
         (resultData: any) => {
           console.log(resultData);
           if (resultData.status === 'success') {
-            this.loginDataService.setData(resultData);
-            this.showMessage('photo updated successfully');
-            this.photo = localStorage.getItem('photo');
+            this.loginDataService.isLoggedin().subscribe(() => {
+              this.photo = this.loginDataService.photo;
+            });
           } else {
             this.showMessage(resultData.message);
           }
