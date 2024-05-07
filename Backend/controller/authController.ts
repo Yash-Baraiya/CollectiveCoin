@@ -455,10 +455,10 @@ export const restrictToAdd = async (
     next();
   } catch (error: any) {
     console.log(error);
-    res.status(400).json({
-      status: "failed",
-      message: error.message,
-    });
+    // res.status(400).json({
+    //   status: "failed",
+    //   message: error.message,
+    // });
   }
 };
 

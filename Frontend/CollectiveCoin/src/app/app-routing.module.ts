@@ -32,6 +32,11 @@ const routes: Routes = [
     canActivate: [RouteGuard],
   },
   {
+    path: 'profile',
+    component: UpdateProfileComponent,
+    canActivate: [RouteGuard],
+  },
+  {
     path: 'Income',
     loadChildren: async () => {
       const module = await import('./incomeModule/income.module');
@@ -66,11 +71,7 @@ const routes: Routes = [
       return module.BudgetModule;
     },
   },
-  {
-    path: 'profile',
-    component: UpdateProfileComponent,
-    canActivate: [RouteGuard],
-  },
+
   {
     path: '**',
     component: NotFoundComponent,

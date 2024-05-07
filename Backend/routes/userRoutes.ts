@@ -42,7 +42,7 @@ router.post("/signup", upload.single("photo"), signUp, uploadImage);
 router.post("/login", signIn);
 router.post("/add-member", protect, restrictToAdd, addUser);
 router.get("/getmembers", protect, getMembers);
-router.patch("/delete-member/:id", protect, restrictToAdd, deleteuser);
+router.patch("/delete-member/:id", protect, deleteuser);
 router.delete("/deletefamily", protect, deletefamily);
 router.post("/forgotpassword", forgotPassword);
 router.patch("/resetPassword/:token", resetPassword);

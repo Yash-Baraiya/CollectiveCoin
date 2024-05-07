@@ -1,0 +1,33 @@
+CollectiveCoin Website
+CollectiveCoin is a web application designed to help families manage their finances collectively. This project aims to provide a platform where family members can track their expenses, income, investments, and more.
+
+Features :
+
+Expense Tracking: Allows users to add, categorize, and track their expenses.
+
+Income Management: Allow users to add, categorize their income sources and track earnings.
+
+Budget Management : Allows users to add, categorize their track their monthly budgets 
+
+transactions : allow user to see their transactions , export their necessary transactions as pdf 
+
+multiple members : Allows multiple member's to share their family finances collectively
+
+Family Financial Overview: Provides an overview of the family's financial status, including expenses, income, and savings through charts and monthly balance
+
+emails : keeps family updated about the activities occurred.
+
+Authentication: Users can register, log in, and log out, update their profile securely to access their financial data , role based authentication .
+
+Technologies Used :
+Frontend: Angular framework is used for the frontend development.
+Backend: Node.js with Express.js is used for the backend server.
+Database: MongoDB is used as the database to store financial data.
+Authentication: JWT (JSON Web Tokens) is used for user authentication and authorization.
+
+State Management: NgRx is used for state management in the Angular's member component .
+
+Prerequisites
+Node.js installed on your machine
+MongoDB installed locally or accessible remotely
+Angular CLI installed globally (npm install -g @angular/cli)
