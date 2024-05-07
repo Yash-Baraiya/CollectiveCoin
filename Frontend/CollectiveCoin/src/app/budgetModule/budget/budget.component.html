@@ -9,12 +9,11 @@
             <h2
               class="total-income"
               *ngIf="budgetservice.overbudget.length > 0"
-              style="overflow: hidden"
             >
               <ul class="scroll-container">
                 <li
                   *ngFor="let obj of budgetservice.overbudget"
-                  style="color: #222260; display: inline-block"
+                  
                 >
                   you are going over budget for
                   <span style="color: red">{{ obj.category }} </span> by
@@ -195,11 +194,7 @@
                   <div class="submit-btn">
                     <button
                       class="formbtn"
-                      style="
-                        background-color: rgb(228, 18, 204);
-                        padding: 0.8rem 1.6rem;
-                        border-radius: 30px;
-                      "
+                      
                       (click)="save()"
                     >
                       <i class="fa-solid fa-plus"></i>Add Budget
@@ -211,33 +206,12 @@
                 <div
                   *ngFor="let i of budgetservice.data"
                   class="income-item"
-                  style="
-                    background: #fcf6f9;
-                    border: 2px solid #ffffff;
-                    box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
-                    border-radius: 20px;
-                    padding: 1rem;
-                    margin-bottom: 1rem;
-                    display: flex;
-                    align-items: center;
-                    gap: 1rem;
-                    width: 100%;
-                    color: #222260;
-                  "
+                  
                   (dblclick)="updateBudget(i.id)"
                 >
                   <div
                     class="icon"
-                    style="
-                      width: 80px;
-                      height: 80px;
-                      border-radius: 20px;
-                      background: #f5f5f5;
-                      display: flex;
-                      align-items: center;
-                      justify-content: center;
-                      border: 2px solid #ffffff;
-                    "
+                    
                   >
                     <img
                       *ngIf="i.category === 'education'"
@@ -298,17 +272,8 @@
                     >
                       {{ i.title }}
                       <span
-                        style="
-                          content: '';
-                          position: absolute;
-                          left: 0;
-                          top: 50%;
-                          transform: translateY(-50%);
-                          width: 0.8rem;
-                          height: 0.8rem;
-                          border-radius: 50%;
-                          background: #1b8f34;
-                        "
+                      class = 'income-dot'
+                        
                       ></span>
                     </h5>
                     <div
@@ -390,13 +355,7 @@
                       </div>
                       <div class="btn-con">
                         <button
-                          style="
-                            padding: 1rem;
-                            border-radius: 80%;
-                            background: #222260;
-                            color: #fcf6f9;
-                            border: none;
-                          "
+                          
                           [id]="i.id"
                           (click)="budgetservice.deleteBudget(i.id)"
                         >

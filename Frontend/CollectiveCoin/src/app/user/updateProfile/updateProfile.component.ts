@@ -89,10 +89,9 @@ export class UpdateProfileComponent implements OnInit {
       );
   }
 
-  updateImage(event: any) {
+  updateImage(event: any): void {
     const file = event.target.files[0];
     const formData = new FormData();
-
     formData.append('photo', file);
 
     this.http
@@ -107,18 +106,14 @@ export class UpdateProfileComponent implements OnInit {
             this.loginDataService.isLoggedin().subscribe(() => {
               this.photo = this.loginDataService.photo;
             });
+            this.showMessage('Image uploaded successfully');
           } else {
             this.showMessage(resultData.message);
           }
         },
         (error) => {
-          console.log(error);
-          if (error.error.message) {
-            console.log(error.error.message);
-            this, this.showMessage(error.error.message);
-          } else {
-            alert('An error occurred. Please try again later.');
-          }
+          console.error('Error uploading image:', error);
+          this.showMessage('An error occurred while uploading image');
         }
       );
   }

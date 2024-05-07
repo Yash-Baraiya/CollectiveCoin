@@ -457,3 +457,21 @@ textarea {
   background-color: #fff;
   color: #333;
 }
+.subbtn{
+  padding: 1rem;
+  background: #222260;
+  color: #fcf6f9;
+  border: none;
+  margin-right: 2%;
+  border-radius: 16px;
+  margin-bottom: 7px;
+}
+.canbtn{
+  padding: 1rem;
+  background: grey;
+  color: #fcf6f9;
+  border: none;
+  margin-right: 2%;
+  border-radius: 16px;
+  margin-bottom: 7px;
+}

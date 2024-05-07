@@ -115,6 +115,9 @@
 .formbtn {
   outline: none;
   border: none;
+  background-color: rgb(228, 18, 204);
+  padding: 0.8rem 1.6rem;
+  border-radius: 30px;
   font-family: inherit;
   font-size: inherit;
   display: -webkit-box;
@@ -315,6 +318,7 @@ h4,
 h5,
 h6 {
   color: var(--primary-color);
+  overflow: hidden;
 }
 .error {
   color: red;
@@ -404,7 +408,10 @@ h6 {
 
 .btn-con button {
   padding: 1rem;
-  border-radius: 50%;
+  border-radius: 80%;
+  background: #222260;
+  color: #fcf6f9;
+  border: none;
   background: var(--primary-color);
   color: #fff;
   border: none;
@@ -438,4 +445,20 @@ h1 {
   white-space: nowrap;
   overflow: hidden;
   animation: scroll 10s linear infinite;
+}
+
+li {
+  color: #222260;
+  display: inline-block;
+}
+.income-dot {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 50%;
+  background: #1b8f34;
 }

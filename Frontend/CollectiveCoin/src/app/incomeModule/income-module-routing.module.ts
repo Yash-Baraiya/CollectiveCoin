@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { IncomeComponent } from './income/income.component';
 import { UpdateincomeComponent } from './updateincome/updateincome.component';
 import { RouteGuard } from '../shared/route.guard';
+import { LoginComponent } from '../user/login/login.component';
 
 const incomeRoutes: Routes = [
   {
@@ -17,6 +18,10 @@ const incomeRoutes: Routes = [
         path: 'update-income/:id',
         component: UpdateincomeComponent,
         canActivate: [RouteGuard],
+      },
+      {
+        path: '**',
+        component: LoginComponent,
       },
     ],
   },

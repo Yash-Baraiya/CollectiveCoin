@@ -1,14 +1,14 @@
 <div id="root">
-  <div class="sc- fir-div App">
-    <div class="sc- emp-div"></div>
-    <div class="sc- con-in">
+  <div class="fir-div App">
+    <div class="emp-div"></div>
+    <div class="con-in">
       <app-sidebar></app-sidebar>
       <main>
-        <div class="sc- upperdiv">
-          <div class="sc- con-content1">
+        <div class="upperdiv">
+          <div class="con-content1">
             <div class="income-content">
               <div class="form-container">
-                <form class="sc- formcon" [formGroup]="updateBudgetForm">
+                <form class="formcon" [formGroup]="updateBudgetForm">
                   <div class="input-control">
                     <input
                       type="text"
@@ -159,15 +159,7 @@
                     </div>
                   </div>
                   <div class="submit-btn">
-                    <button
-                      class="sc- formbtn"
-                      style="
-                        background-color: rgb(228, 18, 204);
-                        padding: 0.8rem 1.6rem;
-                        border-radius: 30px;
-                      "
-                      (click)="save()"
-                    >
+                    <button class="formbtn" (click)="save()">
                       <i class="fa-solid fa-plus"></i>Upate Budget
                     </button>
                   </div>
@@ -178,33 +170,23 @@
 
                 <h3>
                   Amount :
-                  <span style="color: #222260" id="popamount"
-                    >{{ budgetData.amount }}
-                  </span>
+                  <span id="popamount">{{ budgetData.amount }} </span>
                 </h3>
                 <h3>
                   Date :
-                  <span style="color: #222260" id="popdate"
-                    >{{ budgetData.date }}
-                  </span>
+                  <span id="popdate">{{ budgetData.date }} </span>
                 </h3>
                 <h3>
                   Category :
-                  <span style="color: #222260" id="popcategory"
-                    >{{ budgetData.category }}
-                  </span>
+                  <span id="popcategory">{{ budgetData.category }} </span>
                 </h3>
                 <h3>
                   AddedBy :
-                  <span style="color: #222260" id="popaddedBy">
-                    {{ budgetData.createdBy }}</span
-                  >
+                  <span id="popaddedBy"> {{ budgetData.createdBy }}</span>
                 </h3>
                 <h3>
                   Description :
-                  <span style="color: #222260" id="popdescription">
-                    {{ budgetData.description }}</span
-                  >
+                  <span id="popdescription"> {{ budgetData.description }}</span>
                 </h3>
               </div>
             </div>

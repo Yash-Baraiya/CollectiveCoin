@@ -457,3 +457,14 @@ textarea {
   background-color: #fff;
   color: #333;
 }
+.income-dot{
+  content: '';
+                          position: absolute;
+                          left: 0;
+                          top: 50%;
+                          transform: translateY(-50%);
+                          width: 0.8rem;
+                          height: 0.8rem;
+                          border-radius: 50%;
+                          background: #1b8f34;
+}

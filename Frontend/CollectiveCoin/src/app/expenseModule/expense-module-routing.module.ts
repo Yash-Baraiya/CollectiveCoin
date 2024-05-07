@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ExpenseComponent } from './expense/expense.component';
 import { RouteGuard } from '../shared/route.guard';
 import { UpdateexpenseComponent } from './updateexpense/updateexpense.component';
+import { LoginComponent } from '../user/login/login.component';
 
 const routes: Routes = [
   {
@@ -16,8 +17,11 @@ const routes: Routes = [
       {
         path: 'update-expense/:id',
         component: UpdateexpenseComponent,
-        canActivate: [RouteGuard],
-      },
+        canActivate: [RouteGuard]
+      },{
+        path : '**',
+        component: LoginComponent
+      }
     ],
   },
 ];

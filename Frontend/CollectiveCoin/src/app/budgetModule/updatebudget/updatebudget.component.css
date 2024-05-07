@@ -115,6 +115,9 @@
 .formbtn {
   outline: none;
   border: none;
+  background-color: rgb(228, 18, 204);
+  padding: 0.8rem 1.6rem;
+  border-radius: 30px;
   font-family: inherit;
   font-size: inherit;
   display: -webkit-box;
@@ -392,4 +395,8 @@ h1 {
   border-radius: 10px;
   padding: 1rem;
   margin-bottom: 1rem;
+}
+
+span {
+  color: #222260;
 }

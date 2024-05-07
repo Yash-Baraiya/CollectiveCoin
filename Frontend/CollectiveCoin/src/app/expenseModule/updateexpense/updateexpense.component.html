@@ -4,11 +4,11 @@
     <div class="sc- con-in">
       <app-sidebar></app-sidebar>
       <main>
-        <div class="sc- upperdiv">
-          <div class="sc- con-content1">
+        <div class="upperdiv">
+          <div class="con-content1">
             <div class="income-content">
               <div class="form-container">
-                <form class="sc- formcon" [formGroup]="updateExpenseForm">
+                <form class="formcon" [formGroup]="updateExpenseForm">
                   <div class="input-control">
                     <input
                       type="text"
@@ -164,15 +164,7 @@
                     </div>
                   </div>
                   <div class="submit-btn">
-                    <button
-                      class="sc- formbtn"
-                      style="
-                        background-color: rgb(228, 18, 204);
-                        padding: 0.8rem 1.6rem;
-                        border-radius: 30px;
-                      "
-                      (click)="save()"
-                    >
+                    <button class="formbtn" (click)="save()">
                       <i class="fa-solid fa-plus"></i>Upate Expense
                     </button>
                   </div>
@@ -183,39 +175,29 @@
 
                 <h3>
                   Amount :
-                  <span style="color: #222260" id="popamount"
-                    >{{ expenseData.amount }}
-                  </span>
+                  <span id="popamount">{{ expenseData.amount }} </span>
                 </h3>
                 <h3>
                   Date :
-                  <span style="color: #222260" id="popdate"
-                    >{{ expenseData.date }}
-                  </span>
+                  <span id="popdate">{{ expenseData.date }} </span>
                 </h3>
                 <h3>
                   Category :
-                  <span style="color: #222260" id="popcategory"
-                    >{{ expenseData.category }}
-                  </span>
+                  <span id="popcategory">{{ expenseData.category }} </span>
                 </h3>
                 <h3>
                   AddedBy :
-                  <span style="color: #222260" id="popaddedBy">
-                    {{ expenseData.addedBy }}</span
-                  >
+                  <span id="popaddedBy"> {{ expenseData.addedBy }}</span>
                 </h3>
                 <h3>
                   Description :
-                  <span style="color: #222260" id="popdescription">
+                  <span id="popdescription">
                     {{ expenseData.description }}</span
                   >
                 </h3>
                 <h3 *ngIf="expenseData.paidBy">
                   PaidBy:
-                  <span style="color: #222260" id="popdescription">
-                    {{ expenseData.paidBy }}</span
-                  >
+                  <span id="popdescription"> {{ expenseData.paidBy }}</span>
                 </h3>
               </div>
             </div>

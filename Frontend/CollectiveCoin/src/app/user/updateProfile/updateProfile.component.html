@@ -15,22 +15,28 @@
             src="{{ photo }}"
             alt="User Avatar"
           />
-          <input
-            type="file"
-            style="
-              padding: 1rem;
-              background: #222260;
-              color: #fcf6f9;
-              border: none;
-              margin-left: 30px;
-              border-radius: 16px;
-              margin-bottom: 7px;
-              width: 109px;
-            "
-            (click)="updateImage($event)"
-          />
-
           <div>
+            <button
+              style="
+                padding: 1rem;
+                background: #222260;
+                color: #fcf6f9;
+                border: none;
+                margin-left: 23px;
+                border-radius: 16px;
+                margin-bottom: 7px;
+                margin-top: 5px;
+              "
+              (click)="fileInput.click()"
+            >
+              Upload Image
+            </button>
+            <input
+              #fileInput
+              type="file"
+              style="display: none"
+              (change)="updateImage($event)"
+            />
             <h2 style="margin-left: 17px">{{ username }}</h2>
             <p style="margin-left: 17px">{{ email }}</p>
           </div>
@@ -81,33 +87,8 @@
                 </div>
               </div>
               <div class="text-right">
-                <button
-                  type="button"
-                  style="
-                    padding: 1rem;
-                    background: grey;
-                    color: #fcf6f9;
-                    border: none;
-                    margin-right: 2%;
-                    border-radius: 16px;
-                    margin-bottom: 7px;
-                  "
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  style="
-                    padding: 1rem;
-                    background: #222260;
-                    color: #fcf6f9;
-                    border: none;
-                    margin-right: 2%;
-                    border-radius: 16px;
-                    margin-bottom: 7px;
-                  "
-                  (click)="updateProfile()"
-                >
+                <button type="button" class="canbtn">Cancel</button>
+                <button type="button" class="subbtn" (click)="updateProfile()">
                   Update
                 </button>
               </div>
@@ -146,33 +127,8 @@
                 />
               </div>
               <div class="text-right">
-                <button
-                  type="button"
-                  style="
-                    padding: 1rem;
-                    background: grey;
-                    color: #fcf6f9;
-                    border: none;
-                    margin-right: 2%;
-                    border-radius: 16px;
-                    margin-bottom: 7px;
-                  "
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  style="
-                    padding: 1rem;
-                    background: #222260;
-                    color: #fcf6f9;
-                    border: none;
-                    margin-right: 2%;
-                    border-radius: 16px;
-                    margin-bottom: 7px;
-                  "
-                  (click)="updatePassword()"
-                >
+                <button type="button" class="canbtn">Cancel</button>
+                <button type="button" class="subbtn" (click)="updatePassword()">
                   Update
                 </button>
               </div>

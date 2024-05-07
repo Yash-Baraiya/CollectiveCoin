@@ -1,27 +1,27 @@
-# CollectiveCoin
+CollectiveCoin Website
+CollectiveCoin is a web application designed to help families manage their finances collectively. This project aims to provide a platform where family members can track their expenses, income, investments, and more.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.2.3.
+Features :
 
-## Development server
+Expense Tracking: Allows users to add, categorize, and track their expenses.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Income Management: Allow users to add,categorize their income sources and track earnings.
 
-## Code scaffolding
+Family Financial Overview: Provides an overview of the family's financial status, including expenses, income, and savings through charts and monthly balance
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+emails : keeps family updated anbout the activities occured.
 
-## Build
+Authentication: Users can register, log in, and log out,update their profile securely to access their financial data.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Technologies Used :
+Frontend: Angular framework is used for the frontend development.
+Backend: Node.js with Express.js is used for the backend server.
+Database: MongoDB is used as the database to store financial data.
+Authentication: JWT (JSON Web Tokens) is used for user authentication and authorization.
 
-## Running unit tests
+State Management: NgRx is used for state management in the Angular application.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Prerequisites
+Node.js installed on your machine
+MongoDB installed locally or accessible remotely
+Angular CLI installed globally (npm install -g @angular/cli)

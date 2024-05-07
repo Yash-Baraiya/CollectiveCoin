@@ -36,9 +36,10 @@ export class MembersEffects {
             map((response: allMembers) =>
               MembersActions.loadMembersSuccess({ members: response.members })
             ),
-            catchError((error) =>
-              of(MembersActions.loadMembersFailure({ error }))
-            )
+            catchError((error) => {
+              this.showErrorMessage(error.error.message);
+              return of(MembersActions.loadMembersFailure({ error }));
+            })
           )
       )
     )
@@ -55,9 +56,11 @@ export class MembersEffects {
           )
           .pipe(
             map(() => MembersActions.addMemberSuccess({ member })),
-            catchError((error) =>
-              of(MembersActions.addMemberFailure({ error }))
-            )
+            catchError((error) => {
+              this.showErrorMessage(error.error.message);
+
+              return of(MembersActions.addMemberFailure({ error }));
+            })
           )
       )
     )
@@ -78,7 +81,7 @@ export class MembersEffects {
               this.store.dispatch(MembersActions.loadMembers());
             }),
             catchError((error) => {
-              this.showErrorMessage(error);
+              this.showErrorMessage(error.error.message);
               return of(MembersActions.deleteMemberFailure({ error }));
             })
           )
@@ -100,9 +103,10 @@ export class MembersEffects {
             tap(() => {
               this.router.navigate(['/login']);
             }),
-            catchError((error) =>
-              of(MembersActions.deleteFamilyFailure({ error }))
-            )
+            catchError((error) => {
+              this.showErrorMessage(error.error.message);
+              return of(MembersActions.deleteFamilyFailure({ error }));
+            })
           )
       )
     )
@@ -122,9 +126,10 @@ export class MembersEffects {
             tap(() => {
               this.store.dispatch(MembersActions.loadMembers());
             }),
-            catchError((error) =>
-              of(MembersActions.makeAdminFailure({ error }))
-            )
+            catchError((error) => {
+              this.showErrorMessage(error.error.message);
+              return of(MembersActions.makeAdminFailure({ error }));
+            })
           )
       )
     )
@@ -145,9 +150,10 @@ export class MembersEffects {
               this.store.dispatch(MembersActions.loadMembers());
             }),
 
-            catchError((error) =>
-              of(MembersActions.makeEarnerFailure({ error }))
-            )
+            catchError((error) => {
+              this.showErrorMessage(error.error.message);
+              return of(MembersActions.makeEarnerFailure({ error }));
+            })
           )
       )
     )
@@ -168,15 +174,18 @@ export class MembersEffects {
               this.store.dispatch(MembersActions.loadMembers());
             }),
 
-            catchError((error) =>
-              of(MembersActions.emailAdminFailure({ error }))
-            )
+            catchError((error) => {
+              console.log(error.error.message);
+              this.showErrorMessage(error.error.message);
+
+              return of(MembersActions.emailAdminFailure({ error }));
+            })
           )
       )
     )
   );
-  private showErrorMessage(error: any) {
-    this.snackBar.open(error.message || 'An error occurred', 'Close', {
+  private showErrorMessage(message: any) {
+    this.snackBar.open(message || 'An error occurred', 'Close', {
       duration: 5000,
       panelClass: ['snackbar-error'],
     });

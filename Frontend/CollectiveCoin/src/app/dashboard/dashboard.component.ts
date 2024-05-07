@@ -2,6 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IncomeService } from '../shared/services/income.service';
 import { ExpenseService } from '../shared/services/expense.service';
 import { TransactionService } from '../shared/services/transaction.service';
+import { SpinnerService } from '../shared/services/spinner.service';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,7 +14,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   constructor(
     public incomeservice: IncomeService,
     public expenseservice: ExpenseService,
-    public transactionservice: TransactionService
+    public transactionservice: TransactionService,
+    private spinnerservice: SpinnerService
   ) {}
 
   ngOnDestroy(): void {
@@ -23,7 +26,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
   ngOnInit(): void {
     this.incomeservice.getIncome();
-    this.expenseservice.getExpense();
+    this.expenseservice.getExpense().subscribe(() => {});
     this.transactionservice.gettAllTransactions();
+    this.spinnerservice.startLoading();
+
+    setTimeout(() => {
+      this.spinnerservice.stopLoading();
+    }, 2000);
   }
 }

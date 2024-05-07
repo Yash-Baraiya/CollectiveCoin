@@ -23,6 +23,8 @@ import { reducer } from './members/memberstore/members.reducer';
 import { MembersEffects } from './members/memberstore/members.effects';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { UpdateProfileComponent } from './user/updateProfile/updateProfile.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { NotFoundComponent } from './404/404.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +38,7 @@ import { UpdateProfileComponent } from './user/updateProfile/updateProfile.compo
     LineChartComponent,
     CoverpageComponent,
     UpdateProfileComponent,
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,
@@ -45,10 +48,10 @@ import { UpdateProfileComponent } from './user/updateProfile/updateProfile.compo
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MatSnackBarModule,
-
     StoreModule.forRoot({ members: reducer }),
     EffectsModule.forRoot([MembersEffects]),
     SharedModule,
+    NgxSpinnerModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },

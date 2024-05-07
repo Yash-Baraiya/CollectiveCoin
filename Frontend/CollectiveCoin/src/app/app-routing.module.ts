@@ -9,6 +9,7 @@ import { RouteGuard } from './shared/route.guard';
 import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
 import { CoverpageComponent } from './coverpage/coverpage.component';
 import { UpdateProfileComponent } from './user/updateProfile/updateProfile.component';
+import { NotFoundComponent } from './404/404.component';
 
 const routes: Routes = [
   {
@@ -69,6 +70,10 @@ const routes: Routes = [
     path: 'profile',
     component: UpdateProfileComponent,
     canActivate: [RouteGuard],
+  },
+  {
+    path: '**',
+    component: NotFoundComponent,
   },
 ];
 

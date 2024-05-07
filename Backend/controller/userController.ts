@@ -168,7 +168,7 @@ export const deleteuser = async (req: Request, res: Response) => {
 
     const user = await User.findById(AdminId);
     if (!user) {
-      throw new Error("user not  found");
+      throw new Error("user not found");
     }
     if (user.role !== "admin") {
       throw new Error("You are not allowed to remove anyone");
@@ -182,20 +182,17 @@ export const deleteuser = async (req: Request, res: Response) => {
     if (member?.priority) {
       if (member?.priority < user.priority && member.role === "admin") {
         throw new Error(
-          " you can not delete an admin who join the family before you"
+          "you can not delete an admin who joined the family before you"
         );
       }
     }
-    // const members = await User.find({ familycode: member?.familycode });
-    // members.forEach((memberr) => {
-    //   if (member) {
-    //     if (member.priority > memberr.priority) {
-    //       memberr.priority = memberr.priority - 1;
-    //     }
-    //   }
-    // });
-    await User.findByIdAndUpdate(memberId, { familycode: null, priority: 0 });
-    await User.findByIdAndUpdate(AdminId, { $push: { deleteduser: memberId } });
+    await User.findByIdAndUpdate(memberId, {
+      familycode: null,
+      priority: 0,
+    });
+    await User.findByIdAndUpdate(AdminId, {
+      $push: { deleteduser: memberId },
+    });
 
     res.status(200).json({
       status: "success",
