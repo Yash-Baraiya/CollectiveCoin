@@ -6,6 +6,7 @@ import { SharedModule } from '../shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { BudgetModuleRoutingModule } from './budget-module-routing.module';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
   declarations: [BudgetComponent, UpdatebudgetComponent],
@@ -14,6 +15,7 @@ import { BudgetModuleRoutingModule } from './budget-module-routing.module';
     SharedModule,
     ReactiveFormsModule,
     BudgetModuleRoutingModule,
+    NgxPaginationModule,
   ],
 })
 export class BudgetModule {}

@@ -11,10 +11,7 @@
               *ngIf="budgetservice.overbudget.length > 0"
             >
               <ul class="scroll-container">
-                <li
-                  *ngFor="let obj of budgetservice.overbudget"
-                  
-                >
+                <li *ngFor="let obj of budgetservice.overbudget">
                   you are going over budget for
                   <span style="color: red">{{ obj.category }} </span> by
                   <span style="color: red">{{ obj.amount }}$ </span>,
@@ -192,11 +189,7 @@
                     </div>
                   </div>
                   <div class="submit-btn">
-                    <button
-                      class="formbtn"
-                      
-                      (click)="save()"
-                    >
+                    <button class="formbtn" (click)="save()">
                       <i class="fa-solid fa-plus"></i>Add Budget
                     </button>
                   </div>
@@ -204,15 +197,19 @@
               </div>
               <div class="incomes">
                 <div
-                  *ngFor="let i of budgetservice.data"
+                  *ngFor="
+                    let i of budgetservice.data
+                      | paginate
+                        : {
+                            itemsPerPage: 4,
+                            currentPage: currentPage,
+                            totalItems: totalItems
+                          }
+                  "
                   class="income-item"
-                  
                   (dblclick)="updateBudget(i.id)"
                 >
-                  <div
-                    class="icon"
-                    
-                  >
+                  <div class="icon">
                     <img
                       *ngIf="i.category === 'education'"
                       src="https://img.icons8.com/pulsar-line/48/education-fees-payment.png"
@@ -271,10 +268,7 @@
                       "
                     >
                       {{ i.title }}
-                      <span
-                      class = 'income-dot'
-                        
-                      ></span>
+                      <span class="income-dot"></span>
                     </h5>
                     <div
                       class="inner-content"
@@ -355,7 +349,6 @@
                       </div>
                       <div class="btn-con">
                         <button
-                          
                           [id]="i.id"
                           (click)="budgetservice.deleteBudget(i.id)"
                         >
@@ -380,6 +373,11 @@
             </div>
           </div>
         </div>
+        <li style="margin-left: 505px">
+          <pagination-controls
+            (pageChange)="currentPage = $event"
+          ></pagination-controls>
+        </li>
         <app-bar-chart></app-bar-chart>
       </main>
     </div>

@@ -4,7 +4,6 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
 import { IncomeIn } from "../interface/incomeInterface";
 
-
 //method for adding the income
 export const addIncome = async (req: Request, res: Response) => {
   const { title, amount, category, description } = req.body;
@@ -84,10 +83,7 @@ export const getIncomes = async (req: Request, res: Response) => {
     const token = auth.split(" ")[1];
 
     try {
-      const decodedToken = jwt.verify(
-        token,
-        process.env.JWT_SECRET || "defaultSecret$Yash@123$"
-      ) as JwtPayload;
+      const decodedToken = jwt.decode(token) as JwtPayload;
       const userId = decodedToken.id;
 
       let monthlyincome: Array<IncomeIn> = [];
@@ -131,7 +127,6 @@ export const getIncomes = async (req: Request, res: Response) => {
     return res.status(500).json({ message: "Server Error" });
   }
 };
-
 
 //method for deleting the income
 export const deleteIncome = async (
@@ -182,7 +177,6 @@ export const deleteIncome = async (
   next();
 };
 
-
 //method for updating the income
 export const updateIncome = async (req: Request, res: Response) => {
   try {
@@ -210,7 +204,9 @@ export const updateIncome = async (req: Request, res: Response) => {
       throw new Error("income not found");
     }
     console.log(income);
-    if (income?.addedBy !== user.name) {
+    if (
+      income?.addedBy?.trim().toLowerCase() !== user.name.trim().toLowerCase()
+    ) {
       throw new Error(
         `This income is added by ${income.addedBy}. You are not allowed to delete it`
       );

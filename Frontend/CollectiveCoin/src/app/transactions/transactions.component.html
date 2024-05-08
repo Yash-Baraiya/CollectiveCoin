@@ -7,7 +7,7 @@
         <div class="btn-con" style="display: flex; justify-content: flex-end">
           <button class="filbtn" (click)="toggleFilters()">filter</button>
           <button class="filbtn" (click)="downloadTransactionsPDF()">
-            save
+            Export
           </button>
         </div>
         <div *ngIf="showFilters">
@@ -56,7 +56,15 @@
         </div>
 
         <div
-          *ngFor="let i of transactionservice.alltransactions"
+          *ngFor="
+            let i of transactionservice.alltransactions
+              | paginate
+                : {
+                    itemsPerPage: 5,
+                    currentPage: currentPage,
+                    totalItems: totalItems
+                  }
+          "
           class="income-item"
           (dblclick)="updateTransaction(i.id, i.type)"
         >
@@ -270,6 +278,11 @@
             </div>
           </div>
         </div>
+        <li style="margin-left: 325px">
+          <pagination-controls
+            (pageChange)="currentPage = $event"
+          ></pagination-controls>
+        </li>
       </main>
     </div>
   </div>

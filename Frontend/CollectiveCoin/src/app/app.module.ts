@@ -25,6 +25,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { UpdateProfileComponent } from './user/updateProfile/updateProfile.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { NotFoundComponent } from './404/404.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { NotFoundComponent } from './404/404.component';
     CoverpageComponent,
     UpdateProfileComponent,
     NotFoundComponent,
+    
   ],
   imports: [
     BrowserModule,
@@ -52,6 +54,7 @@ import { NotFoundComponent } from './404/404.component';
     EffectsModule.forRoot([MembersEffects]),
     SharedModule,
     NgxSpinnerModule,
+    NgxPaginationModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },

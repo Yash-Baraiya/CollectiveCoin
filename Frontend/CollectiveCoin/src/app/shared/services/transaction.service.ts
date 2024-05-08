@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -25,60 +26,64 @@ export class TransactionService {
       endDate: new FormControl(''),
     });
   }
-  gettAllTransactions() {
-    this.http
-      .get(
-        'http://localhost:8000/api/v1/CollectiveCoin/user/transactions/all-transactions'
-      )
-      .subscribe((resultData) => {
-        try {
-          this.data = resultData;
-          this.incomedata = this.data.incomes.map((income: any) => ({
-            title: income.title,
-            amount: income.amount[0],
-            category: income.category,
-            date: income.date.split('T')[0],
-            id: income._id,
-            type: income.type,
-            description: income.description,
-            addedBy: income.addedBy,
-          }));
+  gettAllTransactions(): Observable<any> {
+    return new Observable((Observer) => {
+      this.http
+        .get(
+          'http://localhost:8000/api/v1/CollectiveCoin/user/transactions/all-transactions'
+        )
+        .subscribe((resultData) => {
+          try {
+            this.data = resultData;
+            this.incomedata = this.data.incomes.map((income: any) => ({
+              title: income.title,
+              amount: income.amount[0],
+              category: income.category,
+              date: income.date.split('T')[0],
+              id: income._id,
+              type: income.type,
+              description: income.description,
+              addedBy: income.addedBy,
+            }));
 
-          this.expensedata = this.data.expenses.map((expense: any) => ({
-            title: expense.title,
-            amount: expense.amount,
-            category: expense.category,
-            date: expense.date.split('T')[0],
-            id: expense._id,
-            type: expense.type,
-            description: expense.description,
-            addedBy: expense.addedBy,
-            markAsPaid: expense.markAsPaid,
-          }));
+            this.expensedata = this.data.expenses.map((expense: any) => ({
+              title: expense.title,
+              amount: expense.amount,
+              category: expense.category,
+              date: expense.date.split('T')[0],
+              id: expense._id,
+              type: expense.type,
+              description: expense.description,
+              addedBy: expense.addedBy,
+              markAsPaid: expense.markAsPaid,
+            }));
 
-          this.alltransactions = this.incomedata.concat(this.expensedata);
-          this.alltransactions = this.alltransactions.sort((a, b) => {
-            const dateA = new Date(a.date);
-            const dateB = new Date(b.date);
+            this.alltransactions = this.incomedata.concat(this.expensedata);
+            this.alltransactions = this.alltransactions.sort((a, b) => {
+              const dateA = new Date(a.date);
+              const dateB = new Date(b.date);
 
-            return dateB.getTime() - dateA.getTime();
-          });
-          this.recenthistory = this.alltransactions.slice(0, 3);
-          this.incomedata = this.incomedata.sort((a, b) => {
-            return b.amount - a.amount;
-          });
-          this.expensedata = this.expensedata.sort((a, b) => {
-            return b.amount - a.amount;
-          });
-          this.maxincome = this.incomedata.shift().amount;
-          this.minincome = this.incomedata.pop().amount;
+              return dateB.getTime() - dateA.getTime();
+            });
+            this.recenthistory = this.alltransactions.slice(0, 3);
+            this.incomedata = this.incomedata.sort((a, b) => {
+              return b.amount - a.amount;
+            });
+            this.expensedata = this.expensedata.sort((a, b) => {
+              return b.amount - a.amount;
+            });
+            this.maxincome = this.incomedata.shift().amount;
+            this.minincome = this.incomedata.pop().amount;
 
-          this.maxexpense = this.expensedata.shift().amount;
-          this.minexpense = this.expensedata.pop().amount;
-        } catch (error) {
-          console.log(error);
-        }
-      });
+            this.maxexpense = this.expensedata.shift().amount;
+            this.minexpense = this.expensedata.pop().amount;
+          } catch (error) {
+            console.log(error);
+          }
+        });
+
+      Observer.next();
+    });
   }
 
   deleteTransaction(id) {

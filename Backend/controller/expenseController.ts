@@ -226,7 +226,9 @@ export const updateExpense = async (req: Request, res: Response) => {
       throw new Error("income not found");
     }
     console.log(expense);
-    if (expense?.addedBy !== user.name) {
+    if (
+      expense?.addedBy?.trim().toLowerCase() !== user.name.trim().toLowerCase()
+    ) {
       throw new Error(
         `This expense is added by ${expense.addedBy}. You are not allowed to update it`
       );

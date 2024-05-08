@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { IncomeModuleRoutingModule } from './income-module-routing.module';
 import { UpdateincomeComponent } from './updateincome/updateincome.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
   declarations: [IncomeComponent, UpdateincomeComponent],
@@ -14,6 +15,7 @@ import { UpdateincomeComponent } from './updateincome/updateincome.component';
     ReactiveFormsModule,
     SharedModule,
     IncomeModuleRoutingModule,
+    NgxPaginationModule,
   ],
 })
 export class IncomeModule {

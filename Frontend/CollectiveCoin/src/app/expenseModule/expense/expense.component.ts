@@ -9,9 +9,10 @@ import Stripe from 'stripe';
   styleUrl: './expense.component.css',
 })
 export class ExpenseComponent implements OnInit {
-  expensedatapop: any;
   showCheckbox: boolean = false;
   stripePromise: Promise<Stripe>;
+  currentPage: number;
+  totalItems: number;
 
   constructor(
     public expenseservice: ExpenseService,
@@ -21,7 +22,8 @@ export class ExpenseComponent implements OnInit {
 
   ngOnInit(): void {
     this.expenseservice.getExpense().subscribe(() => {
-      console.log('getting expense');
+      this.currentPage = 1;
+      this.totalItems = this.expenseservice.data.length;
     });
   }
 

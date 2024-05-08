@@ -227,7 +227,15 @@
               </div>
               <div class="incomes">
                 <div
-                  *ngFor="let i of expenseservice.data"
+                  *ngFor="
+                    let i of expenseservice.data
+                      | paginate
+                        : {
+                            itemsPerPage: 4,
+                            currentPage: currentPage,
+                            totalItems: totalItems
+                          }
+                  "
                   class="income-item"
                   style="
                     background: #fcf6f9;
@@ -479,6 +487,11 @@
             </div>
           </div>
         </div>
+        <li style="margin-left: 505px">
+          <pagination-controls
+            (pageChange)="currentPage = $event"
+          ></pagination-controls>
+        </li>
       </main>
     </div>
   </div>

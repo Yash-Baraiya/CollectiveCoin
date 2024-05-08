@@ -11,10 +11,11 @@ import { LoginDataService } from '../../shared/services/login-data.service';
   styleUrl: './income.component.css',
 })
 export class IncomeComponent implements OnInit, OnDestroy {
-  incomedatapop: any;
   isEarning: any;
   data: any;
-  bsConfig: Partial<BsDatepickerConfig>;
+  currentPage: number;
+  totalItems: number;
+
   constructor(
     public incomeservice: IncomeService,
     private router: Router,
@@ -27,7 +28,8 @@ export class IncomeComponent implements OnInit, OnDestroy {
   }
   ngOnInit(): void {
     this.incomeservice.getIncome().subscribe(() => {
-      console.log(' subscriberd method is getting called');
+      this.currentPage = 1;
+      this.totalItems = this.incomeservice.data.length;
     });
   }
   ngOnDestroy() {

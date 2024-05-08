@@ -11,7 +11,9 @@ import { TransactionService } from '../shared/services/transaction.service';
   styleUrl: './transactions.component.css',
 })
 export class TransactionsComponent implements OnInit {
-  transactiondatapop: any;
+  currentPage: number;
+  totalItems: number;
+
   showFilters: boolean = false;
   toggleFilters() {
     this.showFilters = !this.showFilters;
@@ -26,7 +28,10 @@ export class TransactionsComponent implements OnInit {
   closebox5() {}
 
   ngOnInit(): void {
-    this.transactionservice.gettAllTransactions();
+    this.transactionservice.gettAllTransactions().subscribe(() => {
+      this.currentPage = 1;
+      this.totalItems = this.transactionservice.alltransactions.length;
+    });
   }
   downloadTransactionsPDF(): void {
     try {
@@ -58,7 +63,7 @@ export class TransactionsComponent implements OnInit {
     }
   }
 
-  updateTransaction(id, type) {
+  updateTransaction(id: any, type: any) {
     console.log('transaction', id, type);
     if (type === 'expense') {
       this.router.navigate([`Expense/update-expense/${id}`]);

@@ -197,16 +197,20 @@
               </div>
               <div class="incomes">
                 <div
-                  *ngFor="let i of incomeservice.data"
+                  *ngFor="
+                    let i of incomeservice.data
+                      | paginate
+                        : {
+                            itemsPerPage: 4,
+                            currentPage: currentPage,
+                            totalItems: totalItems
+                          }
+                  "
                   [id]="i.id"
                   class="income-item"
-                  
                   (dblclick)="updateIncome(i.id)"
                 >
-                  <div
-                    class="icon"
-                  
-                  >
+                  <div class="icon">
                     <img
                       *ngIf="i.category === 'salary'"
                       src="https://img.icons8.com/ios/50/money-yours.png"
@@ -260,10 +264,7 @@
                       "
                     >
                       {{ i.title }}
-                      <span
-                      class = 'income-dot'
-                        
-                      ></span>
+                      <span class="income-dot"></span>
                     </h5>
                     <div
                       class="inner-content"
@@ -376,6 +377,11 @@
             </div>
           </div>
         </div>
+        <li style="margin-left: 505px">
+          <pagination-controls
+            (pageChange)="currentPage = $event"
+          ></pagination-controls>
+        </li>
       </main>
     </div>
   </div>

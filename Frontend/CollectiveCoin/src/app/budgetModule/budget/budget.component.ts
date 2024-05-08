@@ -35,6 +35,8 @@ export class BudgetComponent implements OnInit, OnDestroy {
   isEarning: any;
   animationState = 'start';
   data: any;
+  currentPage : number
+  totalItems : number
   constructor(
     public budgetservice: BudgetService,
     private router: Router,
@@ -57,7 +59,8 @@ export class BudgetComponent implements OnInit, OnDestroy {
       this.isEarning = this.logindataservice.isEarning;
     });
     this.budgetservice.getBudgets().subscribe(() => {
-      console.log('getting budgets');
+      this.currentPage = 1;
+      this.totalItems = this.budgetservice.data.length;
     });
   }
 

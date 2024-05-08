@@ -5,6 +5,7 @@ import { ExpenseComponent } from './expense/expense.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ExpenseModuleRoutingModule } from './expense-module-routing.module';
 import { UpdateexpenseComponent } from './updateexpense/updateexpense.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
   declarations: [ExpenseComponent, UpdateexpenseComponent],
@@ -14,6 +15,7 @@ import { UpdateexpenseComponent } from './updateexpense/updateexpense.component'
     FormsModule,
     ReactiveFormsModule,
     ExpenseModuleRoutingModule,
+    NgxPaginationModule,
   ],
 })
 export class ExpenseModule {}

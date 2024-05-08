@@ -5,8 +5,7 @@ import Budget from "../models/budgetModel";
 import { BudgetIn } from "../interface/budgetInterface";
 import { Request, Response, NextFunction } from "express";
 
-
-//method for adding the budget 
+//method for adding the budget
 export const addBudget = async (req: Request, res: Response) => {
   try {
     const { title, amount, category, description, date } = req.body;
@@ -69,7 +68,6 @@ export const addBudget = async (req: Request, res: Response) => {
     });
   }
 };
-
 
 //method for getting the budget
 export const getBudget = async (req: Request, res: Response) => {
@@ -194,7 +192,6 @@ export const deleteBudget = async (
   next: NextFunction
 ) => {
   try {
-    
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("not authorized");
@@ -213,14 +210,12 @@ export const deleteBudget = async (
     console.log(user.name);
     const budget = await Budget.findById(req.params.budgetId);
 
-   
     if (!user || !budget) {
       return res
         .status(404)
         .json({ status: "failed", message: "User or budget not found" });
     }
 
-   
     if (user.name !== budget.CreatedBy) {
       return res.status(403).json({
         status: "failed",
@@ -228,10 +223,8 @@ export const deleteBudget = async (
       });
     }
 
-    
     await Budget.deleteOne({ _id: req.params.budgetId });
 
-    
     res.status(200).json({ status: "success", message: "budget Deleted" });
   } catch (error: any) {
     console.log(error);
@@ -259,7 +252,6 @@ export const updateBudget = async (req: Request, res: Response) => {
       throw new Error("token not found");
     }
     const userId = decodedtoken.id;
-    console.log(userId);
 
     const user = await User.findById({ _id: userId });
     if (!user) {
@@ -268,12 +260,16 @@ export const updateBudget = async (req: Request, res: Response) => {
     console.log(req.params.budgetId);
     let budget = await Budget.findById({ _id: req.params.budgetId });
     if (!budget) {
-      throw new Error("income not found");
+      throw new Error("budget not found");
     }
-    console.log(budget);
-    if (budget?.CreatedBy !== user.name) {
+
+    console.log(budget.CreatedBy);
+    console.log(user.name);
+    if (
+      budget?.CreatedBy.trim().toLowerCase() !== user.name.trim().toLowerCase()
+    ) {
       throw new Error(
-        `This income is added by ${budget.CreatedBy}. You are not allowed to delete it`
+        `This budget is added by ${budget.CreatedBy}. You are not allowed to update it`
       );
     }
     budget = await Budget.findByIdAndUpdate(
@@ -290,7 +286,7 @@ export const updateBudget = async (req: Request, res: Response) => {
 
     res.status(200).json({
       status: "success",
-      messasge: "income updated successfully",
+      messasge: "budget updated successfully",
       budget,
     });
   } catch (error: any) {

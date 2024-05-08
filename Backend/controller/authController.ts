@@ -25,19 +25,6 @@ const signToken = (id: string) => {
 };
 export const createSendToken = (user: any, statusCode: any, res: Response) => {
   const token = signToken(user._id);
-  const jwtExpiresIn = process.env.JWT_COOKIE_EXPIRES_IN
-    ? parseInt(process.env.JWT_COOKIE_EXPIRES_IN)
-    : 7;
-  const cookieOptions = {
-    expires: new Date(Date.now() + jwtExpiresIn * 24 * 60 * 60 * 1000),
-    httpOnly: true,
-    secure: false,
-  };
-
-  if (process.env.NODE_ENV === "production") {
-    cookieOptions.secure = true;
-  }
-  res.cookie("jwt", token, cookieOptions);
 
   user.password = undefined;
   res.status(statusCode).json({
@@ -455,10 +442,6 @@ export const restrictToAdd = async (
     next();
   } catch (error: any) {
     console.log(error);
-    // res.status(400).json({
-    //   status: "failed",
-    //   message: error.message,
-    // });
   }
 };
 
