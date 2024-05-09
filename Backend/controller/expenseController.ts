@@ -3,11 +3,12 @@ import { ExpenseIn } from "../interface/expenseInterface";
 import User from "../models/userModel";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
-import sendEmail from "../email";
+import sendEmail from "../utils/email";
 import * as cron from "node-cron";
 
 //method for adding the expense
 export const addExpense = async (req: Request, res: Response) => {
+  console.log("add expense api called");
   const { title, amount, category, description, date, markAspaid, duedate } =
     req.body;
   console.log(category);
@@ -82,6 +83,7 @@ export const addExpense = async (req: Request, res: Response) => {
         }
       }, 0);
     }
+    console.log("add expense api ended")
     res.status(200).json({
       status: "success",
       message: "Expense Added",
@@ -99,8 +101,10 @@ export const addExpense = async (req: Request, res: Response) => {
 //method for geetting all the expenses
 export const getExpense = async (req: Request, res: Response) => {
   try {
+    console.log("get expense api called");
     let totalexpense: number = 0;
     let monthlyexpense: Array<ExpenseIn> = [];
+    let yearlyTotalExpense: number = 0;
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("not authorized");
@@ -123,6 +127,14 @@ export const getExpense = async (req: Request, res: Response) => {
 
     const currentMonth = new Date().getMonth() + 1;
     const currentYear = new Date().getFullYear();
+
+    for (let expense of expenses) {
+      let expyear = expense.date.getFullYear();
+
+      if (expyear === currentYear) {
+        yearlyTotalExpense = yearlyTotalExpense + expense.amount;
+      }
+    }
     for (let expense of expenses) {
       let expMonth = expense.date.getMonth() + 1;
       let expyear = expense.date.getFullYear();
@@ -133,11 +145,13 @@ export const getExpense = async (req: Request, res: Response) => {
     for (let i = 0; i < monthlyexpense.length; i++) {
       totalexpense = totalexpense + monthlyexpense[i].amount;
     }
+    console.log("get expense api ended");
     res.status(200).json({
       status: "success",
       expenses,
       totalexpense,
       monthlyexpense,
+      yearlyTotalExpense,
     });
   } catch (error) {
     res.status(500).json({ message: "Server Error" });
@@ -151,6 +165,7 @@ export const deleteExpense = async (
   next: NextFunction
 ) => {
   try {
+    console.log("delete expense api called");
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("not authorized");
@@ -178,7 +193,9 @@ export const deleteExpense = async (
         .json({ status: "failed", message: "User or expense not found" });
     }
 
-    if (user.name !== expense.addedBy) {
+    if (
+      user.name.trim().toLowerCase() !== expense.addedBy?.trim().toLowerCase()
+    ) {
       return res.status(403).json({
         status: "failed",
         message: `This expense is added by ${expense.addedBy}. You are not allowed to delete it`,
@@ -187,6 +204,7 @@ export const deleteExpense = async (
 
     await Expense.deleteOne({ _id: req.params.expenseId });
 
+    console.log("delete expense api ended");
     res.status(200).json({ status: "success", message: "Expense Deleted" });
   } catch (error: any) {
     console.log(error);
@@ -202,6 +220,7 @@ export const deleteExpense = async (
 //method for updating the expense
 export const updateExpense = async (req: Request, res: Response) => {
   try {
+    console.log("update expense api called");
     const { title, amount, category, description, date } = req.body;
 
     const auth = req.headers.authorization;
@@ -245,6 +264,7 @@ export const updateExpense = async (req: Request, res: Response) => {
       { new: true }
     );
 
+    console.log("update expese api ended")
     res.status(200).json({
       status: "success",
       messasge: "expense updated successfully",

@@ -24,7 +24,7 @@
                   name="category"
                   id="type"
                   formControlName="type"
-                  style="margin-right: 105px"
+                  style="margin-right: 18px"
                 >
                   <option value="income">Income</option>
                   <option value="expense">Expense</option>
@@ -40,17 +40,17 @@
                 <label for="endDate" style="font-size: 18px">End Date:</label>
                 <input type="date" id="endDate" formControlName="endDate" />
               </div>
-            </div>
-            <div class="button-container">
-              <button
-                class="formbtn apply-btn"
-                (click)="transactionservice.getFilteredTransactions()"
-              >
-                Apply
-              </button>
-              <button class="formbtn clear-btn" (click)="clearFilters()">
-                Clear
-              </button>
+              <div class="form-group">
+                <button
+                  class="formbtn apply-btn"
+                  (click)="transactionservice.getFilteredTransactions()"
+                >
+                  Apply
+                </button>
+                <button class="formbtn clear-btn" (click)="clearFilters()">
+                  Clear
+                </button>
+              </div>
             </div>
           </form>
         </div>
@@ -278,7 +278,7 @@
             </div>
           </div>
         </div>
-        <li style="margin-left: 325px">
+        <li style="margin-left: 325px" *ngIf="totalItems > 5">
           <pagination-controls
             (pageChange)="currentPage = $event"
           ></pagination-controls>

@@ -6,7 +6,7 @@ import {
   deleteExpense,
   updateExpense,
 } from "../controller/expenseController";
-import { createCheckOutSession, handleStripeEvent } from "./../stripe";
+import { createCheckOutSession, handleStripeEvent } from "./../utils/stripe";
 
 const router = express.Router();
 

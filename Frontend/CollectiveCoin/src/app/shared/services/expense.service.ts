@@ -18,6 +18,7 @@ export class ExpenseService {
   expamounts: any = [];
   amountsvalue: Array<number> = [];
   totalexpense: number = 0;
+  yearlyTotalExpense :number;
 
   constructor(
     private http: HttpClient,
@@ -108,6 +109,7 @@ export class ExpenseService {
                 duedate: this.datepipe.transform(expense.duedate, 'MM/dd/yyyy'),
                 paidBy: expense.paidBy,
               }));
+              this.yearlyTotalExpense = resultData.yearlyTotalExpense;
               this.expamounts = resultData.monthlyexpense
                 .map((expense) => ({
                   amount: expense.amount,

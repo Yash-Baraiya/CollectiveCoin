@@ -1,11 +1,9 @@
 import { Request, Response } from "express";
 import stripe from "stripe";
 
-import Expense from "./models/expenseModel";
+import Expense from "../models/expenseModel";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import User from "./models/userModel";
-
-
+import User from "../models/userModel";
 
 //stripe method for creating the checkout session
 const stripeInstance = new stripe(
@@ -74,7 +72,6 @@ export const createCheckOutSession = async (req: Request, res: Response) => {
     });
   }
 };
-
 
 //for updating the expense's after the payment has been done
 export const handleStripeEvent = async (req: Request, res: Response) => {

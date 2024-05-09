@@ -3,11 +3,11 @@ import crypto from "crypto";
 const { promisify } = require("util");
 import jwt, { JwtPayload } from "jsonwebtoken";
 import User from "../models/userModel";
-import sendEmail from "../email";
+import sendEmail from "../utils/email";
 import otpgenerator from "otp-generator";
-import { cloudinaryconfig } from "../cloudinary";
+import { cloudinaryconfig } from "../utils/cloudinary";
 import { v2 as cloudinary } from "cloudinary";
-import { uploadImage } from "./userController";
+
 declare global {
   namespace Express {
     interface Request {
@@ -39,6 +39,7 @@ export const createSendToken = (user: any, statusCode: any, res: Response) => {
 //method for signing the user up
 export const signUp = async (req: Request, res: Response) => {
   try {
+    console.log("signup api called");
     let priority = 1;
     const existingUser = await User.findOne({ email: req.body.email });
     const existingFamilycode = await User.findOne({
@@ -86,7 +87,6 @@ export const signUp = async (req: Request, res: Response) => {
 
     const result = await cloudinaryUpload;
 
-    console.log(photo);
     if (!existingFamilycode) {
       const newUser = await User.create({
         name: req.body.name,
@@ -115,6 +115,7 @@ export const signUp = async (req: Request, res: Response) => {
       });
       // Create and send JWT token
       createSendToken(newUser, 201, res);
+      console.log("sign up api ended");
     } else {
       const newUser = await User.create({
         name: req.body.name,
@@ -143,6 +144,7 @@ export const signUp = async (req: Request, res: Response) => {
       });
       // Create and send JWT token
       createSendToken(newUser, 201, res);
+      console.log("sign up api ended");
     }
   } catch (error: any) {
     console.log(error);
@@ -156,6 +158,7 @@ export const signUp = async (req: Request, res: Response) => {
 //method for logging  user in
 export const signIn = async (req: Request, res: Response) => {
   try {
+    console.log("singin api called");
     const { email, password, familycode } = req.body;
     if (!email || !password || !familycode) {
       throw new Error("Please provide email, password, and family code.");
@@ -225,6 +228,7 @@ export const signIn = async (req: Request, res: Response) => {
 
       createSendToken(user, 200, res);
     }
+    console.log(" singin api ended");
   } catch (error: any) {
     console.error("Error in signIn:", error);
     res.status(400).json({
@@ -314,6 +318,7 @@ export const forgotPassword = async (
   next: NextFunction
 ) => {
   try {
+    console.log("forgot password api called ");
     const email = req.body.email;
     const user = await User.findOne({ email: req.body.email });
     if (!user) {
@@ -363,6 +368,7 @@ export const forgotPassword = async (
 
       throw new Error("There was an error sending the email. Try again later!");
     }
+    console.log("forgot password api called");
   } catch (error: any) {
     console.log(error);
     res.status(200).json({
@@ -375,6 +381,7 @@ export const forgotPassword = async (
 //method for resetting the password
 export const resetPassword = async (req: Request, res: Response) => {
   try {
+    console.log("reset password api called");
     const hashedToken = crypto
       .createHash("sha256")
       .update(req.params.token)
@@ -401,6 +408,7 @@ export const resetPassword = async (req: Request, res: Response) => {
     await user.save();
 
     createSendToken(user, 200, res);
+    console.log("reset password api ended");
   } catch (error: any) {
     console.log(error);
     res.status(200).json({
@@ -447,6 +455,8 @@ export const restrictToAdd = async (
 
 export const updateUser = async (req: Request, res: Response) => {
   try {
+    console.log("update user api called");
+
     const { name, email } = req.body;
 
     const auth = req.headers.authorization;
@@ -475,6 +485,7 @@ export const updateUser = async (req: Request, res: Response) => {
     });
     console.log(user);
     createSendToken(user, 200, res);
+    console.log("update user api ended");
   } catch (error: any) {
     console.log(error);
     res.status(400).json({
@@ -486,6 +497,7 @@ export const updateUser = async (req: Request, res: Response) => {
 
 export const updatePassword = async (req: Request, res: Response) => {
   try {
+    console.log("update password api is called");
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("not authorized");
@@ -516,6 +528,7 @@ export const updatePassword = async (req: Request, res: Response) => {
 
     console.log("user updated successfully", user);
     createSendToken(user, 200, res);
+    console.log("update password api ended");
   } catch (error: any) {
     console.log(error);
     res.status(400).json({
@@ -527,6 +540,7 @@ export const updatePassword = async (req: Request, res: Response) => {
 
 export const isLoggedin = async (req: Request, res: Response) => {
   try {
+    console.log("is isloggedin api called");
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("not authorized");
@@ -547,6 +561,7 @@ export const isLoggedin = async (req: Request, res: Response) => {
         user,
       },
     });
+    console.log("islogged in api ended");
   } catch (error: any) {
     console.log(error);
     res.status(400).json({

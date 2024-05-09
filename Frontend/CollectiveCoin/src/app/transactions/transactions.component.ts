@@ -52,10 +52,17 @@ export class TransactionsComponent implements OnInit {
       pdf.text('CollectiveCoin', 20, 20);
 
       (pdf as any).autoTable({
-        startY: 30,
+        startY: 40,
         head: [columns],
         body: rows,
       });
+      pdf.text('Transactions Details :', 20, 35);
+
+      pdf.text(
+        `total Transactions :${this.transactionservice.alltransactions.length}`,
+        20,
+        120
+      );
 
       pdf.save('transactions.pdf');
     } catch (error) {

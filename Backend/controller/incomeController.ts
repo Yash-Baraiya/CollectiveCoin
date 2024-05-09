@@ -6,6 +6,7 @@ import { IncomeIn } from "../interface/incomeInterface";
 
 //method for adding the income
 export const addIncome = async (req: Request, res: Response) => {
+  console.log("add income api called");
   const { title, amount, category, description } = req.body;
 
   let date = req.body.date;
@@ -53,6 +54,7 @@ export const addIncome = async (req: Request, res: Response) => {
         .json({ message: "Amount must be a positive number!" });
     }
 
+    console.log("add income api ended");
     res.status(200).json({
       status: "success",
       message: "Income Added",
@@ -70,7 +72,9 @@ export const addIncome = async (req: Request, res: Response) => {
 //method for getting all the incomes
 export const getIncomes = async (req: Request, res: Response) => {
   try {
+    console.log("get income api called");
     let totalincome = 0;
+    let yearlyTotalincome = 0;
 
     const auth = req.headers.authorization;
     if (!auth) {
@@ -97,10 +101,16 @@ export const getIncomes = async (req: Request, res: Response) => {
       }).sort({
         createdAt: -1,
       });
-      console.log(incomes);
+
       const currentMonth = new Date().getMonth() + 1;
       const currentYear = new Date().getFullYear();
 
+      for (let income of incomes) {
+        let incYear = income.date.getFullYear();
+        if (currentYear === incYear) {
+          yearlyTotalincome = yearlyTotalincome + income.amount[0];
+        }
+      }
       for (let income of incomes) {
         let incMonth = income.date.getMonth() + 1;
         let incYear = income.date.getFullYear();
@@ -112,11 +122,13 @@ export const getIncomes = async (req: Request, res: Response) => {
         totalincome = totalincome + monthlyincome[i].amount[0];
       }
 
+      console.log("get income api ended");
       return res.status(200).json({
         status: "success",
         incomes,
         monthlyincome,
         totalincome,
+        yearlyTotalincome,
       });
     } catch (error: any) {
       console.log(error);
@@ -135,6 +147,7 @@ export const deleteIncome = async (
   next: NextFunction
 ) => {
   try {
+    console.log("delete income api called");
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("not authorized");
@@ -168,6 +181,7 @@ export const deleteIncome = async (
     }
     await Income.deleteOne({ _id: req.params.incomeId });
 
+    console.log("delete income api ended");
     res.status(200).json({ status: "success", message: "Income Deleted" });
   } catch (error: any) {
     console.error(error);
@@ -180,6 +194,7 @@ export const deleteIncome = async (
 //method for updating the income
 export const updateIncome = async (req: Request, res: Response) => {
   try {
+    console.log("update income api called");
     const { title, amount, category, description, date } = req.body;
 
     const auth = req.headers.authorization;
@@ -211,6 +226,7 @@ export const updateIncome = async (req: Request, res: Response) => {
         `This income is added by ${income.addedBy}. You are not allowed to delete it`
       );
     }
+
     income = await Income.findByIdAndUpdate(
       { _id: req.params.incomeId },
       {
@@ -222,7 +238,7 @@ export const updateIncome = async (req: Request, res: Response) => {
       },
       { new: true }
     );
-
+    console.log("update income api ended");
     res.status(200).json({
       status: "success",
       messasge: "income updated successfully",

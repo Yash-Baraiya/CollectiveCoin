@@ -353,12 +353,6 @@ h1 {
   background: var(--color-green) !important;
 }
 
-.button-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
 .form-row {
   display: flex;
   justify-content: space-between;
@@ -368,11 +362,6 @@ h1 {
 .selects,
 .form-group {
   flex: 1;
-}
-
-.button-container {
-  display: flex;
-  justify-content: space-between;
 }
 
 .formbtn {
@@ -385,12 +374,12 @@ h1 {
 
 .apply-btn {
   background: #222260;
-  margin-left: 400px;
+  /* margin-left: 400px; */
 }
 
 .clear-btn {
   background: #aaa;
-  margin-right: 450px;
+  margin-left: 15px;
 }
 
 .filbtn {

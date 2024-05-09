@@ -3,9 +3,6 @@ import Expense from "../models/expenseModel";
 import User from "../models/userModel";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import Income from "../models/incomeModel";
-import PDFDocument from "pdfkit";
-import * as pdfMake from "pdfmake/build/pdfmake";
-import * as pdfFonts from "pdfmake/build/vfs_fonts";
 
 //method for getting all the transactions
 export const getalltransactions = async (
@@ -13,6 +10,7 @@ export const getalltransactions = async (
   res: Response
 ): Promise<{ incomes: any[]; expenses: any[] }> => {
   try {
+    console.log("get all transaction api called");
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("not authorized");
@@ -34,6 +32,7 @@ export const getalltransactions = async (
     const incomes = await Income.find({ familycode: familycode });
     const expenses = await Expense.find({ familycode: familycode });
 
+    console.log("get all transactions api ended");
     res.status(200).json({
       status: "success",
       incomes,
@@ -56,6 +55,7 @@ export const deleteTransaction = async (
   next: NextFunction
 ) => {
   try {
+    console.log("delete transactions api called");
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("not authorized");
@@ -71,7 +71,7 @@ export const deleteTransaction = async (
     if (!user) {
       throw new Error("user not found");
     }
-    console.log(user.name);
+
     const income = await Income.findById(req.params.id);
     const expense = await Expense.findById(req.params.id);
 
@@ -103,6 +103,7 @@ export const deleteTransaction = async (
 
       await Income.deleteOne({ _id: req.params.id });
 
+      console.log("delete transactions  api ended");
       res.status(200).json({ status: "success", message: "Income Deleted" });
     }
   } catch (error: any) {
@@ -116,14 +117,13 @@ export const deleteTransaction = async (
   next();
 };
 
-
-
 //method for filtering the transaactions
 export const getFilteredTransactions = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   try {
+    console.log("get filtered transactions api called");
     let transactions: Array<any>;
     let incomes: Array<any>, expenses: Array<any>;
     const auth = req.headers.authorization;
@@ -212,6 +212,7 @@ export const getFilteredTransactions = async (
           (transactions = incomes.concat(expenses));
       }
 
+      console.log("get filtered transactions api finished");
       res.status(200).json({
         status: "success",
         transactions,

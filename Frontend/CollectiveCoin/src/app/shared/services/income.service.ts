@@ -18,7 +18,7 @@ export class IncomeService {
   incamounts: any = [];
   totalIncome: number = 0;
   amountsvalue: Array<number> = [];
-
+  yearlyTotalIncome: number;
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -84,7 +84,7 @@ export class IncomeService {
         .subscribe(
           (resultData: IncomeResponse) => {
             try {
-              console.log('get income is getting called');
+              console.log('get income is getting called', resultData);
               this.data = resultData.monthlyincome.map((income: any) => ({
                 title: income.title,
                 category: income.category,
@@ -94,6 +94,7 @@ export class IncomeService {
                 description: income.description,
                 addedBy: income.addedBy,
               }));
+              this.yearlyTotalIncome = resultData.yearlyTotalincome;
               this.totalIncome = resultData.totalincome;
 
               this.incamounts = resultData.monthlyincome

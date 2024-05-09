@@ -72,11 +72,12 @@ export class TransactionService {
             this.expensedata = this.expensedata.sort((a, b) => {
               return b.amount - a.amount;
             });
-            this.maxincome = this.incomedata.shift().amount;
-            this.minincome = this.incomedata.pop().amount;
+            this.maxincome = this.incomedata[0].amount;
+            this.minincome = this.incomedata[this.incomedata.length - 1].amount;
 
-            this.maxexpense = this.expensedata.shift().amount;
-            this.minexpense = this.expensedata.pop().amount;
+            this.maxexpense = this.expensedata[0].amount;
+            this.minexpense =
+              this.expensedata[this.expensedata.length - 1].amount;
           } catch (error) {
             console.log(error);
           }

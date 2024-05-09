@@ -8,6 +8,7 @@ import { Request, Response, NextFunction } from "express";
 //method for adding the budget
 export const addBudget = async (req: Request, res: Response) => {
   try {
+    console.log("add budget called");
     const { title, amount, category, description, date } = req.body;
 
     const auth = req.headers.authorization;
@@ -55,6 +56,7 @@ export const addBudget = async (req: Request, res: Response) => {
         .json({ message: "Amount must be a positive number!" });
     }
 
+    console.log("add budget api ended");
     res.status(200).json({
       status: "success",
       message: "Budget Added",
@@ -72,9 +74,15 @@ export const addBudget = async (req: Request, res: Response) => {
 //method for getting the budget
 export const getBudget = async (req: Request, res: Response) => {
   try {
+    console.log("get budget api called");
     let monthlybudget: Array<BudgetIn> = [];
     let expcategoryAmounts: { [key: string]: number } = {};
     let budgetcategoryamounts: { [key: string]: number } = {};
+    let overbudget: Array<object> = [];
+    let underbudget: Array<object> = [];
+    let monthlyexpense: Array<any> = [];
+    const currentMonth = new Date().getMonth() + 1;
+    const currentYear = new Date().getFullYear();
 
     const auth = req.headers.authorization;
     if (!auth) {
@@ -103,9 +111,7 @@ export const getBudget = async (req: Request, res: Response) => {
       amount: expense.amount,
       date: expense.date,
     }));
-    let monthlyexpense: Array<any> = [];
-    const currentMonth = new Date().getMonth() + 1;
-    const currentYear = new Date().getFullYear();
+
     for (let expense of expenses) {
       let expMonth = expense.date.getMonth() + 1;
       let expyear = expense.date.getFullYear();
@@ -150,8 +156,6 @@ export const getBudget = async (req: Request, res: Response) => {
       }
     });
 
-    let overbudget: Array<object> = [];
-    let underbudget: Array<object> = [];
     for (let category in budgetcategoryamounts) {
       if (expcategoryAmounts[category] > budgetcategoryamounts[category]) {
         overbudget.push({
@@ -167,7 +171,7 @@ export const getBudget = async (req: Request, res: Response) => {
         });
       }
     }
-    console.log(monthlybudget);
+    console.log("get budgets api ended");
     res.status(200).json({
       status: "success",
       budgets,
@@ -192,6 +196,7 @@ export const deleteBudget = async (
   next: NextFunction
 ) => {
   try {
+    console.log("delete budget api called");
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("not authorized");
@@ -225,6 +230,7 @@ export const deleteBudget = async (
 
     await Budget.deleteOne({ _id: req.params.budgetId });
 
+    console.log("delete budget api eded");
     res.status(200).json({ status: "success", message: "budget Deleted" });
   } catch (error: any) {
     console.log(error);
@@ -240,6 +246,7 @@ export const deleteBudget = async (
 //method for updating the budget
 export const updateBudget = async (req: Request, res: Response) => {
   try {
+    console.log("update budget api called");
     const { title, amount, category, description, date } = req.body;
 
     const auth = req.headers.authorization;
@@ -284,6 +291,7 @@ export const updateBudget = async (req: Request, res: Response) => {
       { new: true }
     );
 
+    console.log("update budget api ended");
     res.status(200).json({
       status: "success",
       messasge: "budget updated successfully",

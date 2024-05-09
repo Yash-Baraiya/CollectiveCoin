@@ -1,16 +1,17 @@
 import User from "../models/userModel";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import sendEmail from "../email";
+import sendEmail from "./../utils/email";
 import Income from "../models/incomeModel";
 import Expense from "../models/expenseModel";
 import Budget from "../models/budgetModel";
 import { Request, Response } from "express";
 import { v2 as cloudinary } from "cloudinary";
-import { cloudinaryconfig } from "../cloudinary";
+import { cloudinaryconfig } from "./../utils/cloudinary";
 import { createSendToken } from "./authController";
 
 //method for adding the user
 export const addUser = async (req: Request, res: Response) => {
+  console.log("add user api called");
   const email1 = req.body.email;
   const auth = req.headers.authorization;
   if (!auth) {
@@ -85,6 +86,7 @@ export const addUser = async (req: Request, res: Response) => {
         <p>Warm regards,<br>Your Name</p></div>`,
       });
 
+      console.log("add user api ended");
       res.status(200).json({
         status: "success",
         messege: "your request sent via email",
@@ -101,6 +103,8 @@ export const addUser = async (req: Request, res: Response) => {
 //method for getting all the members of family
 export const getMembers = async (req: Request, res: Response) => {
   try {
+    console.log("get member api called");
+
     let firstadmin: any = "";
     const auth = req.headers.authorization;
     if (!auth) {
@@ -142,6 +146,7 @@ export const getMembers = async (req: Request, res: Response) => {
       members,
       firstadmin,
     });
+    console.log("get members api ended");
   } catch (error: any) {
     console.log(error);
     res.status(400).json({
@@ -154,6 +159,7 @@ export const getMembers = async (req: Request, res: Response) => {
 //method for removing the user from the family. user will not be removed from database
 export const deleteuser = async (req: Request, res: Response) => {
   try {
+    console.log("delete user api called");
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("not Authorized");
@@ -199,6 +205,7 @@ export const deleteuser = async (req: Request, res: Response) => {
       message: "user removed successfully",
       member,
     });
+    console.log("delete member api ended");
   } catch (error: any) {
     console.log(error);
     res.status(400).json({
@@ -211,6 +218,7 @@ export const deleteuser = async (req: Request, res: Response) => {
 //method for deleting the whole family from the database
 export const deletefamily = async (req: Request, res: Response) => {
   try {
+    console.log("delete family api called");
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("Not Authorized");
@@ -246,6 +254,7 @@ export const deletefamily = async (req: Request, res: Response) => {
       status: "success",
       messege: "family deleted succesfully",
     });
+    console.log("delete family api ended");
   } catch (error: any) {
     res.status(400).json({
       status: "faied",
@@ -257,6 +266,7 @@ export const deletefamily = async (req: Request, res: Response) => {
 //method for uploading the image to cloudinary storage
 export const uploadImage = async (req: Request, res: Response) => {
   try {
+    console.log("upload image api called");
     const auth = req.headers.authorization;
     if (!auth) throw new Error("not Authorized");
 
@@ -298,6 +308,7 @@ export const uploadImage = async (req: Request, res: Response) => {
       { photo: photo },
       { new: true }
     );
+    console.log("upload image api ended");
     createSendToken(user, 200, res);
   } catch (error: any) {
     console.log(error);
@@ -311,6 +322,7 @@ export const uploadImage = async (req: Request, res: Response) => {
 //method for communicating with your admin
 export const sendmailAdmin = async (req: Request, res: Response) => {
   try {
+    console.log("send admin email api called");
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("not Authorized");
@@ -354,6 +366,7 @@ export const sendmailAdmin = async (req: Request, res: Response) => {
         messege: error.message,
       });
     }
+    console.log("send email admin api ended");
   } catch (error: any) {
     console.log(error);
     res.status(400).json({
@@ -366,7 +379,7 @@ export const sendmailAdmin = async (req: Request, res: Response) => {
 //method for changing  user's role
 export const makeAdmin = async (req: Request, res: Response) => {
   try {
-    console.log("coming here");
+    console.log("make admin api called");
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("not Authorized");
@@ -425,6 +438,7 @@ export const makeAdmin = async (req: Request, res: Response) => {
 //for chaging the user's earning status
 export const toggleEarningState = async (req: Request, res: Response) => {
   try {
+    console.log("toggle earning state api called");
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("not Authorized");
@@ -464,6 +478,7 @@ export const toggleEarningState = async (req: Request, res: Response) => {
           { _id: req.params.id },
           { isEarning: false }
         );
+        console.log("toggle earning state api ended");
         res.status(200).json({
           status: "success",
           updateduser,
@@ -474,76 +489,6 @@ export const toggleEarningState = async (req: Request, res: Response) => {
         "you can not change the earining state of admin join the family before you"
       );
     }
-  } catch (error: any) {
-    console.log(error);
-    res.status(200).json({
-      status: "failed",
-      message: error.message,
-    });
-  }
-};
-
-export const updateprofile = async (req: Request, res: Response) => {
-  try {
-    const auth = req.headers.authorization;
-    if (!auth) {
-      throw new Error("not Authorized");
-    }
-    const token = auth.split(" ")[1];
-    const decodedtoken = jwt.decode(token) as JwtPayload;
-    if (!decodedtoken) {
-      throw new Error("token not found");
-    }
-    const userId = decodedtoken.id;
-
-    const admin = await User.findById(userId);
-    if (!admin) {
-      throw new Error("admin not found");
-    }
-    let file = req.file;
-
-    if (!file) throw new Error("please upload file");
-
-    console.log(file);
-
-    let photo = `${file.filename}`;
-
-    const cloudinaryUpload = new Promise((resolve, reject) => {
-      const options = {
-        public_id: photo,
-      };
-      cloudinaryconfig();
-      cloudinary.uploader.upload(
-        file.path,
-        options,
-        (error: any, result: any) => {
-          if (error) {
-            console.log(error);
-            reject(error);
-          } else {
-            photo = result.url;
-            resolve(result);
-          }
-        }
-      );
-    });
-
-    const result = await cloudinaryUpload;
-
-    console.log(photo);
-
-    const updatedUser = await User.findByIdAndUpdate(
-      { _id: userId },
-      {
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password,
-        passwordConfirm: req.body.passwordConfirm,
-        photo: photo,
-      }
-    );
-
-    // Create and send JWT token
   } catch (error: any) {
     console.log(error);
     res.status(200).json({

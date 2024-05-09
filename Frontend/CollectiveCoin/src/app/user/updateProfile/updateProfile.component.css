@@ -457,21 +457,34 @@ textarea {
   background-color: #fff;
   color: #333;
 }
-.subbtn{
+.subbtn {
   padding: 1rem;
-  background: #222260;
+  background: #198754;
   color: #fcf6f9;
   border: none;
   margin-right: 2%;
-  border-radius: 16px;
+  border-radius: 10px;
   margin-bottom: 7px;
+  margin-left: 1px;
 }
-.canbtn{
+.canbtn {
   padding: 1rem;
   background: grey;
   color: #fcf6f9;
   border: none;
   margin-right: 2%;
-  border-radius: 16px;
+  border-radius: 10px;
   margin-bottom: 7px;
+  margin-left: 1px;
+}
+.UpImBtn {
+  background: #222260;
+  color: #fcf6f9;
+  border: none;
+  margin-left: -20px;
+  border-radius: 7px;
+  margin-bottom: 7px;
+  margin-top: 5px;
+  height: 35px;
+  width: 235px;
 }
