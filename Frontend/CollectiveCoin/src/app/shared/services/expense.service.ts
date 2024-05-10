@@ -16,6 +16,8 @@ export class ExpenseService {
   date: Date = new Date();
   data: any = [];
   expamounts: any = [];
+  minexpense: number = 0;
+  maxexpense: number = 0;
 
   totalexpense: number = 0;
   yearlyTotalExpense: number;
@@ -96,8 +98,10 @@ export class ExpenseService {
             duedate: this.datepipe.transform(expense.duedate, 'MM/dd/yyyy'),
             paidBy: expense.paidBy,
           }));
-          this.yearlyTotalExpense =
-            resultData.yearlyTotalExpense[0].yearlyTotalExpense;
+          this.yearlyTotalExpense = resultData.yearlyTotalExpense[0].yearlyTotalExpense;
+          this.totalexpense = resultData.totalexpense[0].totalexpense;
+          this.minexpense = resultData.minAmountexpense;
+          this.maxexpense = resultData.maxAmountexpense;
           this.expamounts = resultData.monthlyexpense
             .map((expense) => ({
               amount: expense.amount,
@@ -109,15 +113,7 @@ export class ExpenseService {
 
               return dateA.getTime() - dateB.getTime();
             });
-          this.totalexpense = resultData.totalexpense[0].totalexpense;
-          this.data = this.data.sort((a, b) => {
-            const dateA = new Date(a.date);
-            const dateB = new Date(b.date);
-
-            return dateB.getTime() - dateA.getTime();
-          });
-          console.log(this.totalexpense);
-
+          
           obseraver.next();
         },
         (error) => {

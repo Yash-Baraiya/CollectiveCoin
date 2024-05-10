@@ -26,9 +26,7 @@ export class ItemsComponent implements OnInit {
     public budgetservice: BudgetService
   ) {}
 
-  ngOnInit(): void {
-    console.log('items called', this.item);
-  }
+  ngOnInit(): void {}
 
   deleteItem(id: any) {
     if (this.deleteMethod) {

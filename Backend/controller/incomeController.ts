@@ -93,11 +93,6 @@ export const getIncomes = async (req: Request, res: Response) => {
         throw new Error("user not found");
       }
       const familyCode = admin.familycode;
-      let incomes = await Income.find({
-        familycode: familyCode,
-      }).sort({
-        createdAt: -1,
-      });
 
       const currentMonth = new Date().getMonth() + 1;
       const currentYear = new Date().getFullYear();
@@ -147,17 +142,39 @@ export const getIncomes = async (req: Request, res: Response) => {
             },
           },
         },
+        {
+          $addFields: {
+            covertedDate: {
+              $toDate: "$date",
+            },
+          },
+        },
+        {
+          $sort: {
+            covertedDate: -1,
+          },
+        },
       ]);
 
-      console.log(monthlyincome);
+      let maxAmountincome = monthlyincome.reduce((max, income) => {
+        return income.amount > max.amount ? income : max;
+      }, monthlyincome[0]);
+
+      let minAmountincome = monthlyincome.reduce((min, income) => {
+        return income.amount < min.amount ? income : min;
+      }, monthlyincome[0]);
+
+      maxAmountincome = maxAmountincome.amount;
+      minAmountincome = minAmountincome.amount;
 
       console.log("get income api ended");
       return res.status(200).json({
         status: "success",
-        incomes,
         monthlyincome,
         totalincome,
         yearlyTotalincome,
+        minAmountincome,
+        maxAmountincome,
       });
     } catch (error: any) {
       console.log(error);

@@ -303,10 +303,10 @@ export const restrictTo = async (
 
     next();
   } catch (error: any) {
-    console.error("Error in restrictTo middleware:", error);
-    res.status(500).json({
+    console.log("Error in restrictTo middleware:", error);
+    res.status(400).json({
       status: "failed",
-      message: "Server Error",
+      message: error.message,
     });
   }
 };

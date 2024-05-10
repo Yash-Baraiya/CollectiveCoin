@@ -1,13 +1,14 @@
 interface IncomeResponse {
   status: string;
-  incomes: Array<income>;
   totalincome: number;
   monthlyincome: Array<income>;
   yearlyTotalincome: number;
+  minAmountincome: number;
+  maxAmountincome: number;
 }
 interface income {
   createdAt: string;
-  amount: Array<number>;
+  amount: number;
   category: string;
   date: string;
   description: string;

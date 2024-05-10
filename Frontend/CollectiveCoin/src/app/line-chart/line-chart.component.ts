@@ -40,7 +40,9 @@ export class LineChartComponent implements OnInit {
     return new Observable((obseraver) => {
       this.labels.forEach((label) => {
         let value: boolean;
+
         for (let i = 0; i < this.incomeservice.incamounts.length; i++) {
+          
           if (this.incomeservice.incamounts[i].date === label) {
             this.incomeamounts.push(this.incomeservice.incamounts[i].amount);
             value = true;

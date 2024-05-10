@@ -29,9 +29,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.transactionservice.gettAllTransactions().subscribe(() => {});
   }
   ngOnDestroy(): void {
-    this.transactionservice.maxexpense = 0;
-    this.transactionservice.maxincome = 0;
-    this.transactionservice.minincome = 0;
-    this.transactionservice.minexpense = 0;
+    this.incomeservice.maxincome = 0;
+    this.incomeservice.minincome = 0;
+    this.expenseservice.maxexpense = 0;
+    this.expenseservice.minexpense = 0;
   }
 }

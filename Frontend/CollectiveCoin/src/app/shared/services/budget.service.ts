@@ -13,7 +13,6 @@ import { environment } from '../../environment';
 })
 export class BudgetService {
   budgetForm: FormGroup;
-
   date: Date = new Date();
   data: Array<budget> = [];
   amounts: Array<budget> = [];
@@ -81,7 +80,6 @@ export class BudgetService {
           this.overbudget = resultData.overbudget;
           this.underbudget = resultData.underbudget;
           this.expcategoryAmounts = resultData.expcategoryAmounts;
-
           this.amounts = resultData.monthlybudget
             .map((budget) => ({
               amount: budget.amount,

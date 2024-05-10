@@ -119,9 +119,6 @@ export const getExpense = async (req: Request, res: Response) => {
       throw new Error("user not found");
     }
     const familycode = Admin.familycode;
-    const expenses = await Expense.find({ familycode: familycode }).sort({
-      createdAt: -1,
-    });
 
     const currentMonth = new Date().getMonth() + 1;
     const currentYear = new Date().getFullYear();
@@ -172,15 +169,38 @@ export const getExpense = async (req: Request, res: Response) => {
           },
         },
       },
+      {
+        $addFields: {
+          covertedDate: {
+            $toDate: "$date",
+          },
+        },
+      },
+      {
+        $sort: {
+          covertedDate: -1,
+        },
+      },
     ]);
+    let maxAmountexpense = monthlyexpense.reduce((max, expense) => {
+      return expense.amount > max.amount ? expense : max;
+    }, monthlyexpense[0]);
+
+    let minAmountexpense = monthlyexpense.reduce((min, expense) => {
+      return expense.amount < min.amount ? expense : min;
+    }, monthlyexpense[0]);
+
+    maxAmountexpense = maxAmountexpense.amount;
+    minAmountexpense = minAmountexpense.amount;
 
     console.log("get expense api ended");
     res.status(200).json({
       status: "success",
-      expenses,
       totalexpense,
       monthlyexpense,
       yearlyTotalExpense,
+      maxAmountexpense,
+      minAmountexpense,
     });
   } catch (error) {
     res.status(500).json({ message: "Server Error" });

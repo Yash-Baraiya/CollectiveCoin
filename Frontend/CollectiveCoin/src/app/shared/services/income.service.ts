@@ -17,6 +17,8 @@ export class IncomeService {
   data: any = [];
   incamounts: any = [];
   totalIncome: number = 0;
+  maxincome: number = 0;
+  minincome: number = 0;
 
   yearlyTotalIncome: number;
   constructor(
@@ -71,7 +73,7 @@ export class IncomeService {
     return new Observable((obseraver) => {
       this.http.get(`${environment.incomeApiUrl}/get-incomes`).subscribe(
         (resultData: IncomeResponse) => {
-          console.log(resultData.monthlyincome);
+          console.log(resultData);
           this.data = resultData.monthlyincome.map((income: any) => ({
             title: income.title,
             category: income.category,
@@ -85,10 +87,12 @@ export class IncomeService {
           this.yearlyTotalIncome =
             resultData.yearlyTotalincome[0].yearlyTotalincome;
           this.totalIncome = resultData.totalincome[0].totalincome;
+          this.maxincome = resultData.maxAmountincome;
 
+          this.minincome = resultData.minAmountincome;
           this.incamounts = resultData.monthlyincome
             .map((income) => ({
-              amount: income.amount[0],
+              amount: income.amount,
               date: this.datepipe.transform(income.date, 'dd/MM/yyyy'),
             }))
             .sort((a, b) => {
@@ -97,13 +101,6 @@ export class IncomeService {
 
               return dateA.getTime() - dateB.getTime();
             });
-
-          this.data = this.data.sort((a, b) => {
-            const dateA = new Date(a.date);
-            const dateB = new Date(b.date);
-
-            return dateB.getTime() - dateA.getTime();
-          });
 
           obseraver.next();
         },

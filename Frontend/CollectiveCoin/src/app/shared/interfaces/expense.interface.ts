@@ -1,14 +1,15 @@
 interface ExpenseResponse {
   status: string;
-  expenses: Array<expense>;
   totalexpense: number;
   monthlyexpense: Array<expense>;
   yearlyTotalExpense: number;
+  minAmountexpense: number;
+  maxAmountexpense: number;
 }
 
 interface expense {
   createdAt: string;
-  amount: Array<number>;
+  amount: number;
   category: string;
   date: string;
   description: string;
