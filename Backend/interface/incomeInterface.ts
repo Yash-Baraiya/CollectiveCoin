@@ -1,6 +1,6 @@
 export interface IncomeIn extends Document {
   title: string;
-  amount: number[];
+  amount: number;
   type: string;
   date: Date;
   category: string;

@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { environment } from '../environment';
+import resultData from '../shared/interfaces/resultData.interface';
 
 @Component({
   selector: 'app-resetpassword',
@@ -45,12 +47,9 @@ export class ResetpasswordComponent {
       });
 
       this.http
-        .patch(
-          `http://localhost:8000/api/v1/CollectiveCoin/user/resetPassword/${token}`,
-          bodyData
-        )
+        .patch(`${environment.userApiUrl}/resetPassword/${token}`, bodyData)
         .subscribe(
-          (resultData: any) => {
+          (resultData: resultData) => {
             if (resultData.status === 'success') {
               this.showMessage('password reseted successfully');
               this.router.navigate(['/login']);
@@ -80,7 +79,7 @@ export class ResetpasswordComponent {
       this.showMessage('please fill the form as directed');
     }
   }
-  showMessage(message: any) {
+  showMessage(message: string) {
     this.snackBar.open(message || 'An error occurred', 'Close', {
       duration: 5000,
       panelClass: ['snackbar-error'],

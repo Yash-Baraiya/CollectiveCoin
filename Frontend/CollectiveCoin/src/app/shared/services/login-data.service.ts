@@ -1,21 +1,23 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environment';
+import resultData from '../interfaces/resultData.interface';
 @Injectable({
   providedIn: 'root',
 })
 export class LoginDataService {
-  data: any;
-  role: any;
-  username: any;
-  photo: any;
-  isEarning: any;
-  priority: any;
-  email: any;
+  data: resultData;
+  role: string;
+  username: string;
+  photo: string;
+  isEarning: boolean;
+  priority: number;
+  email: string;
   constructor(private http: HttpClient) {}
 
   //method for setting the user's data to local storange
-  setData(parsedData: any) {
+  setData(parsedData: resultData) {
     this.data = parsedData;
     console.log(this.data);
     this.role = this.data.data.user.role;
@@ -31,15 +33,12 @@ export class LoginDataService {
   }
 
   //method for getting the user
-  getData() {
-    return this.data;
-  }
 
   isLoggedin(): Observable<any> {
     return new Observable((observer) => {
       this.http
-        .get('http://localhost:8000/api/v1/CollectiveCoin/user/isloggedin')
-        .subscribe((resultData) => {
+        .get(`${environment.userApiUrl}/isloggedin`)
+        .subscribe((resultData: resultData) => {
           console.log('is logged in result data', resultData);
           this.setData(resultData);
           observer.next();

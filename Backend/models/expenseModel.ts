@@ -53,6 +53,11 @@ const ExpenseSchema = new Schema<ExpenseIn>(
       type: String,
       trim: true,
     },
+    recurrence: {
+      type: String,
+      enum: ["one-time", "yearly", "quarterly", "monthly"],
+      default: "one-time",
+    },
   },
 
   { timestamps: true }

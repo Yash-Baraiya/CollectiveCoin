@@ -40,7 +40,6 @@ import { NgxPaginationModule } from 'ngx-pagination';
     CoverpageComponent,
     UpdateProfileComponent,
     NotFoundComponent,
-    
   ],
   imports: [
     BrowserModule,
@@ -54,7 +53,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
     EffectsModule.forRoot([MembersEffects]),
     SharedModule,
     NgxSpinnerModule,
-    NgxPaginationModule
+    NgxPaginationModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },

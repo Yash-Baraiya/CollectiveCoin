@@ -5,6 +5,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { environment } from '../../environment';
+import { income } from '../../shared/interfaces/income.interface';
 
 @Component({
   selector: 'app-updateincome',
@@ -14,7 +16,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class UpdateincomeComponent implements OnInit, OnDestroy {
   incomeId = '';
   updateIncomeForm: FormGroup;
-  incomeData: any = {};
+  incomeData: income;
 
   constructor(
     public incomeservice: IncomeService,
@@ -61,10 +63,6 @@ export class UpdateincomeComponent implements OnInit, OnDestroy {
       });
     });
   }
-  ngOnDestroy(): void {
-    this.incomeData = {};
-    this.updateIncomeForm.reset();
-  }
 
   Updateincome(id: any): Observable<any> {
     return new Observable((obseraver) => {
@@ -72,10 +70,7 @@ export class UpdateincomeComponent implements OnInit, OnDestroy {
       console.log(bodyData);
       if (confirm('are you sure you want to update this income')) {
         this.http
-          .patch(
-            `http://localhost:8000/api/v1/CollectiveCoin/user/incomes/update-income/${id}`,
-            bodyData
-          )
+          .patch(`${environment.incomeApiUrl}/update-income/${id}`, bodyData)
           .subscribe(
             (resultData) => {
               try {
@@ -123,5 +118,9 @@ export class UpdateincomeComponent implements OnInit, OnDestroy {
       duration: 5000,
       panelClass: ['snackbar-error'],
     });
+  }
+
+  ngOnDestroy(): void {
+    this.updateIncomeForm.reset();
   }
 }

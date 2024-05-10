@@ -15,9 +15,8 @@ export class MembersComponent implements OnInit {
   allmembers$: Observable<any[]>;
   memberrform: FormGroup;
   emailform: FormGroup;
-  role: any;
-  priority: any;
-  loginData: any;
+  role: string;
+  priority: number;
 
   constructor(
     private store: Store<AppState>,

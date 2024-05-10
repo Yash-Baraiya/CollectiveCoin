@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import ExpenseResponse from '../../expenseModule/expense.interface';
+import { ExpenseResponse } from '../interfaces/expense.interface';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Stripe } from 'stripe';
+import { environment } from '../../environment';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +18,7 @@ export class ExpenseService {
   expamounts: any = [];
   amountsvalue: Array<number> = [];
   totalexpense: number = 0;
-  yearlyTotalExpense :number;
+  yearlyTotalExpense: number;
 
   constructor(
     private http: HttpClient,
@@ -47,28 +47,20 @@ export class ExpenseService {
     let bodyData = this.expenseForm.value;
     console.log(bodyData);
     this.http
-      .post(
-        'http://localhost:8000/api/v1/CollectiveCoin/user/expenses/add-expense',
-        bodyData
-      )
+      .post(`${environment.expenseApiUrl}/add-expense`, bodyData)
       .subscribe(
         (resultData) => {
-          try {
-            console.log(resultData);
+          console.log(resultData);
 
-            this.showMessage('expense added successfully');
-            this.getExpense().subscribe(() => {
-              console.log('getting expense again');
-            });
-            this.expenseForm.reset();
-            let checkbox = document.getElementById(
-              'markAsPaid'
-            ) as HTMLInputElement;
-            checkbox.checked = true;
-          } catch (error) {
-            console.log(error);
-            this.expenseForm.reset();
-          }
+          this.showMessage('expense added successfully');
+          this.getExpense().subscribe(() => {
+            console.log('getting expense again');
+          });
+          this.expenseForm.reset();
+          let checkbox = document.getElementById(
+            'markAsPaid'
+          ) as HTMLInputElement;
+          checkbox.checked = true;
         },
         (error) => {
           console.log(error);
@@ -88,86 +80,73 @@ export class ExpenseService {
 
   getExpense(): Observable<any> {
     return new Observable((obseraver) => {
-      this.http
-        .get(
-          'http://localhost:8000/api/v1/CollectiveCoin/user/expenses/get-expenses'
-        )
-        .subscribe(
-          (resultData: ExpenseResponse) => {
-            try {
-              console.log(resultData);
-              this.data = resultData.monthlyexpense.map((expense) => ({
-                title: expense.title,
-                amount: expense.amount,
-                category: expense.category,
-                date: this.datepipe.transform(expense.date, 'MM/dd/yyyy'),
-                type: 'expense',
-                id: expense._id,
-                description: expense.description,
-                addedBy: expense.addedBy,
-                markAspaid: expense.markAspaid,
-                duedate: this.datepipe.transform(expense.duedate, 'MM/dd/yyyy'),
-                paidBy: expense.paidBy,
-              }));
-              this.yearlyTotalExpense = resultData.yearlyTotalExpense;
-              this.expamounts = resultData.monthlyexpense
-                .map((expense) => ({
-                  amount: expense.amount,
-                  date: this.datepipe.transform(expense.date, 'dd/MM/yyyy'),
-                }))
-                .sort((a, b) => {
-                  const dateA = new Date(a.date);
-                  const dateB = new Date(b.date);
+      this.http.get(`${environment.expenseApiUrl}/get-expenses`).subscribe(
+        (resultData: ExpenseResponse) => {
+          console.log(resultData);
+          this.data = resultData.monthlyexpense.map((expense) => ({
+            title: expense.title,
+            amount: expense.amount,
+            category: expense.category,
+            date: this.datepipe.transform(expense.date, 'MM/dd/yyyy'),
+            type: 'expense',
+            id: expense._id,
+            description: expense.description,
+            addedBy: expense.addedBy,
+            markAspaid: expense.markAspaid,
+            duedate: this.datepipe.transform(expense.duedate, 'MM/dd/yyyy'),
+            paidBy: expense.paidBy,
+          }));
+          this.yearlyTotalExpense =
+            resultData.yearlyTotalExpense[0].yearlyTotalExpense;
+          this.expamounts = resultData.monthlyexpense
+            .map((expense) => ({
+              amount: expense.amount,
+              date: this.datepipe.transform(expense.date, 'dd/MM/yyyy'),
+            }))
+            .sort((a, b) => {
+              const dateA = new Date(a.date);
+              const dateB = new Date(b.date);
 
-                  return dateA.getTime() - dateB.getTime();
-                });
-              this.totalexpense = resultData.totalexpense;
-              this.data = this.data.sort((a, b) => {
-                const dateA = new Date(a.date);
-                const dateB = new Date(b.date);
+              return dateA.getTime() - dateB.getTime();
+            });
+          this.totalexpense = resultData.totalexpense;
+          this.data = this.data.sort((a, b) => {
+            const dateA = new Date(a.date);
+            const dateB = new Date(b.date);
 
-                return dateB.getTime() - dateA.getTime();
-              });
-              console.log(this.totalexpense);
-              this.amountsvalue = this.expamounts.map((obj) => obj.amount);
-              obseraver.next();
-            } catch (error) {
-              console.log(error);
-            }
-          },
-          (error) => {
-            if (error.error.messege) {
-              this.showMessage(error.error.messege);
-            } else {
-              this.showMessage(
-                'there was problem loading this page please login again '
-              );
-              this.router.navigate(['/login']);
-            }
-            if (error.error.messege === 'please login first') {
-              this.router.navigate(['/login']);
-            }
+            return dateB.getTime() - dateA.getTime();
+          });
+          console.log(this.totalexpense);
+          this.amountsvalue = this.expamounts.map((obj) => obj.amount);
+          obseraver.next();
+        },
+        (error) => {
+          if (error.error.messege) {
+            this.showMessage(error.error.messege);
+          } else {
+            this.showMessage(
+              'there was problem loading this page please login again '
+            );
+            this.router.navigate(['/login']);
           }
-        );
+          if (error.error.messege === 'please login first') {
+            this.router.navigate(['/login']);
+          }
+        }
+      );
     });
   }
   deleteExpense(id) {
     if (confirm('are you sure you want to delete this expense')) {
       this.http
-        .delete(
-          `http://localhost:8000/api/v1/CollectiveCoin/user/expenses/delete-expense/${id}`
-        )
+        .delete(`${environment.expenseApiUrl}/delete-expense/${id}`)
         .subscribe(
           (resultData) => {
-            try {
-              console.log(resultData);
-              this.showMessage('expense deleted successfully');
-              this.getExpense().subscribe(() => {
-                console.log('getting expense again');
-              });
-            } catch (error) {
-              console.log(error);
-            }
+            console.log(resultData);
+            this.showMessage('expense deleted successfully');
+            this.getExpense().subscribe(() => {
+              console.log('getting expense again');
+            });
           },
           (error) => {
             console.log(error);
@@ -182,27 +161,14 @@ export class ExpenseService {
         );
     }
   }
-  private loadStripe(): Promise<Stripe> {
-    return (window as any).Stripe(
-      'pk_test_51P7XldSCqlnBTgeBDXQpbvdF3fgScPKDMNyjmtwTu2BWasJkUtuJvtEodSTEE9akM6eaW4mADMNjzuV78nwPLOxX00e8uBseJH'
-    );
-  }
-  payment(id: any) {
-    console.log('button clicked');
 
+  payment(id: any) {
     this.http
-      .post(
-        `http://localhost:8000/api/v1/CollectiveCoin/user/expenses/billpayment/${id}`,
-        {}
-      )
+      .post(`${environment.expenseApiUrl}/billpayment/${id}`, {})
       .subscribe(
         (resultData: any) => {
-          try {
-            const rediretLink = resultData.link;
-            window.location.href = rediretLink;
-          } catch (error) {
-            console.log(error);
-          }
+          const rediretLink = resultData.link;
+          window.location.href = rediretLink;
         },
         (error) => {
           console.log(error);

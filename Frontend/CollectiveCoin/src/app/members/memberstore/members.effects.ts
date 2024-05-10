@@ -7,6 +7,7 @@ import * as MembersActions from './members.action';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { environment } from '../../environment';
 
 interface allMembers {
   status: string;
@@ -28,19 +29,15 @@ export class MembersEffects {
     this.actions$.pipe(
       ofType(MembersActions.loadMembers),
       switchMap(() =>
-        this.http
-          .get<allMembers>(
-            'http://localhost:8000/api/v1/CollectiveCoin/user/getmembers'
-          )
-          .pipe(
-            map((response: allMembers) =>
-              MembersActions.loadMembersSuccess({ members: response.members })
-            ),
-            catchError((error) => {
-              this.showErrorMessage(error.error.message);
-              return of(MembersActions.loadMembersFailure({ error }));
-            })
-          )
+        this.http.get<allMembers>(`${environment.userApiUrl}/getmembers`).pipe(
+          map((response: allMembers) =>
+            MembersActions.loadMembersSuccess({ members: response.members })
+          ),
+          catchError((error) => {
+            this.showErrorMessage(error.error.message);
+            return of(MembersActions.loadMembersFailure({ error }));
+          })
+        )
       )
     )
   );
@@ -49,19 +46,14 @@ export class MembersEffects {
     this.actions$.pipe(
       ofType(MembersActions.addMember),
       switchMap(({ member }) =>
-        this.http
-          .post(
-            'http://localhost:8000/api/v1/CollectiveCoin/user/add-member',
-            member
-          )
-          .pipe(
-            map(() => MembersActions.addMemberSuccess({ member })),
-            catchError((error) => {
-              this.showErrorMessage(error.error.message);
+        this.http.post(`${environment.userApiUrl}/add-member`, member).pipe(
+          map(() => MembersActions.addMemberSuccess({ member })),
+          catchError((error) => {
+            this.showErrorMessage(error.error.message);
 
-              return of(MembersActions.addMemberFailure({ error }));
-            })
-          )
+            return of(MembersActions.addMemberFailure({ error }));
+          })
+        )
       )
     )
   );
@@ -71,10 +63,7 @@ export class MembersEffects {
       ofType(MembersActions.deleteMember),
       switchMap(({ id }) =>
         this.http
-          .patch(
-            `http://localhost:8000/api/v1/CollectiveCoin/user/delete-member/${id}`,
-            {}
-          )
+          .patch(`${environment.userApiUrl}/delete-member/${id}`, {})
           .pipe(
             map(() => MembersActions.deleteMemberSuccess({ id })),
             tap(() => {
@@ -93,21 +82,16 @@ export class MembersEffects {
     this.actions$.pipe(
       ofType(MembersActions.deleteFamily),
       switchMap(() =>
-        this.http
-          .delete(
-            `http://localhost:8000/api/v1/CollectiveCoin/user/deletefamily`,
-            {}
-          )
-          .pipe(
-            map(() => MembersActions.deleteFamilySuccess()),
-            tap(() => {
-              this.router.navigate(['/login']);
-            }),
-            catchError((error) => {
-              this.showErrorMessage(error.error.message);
-              return of(MembersActions.deleteFamilyFailure({ error }));
-            })
-          )
+        this.http.delete(`${environment.userApiUrl}/deletefamily`, {}).pipe(
+          map(() => MembersActions.deleteFamilySuccess()),
+          tap(() => {
+            this.router.navigate(['/login']);
+          }),
+          catchError((error) => {
+            this.showErrorMessage(error.error.message);
+            return of(MembersActions.deleteFamilyFailure({ error }));
+          })
+        )
       )
     )
   );
@@ -116,21 +100,16 @@ export class MembersEffects {
     this.actions$.pipe(
       ofType(MembersActions.makeAdmin),
       switchMap(({ id }) =>
-        this.http
-          .patch(
-            `http://localhost:8000/api/v1/CollectiveCoin/user/makeadmin/${id}`,
-            {}
-          )
-          .pipe(
-            map(() => MembersActions.makeAdminSuccess({ id })),
-            tap(() => {
-              this.store.dispatch(MembersActions.loadMembers());
-            }),
-            catchError((error) => {
-              this.showErrorMessage(error.error.message);
-              return of(MembersActions.makeAdminFailure({ error }));
-            })
-          )
+        this.http.patch(`${environment.userApiUrl}/makeadmin/${id}`, {}).pipe(
+          map(() => MembersActions.makeAdminSuccess({ id })),
+          tap(() => {
+            this.store.dispatch(MembersActions.loadMembers());
+          }),
+          catchError((error) => {
+            this.showErrorMessage(error.error.message);
+            return of(MembersActions.makeAdminFailure({ error }));
+          })
+        )
       )
     )
   );
@@ -139,22 +118,17 @@ export class MembersEffects {
     this.actions$.pipe(
       ofType(MembersActions.makeEarner),
       switchMap(({ id }) =>
-        this.http
-          .patch(
-            `http://localhost:8000/api/v1/CollectiveCoin/user/makeearner/${id}`,
-            {}
-          )
-          .pipe(
-            map(() => MembersActions.makeEarnerSuccess({ id })),
-            tap(() => {
-              this.store.dispatch(MembersActions.loadMembers());
-            }),
+        this.http.patch(`${environment.userApiUrl}/makeearner/${id}`, {}).pipe(
+          map(() => MembersActions.makeEarnerSuccess({ id })),
+          tap(() => {
+            this.store.dispatch(MembersActions.loadMembers());
+          }),
 
-            catchError((error) => {
-              this.showErrorMessage(error.error.message);
-              return of(MembersActions.makeEarnerFailure({ error }));
-            })
-          )
+          catchError((error) => {
+            this.showErrorMessage(error.error.message);
+            return of(MembersActions.makeEarnerFailure({ error }));
+          })
+        )
       )
     )
   );
@@ -163,28 +137,23 @@ export class MembersEffects {
     this.actions$.pipe(
       ofType(MembersActions.emailAdmin),
       switchMap(({ bodyData }) =>
-        this.http
-          .post(
-            `http://localhost:8000/api/v1/CollectiveCoin/user/sendmail`,
-            bodyData
-          )
-          .pipe(
-            map(() => MembersActions.emailAdminSuccess()),
-            tap(() => {
-              this.store.dispatch(MembersActions.loadMembers());
-            }),
+        this.http.post(`${environment.userApiUrl}/sendmail`, bodyData).pipe(
+          map(() => MembersActions.emailAdminSuccess()),
+          tap(() => {
+            this.store.dispatch(MembersActions.loadMembers());
+          }),
 
-            catchError((error) => {
-              console.log(error.error.message);
-              this.showErrorMessage(error.error.message);
+          catchError((error) => {
+            console.log(error.error.message);
+            this.showErrorMessage(error.error.message);
 
-              return of(MembersActions.emailAdminFailure({ error }));
-            })
-          )
+            return of(MembersActions.emailAdminFailure({ error }));
+          })
+        )
       )
     )
   );
-  private showErrorMessage(message: any) {
+  private showErrorMessage(message: string) {
     this.snackBar.open(message || 'An error occurred', 'Close', {
       duration: 5000,
       panelClass: ['snackbar-error'],

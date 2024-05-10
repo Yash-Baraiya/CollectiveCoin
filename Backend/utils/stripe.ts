@@ -42,7 +42,7 @@ export const createCheckOutSession = async (req: Request, res: Response) => {
       line_items: [
         {
           price_data: {
-            currency: "usd",
+            currency: "inr",
             product_data: {
               name: expense.title,
             },
@@ -54,6 +54,8 @@ export const createCheckOutSession = async (req: Request, res: Response) => {
       mode: "payment",
       success_url: `${req.protocol}://localhost:4200/Expense`,
       cancel_url: `${req.protocol}://localhost:4200/Expense`,
+      customer_email: user.email,
+      billing_address_collection: "required",
       metadata: {
         expenseId: expenseId,
         username: user.name,

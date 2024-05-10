@@ -1,6 +1,5 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import * as MembersActions from './members.action';
-import { state } from '@angular/animations';
 
 export interface MembersState {
   members: any[];

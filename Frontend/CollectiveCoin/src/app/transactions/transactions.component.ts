@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-
 import * as jspdf from 'jspdf';
-import { HttpClient } from '@angular/common/http';
 import 'jspdf-autotable';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { TransactionService } from '../shared/services/transaction.service';
 @Component({
   selector: 'app-transactions',
@@ -11,21 +9,17 @@ import { TransactionService } from '../shared/services/transaction.service';
   styleUrl: './transactions.component.css',
 })
 export class TransactionsComponent implements OnInit {
-  currentPage: number;
-  totalItems: number;
+  currentPage: number = 1;
 
+  totalItems: number;
   showFilters: boolean = false;
   toggleFilters() {
     this.showFilters = !this.showFilters;
   }
   constructor(
     public transactionservice: TransactionService,
-    private http: HttpClient,
-    private router: Router,
-    private route: ActivatedRoute
+    private router: Router
   ) {}
-  openbox5(id: any) {}
-  closebox5() {}
 
   ngOnInit(): void {
     this.transactionservice.gettAllTransactions().subscribe(() => {
@@ -70,7 +64,7 @@ export class TransactionsComponent implements OnInit {
     }
   }
 
-  updateTransaction(id: any, type: any) {
+  updateTransaction(id: string, type: string) {
     console.log('transaction', id, type);
     if (type === 'expense') {
       this.router.navigate([`Expense/update-expense/${id}`]);
@@ -78,6 +72,26 @@ export class TransactionsComponent implements OnInit {
       this.router.navigate([`Income/update-income/${id}`]);
     }
   }
+  // previousPage() {
+  //   if (this.currentPage > 1) {
+  //     this.currentPage--;
+  //     this.transactionservice.gettAllTransactions();
+  //   }
+  // }
+
+  // nextPage() {
+  //   if (this.currentPage < this.totalPages) {
+  //     this.currentPage++;
+  //     this.transactionservice.gettAllTransactions();
+  //   }
+  // }
+
+  // changePage(page: number) {
+  //   if (page >= 1 && page <= this.totalPages) {
+  //     this.currentPage = page;
+  //     this.transactionservice.gettAllTransactions();
+  //   }
+  // }
 
   clearFilters() {
     console.log('button is clicked');

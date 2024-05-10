@@ -6,6 +6,7 @@ import { SharedModule } from '../shared/shared.module';
 import { IncomeModuleRoutingModule } from './income-module-routing.module';
 import { UpdateincomeComponent } from './updateincome/updateincome.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { ItemsComponent } from '../shared/items/items.component';
 
 @NgModule({
   declarations: [IncomeComponent, UpdateincomeComponent],

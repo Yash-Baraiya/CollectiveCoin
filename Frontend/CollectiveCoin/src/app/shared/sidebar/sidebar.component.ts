@@ -10,9 +10,8 @@ import { LoginDataService } from '../services/login-data.service';
 })
 export class SidebarComponent implements OnInit {
   imageform: FormGroup;
-  data: any;
   name: string = '';
-  photo: any = '';
+  photo: string = '';
 
   constructor(
     private router: Router,

@@ -18,12 +18,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private spinnerservice: SpinnerService
   ) {}
 
-  ngOnDestroy(): void {
-    this.transactionservice.maxexpense = 0;
-    this.transactionservice.maxincome = 0;
-    this.transactionservice.minincome = 0;
-    this.transactionservice.minexpense = 0;
-  }
   ngOnInit(): void {
     this.spinnerservice.startLoading();
 
@@ -33,5 +27,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.incomeservice.getIncome().subscribe(() => {});
     this.expenseservice.getExpense().subscribe(() => {});
     this.transactionservice.gettAllTransactions().subscribe(() => {});
+  }
+  ngOnDestroy(): void {
+    this.transactionservice.maxexpense = 0;
+    this.transactionservice.maxincome = 0;
+    this.transactionservice.minincome = 0;
+    this.transactionservice.minexpense = 0;
   }
 }

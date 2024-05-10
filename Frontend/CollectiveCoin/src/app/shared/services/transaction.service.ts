@@ -1,9 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
-
+import { environment } from '../../environment';
+import transactionResponse from '../../transactions/transaction.interface';
 @Injectable({
   providedIn: 'root',
 })
@@ -15,10 +16,11 @@ export class TransactionService {
   minincome: number = 0;
   maxexpense: number = 0;
   minexpense: number = 0;
-  data: any;
+  data: transactionResponse;
   recenthistory: Array<any> = [];
   filtersForm: FormGroup;
-
+  currentPage: number;
+  itemsPerPage: number;
   constructor(private http: HttpClient, private snackBar: MatSnackBar) {
     this.filtersForm = new FormGroup({
       type: new FormControl('', Validators.required),
@@ -29,10 +31,8 @@ export class TransactionService {
   gettAllTransactions(): Observable<any> {
     return new Observable((Observer) => {
       this.http
-        .get(
-          'http://localhost:8000/api/v1/CollectiveCoin/user/transactions/all-transactions'
-        )
-        .subscribe((resultData) => {
+        .get(`${environment.transactionsApiUrl}/all-transactions`)
+        .subscribe((resultData: transactionResponse) => {
           try {
             this.data = resultData;
             this.incomedata = this.data.incomes.map((income: any) => ({
@@ -87,22 +87,16 @@ export class TransactionService {
     });
   }
 
-  deleteTransaction(id) {
-    console.log(id);
+  deleteTransaction(id: string) {
+    console.log('delete transactions id', id);
     this.http
-      .delete(
-        `http://localhost:8000/api/v1/CollectiveCoin/user/transactions/delete-transaction/${id}`
-      )
+      .delete(`${environment.transactionsApiUrl}/delete-transaction/${id}`)
       .subscribe(
         (resultData) => {
-          try {
-            if (confirm('are you sure you want to delete this tranaction'))
-              console.log(resultData);
-            this.showMessage('transaction deleted successfully');
-            this.gettAllTransactions();
-          } catch (error) {
-            console.log(error);
-          }
+          if (confirm('are you sure you want to delete this tranaction'))
+            console.log(resultData);
+          this.showMessage('transaction deleted successfully');
+          this.gettAllTransactions();
         },
         (error) => {
           console.log(error);
@@ -121,36 +115,31 @@ export class TransactionService {
     const formData = this.filtersForm.value;
 
     this.http
-      .get<any>(
-        `http://localhost:8000/api/v1/CollectiveCoin/user/transactions/filter`,
-        { params: formData }
-      )
+      .get<any>(`${environment.transactionsApiUrl}/filter`, {
+        params: formData,
+      })
       .subscribe(
         (filteredData) => {
-          try {
-            console.log(filteredData);
+          console.log(filteredData);
 
-            this.alltransactions = filteredData.transactions.map(
-              (transaction: any) => ({
-                title: transaction.title,
-                amount: transaction.amount[0],
-                category: transaction.category,
-                type: transaction.type,
-                date: transaction.date.split('T')[0],
-                id: transaction._id,
-                description: transaction.description,
-                addedBy: transaction.addedBy,
-              })
-            );
-            this.alltransactions.sort((a, b) => {
-              const dateA = new Date(a.date);
-              const dateB = new Date(b.date);
+          this.alltransactions = filteredData.transactions.map(
+            (transaction: any) => ({
+              title: transaction.title,
+              amount: transaction.amount[0],
+              category: transaction.category,
+              type: transaction.type,
+              date: transaction.date.split('T')[0],
+              id: transaction._id,
+              description: transaction.description,
+              addedBy: transaction.addedBy,
+            })
+          );
+          this.alltransactions.sort((a, b) => {
+            const dateA = new Date(a.date);
+            const dateB = new Date(b.date);
 
-              return dateB.getTime() - dateA.getTime();
-            });
-          } catch (error) {
-            console.log(error);
-          }
+            return dateB.getTime() - dateA.getTime();
+          });
         },
         (error) => {
           console.log(error);
@@ -164,7 +153,7 @@ export class TransactionService {
         }
       );
   }
-  showMessage(message: any): void {
+  showMessage(message: string): void {
     this.snackBar.open(message || 'An error occurred', 'Close', {
       duration: 5000,
       panelClass: ['snackbar-error'],

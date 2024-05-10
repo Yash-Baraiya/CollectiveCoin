@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ExpenseService } from '../../shared/services/expense.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import Stripe from 'stripe';
@@ -8,11 +8,11 @@ import Stripe from 'stripe';
   templateUrl: './expense.component.html',
   styleUrl: './expense.component.css',
 })
-export class ExpenseComponent implements OnInit {
+export class ExpenseComponent implements OnInit, OnDestroy {
   showCheckbox: boolean = false;
-  stripePromise: Promise<Stripe>;
   currentPage: number;
   totalItems: number;
+  showrecurrence: boolean = false;
 
   constructor(
     public expenseservice: ExpenseService,
@@ -27,14 +27,16 @@ export class ExpenseComponent implements OnInit {
     });
   }
 
-  updateExpense(id: any) {
-    this.router.navigate([`update-expense/${id}`], { relativeTo: this.route });
+  updateExpense(id: string) {
+    this.router.navigate([`Expense/update-expense/${id}`]);
   }
   onCategoryChange(event: any) {
     const selectedCategory = event.target.value.trim();
     console.log('Selected Category:', selectedCategory);
     console.log('Is Monthly Bills?', selectedCategory === 'monthlybills');
     this.showCheckbox = selectedCategory === 'monthlybills';
+
+    this.showrecurrence = selectedCategory === 'subscriptions';
   }
 
   saveadd() {
@@ -43,5 +45,10 @@ export class ExpenseComponent implements OnInit {
     } else {
       alert('please fill the form as directed');
     }
+  }
+
+  ngOnDestroy(): void {
+    this.expenseservice.totalexpense = 0;
+    this.expenseservice.yearlyTotalExpense = 0;
   }
 }

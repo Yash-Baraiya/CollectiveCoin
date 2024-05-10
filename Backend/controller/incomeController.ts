@@ -74,7 +74,6 @@ export const getIncomes = async (req: Request, res: Response) => {
   try {
     console.log("get income api called");
     let totalincome = 0;
-    let yearlyTotalincome = 0;
 
     const auth = req.headers.authorization;
     if (!auth) {
@@ -105,12 +104,24 @@ export const getIncomes = async (req: Request, res: Response) => {
       const currentMonth = new Date().getMonth() + 1;
       const currentYear = new Date().getFullYear();
 
-      for (let income of incomes) {
-        let incYear = income.date.getFullYear();
-        if (currentYear === incYear) {
-          yearlyTotalincome = yearlyTotalincome + income.amount[0];
-        }
-      }
+      let yearlyTotalincome = await Income.aggregate([
+        {
+          $match: {
+            familycode: familyCode,
+            date: {
+              $gte: new Date(currentYear, 0, 1),
+              $lt: new Date(currentYear + 1, 0, 1),
+            },
+          },
+        },
+        {
+          $group: {
+            _id: null,
+            yearlyTotalincome: { $sum: "$amount" },
+          },
+        },
+      ]);
+      console.log(yearlyTotalincome);
       for (let income of incomes) {
         let incMonth = income.date.getMonth() + 1;
         let incYear = income.date.getFullYear();
@@ -119,7 +130,7 @@ export const getIncomes = async (req: Request, res: Response) => {
         }
       }
       for (let i = 0; i < monthlyincome.length; i++) {
-        totalincome = totalincome + monthlyincome[i].amount[0];
+        totalincome = totalincome + monthlyincome[i].amount;
       }
 
       console.log("get income api ended");

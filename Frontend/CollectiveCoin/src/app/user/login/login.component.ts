@@ -5,7 +5,8 @@ import { LoginDataService } from '../../shared/services/login-data.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ExpenseService } from '../../shared/services/expense.service';
-import { TransactionService } from '../../shared/services/transaction.service';
+import { environment } from '../../environment';
+import resultData from '../../shared/interfaces/resultData.interface';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,7 @@ export class LoginComponent implements OnInit {
   email: string = '';
   password: string = '';
   forgotpasswordForm: FormGroup;
-  data: any;
+  data: resultData;
 
   constructor(
     private http: HttpClient,
@@ -59,40 +60,38 @@ export class LoginComponent implements OnInit {
     console.log('login button clicked');
     let bodyData = this.loginForm.value;
 
-    this.http
-      .post('http://localhost:8000/api/v1/CollectiveCoin/user/login', bodyData)
-      .subscribe(
-        (resultData: any) => {
-          if (resultData) {
-            try {
-              this.loginDataServeice.setData(resultData);
+    this.http.post(`${environment.userApiUrl}/login`, bodyData).subscribe(
+      (resultData: any) => {
+        if (resultData) {
+          try {
+            this.loginDataServeice.setData(resultData);
 
-              this.showMessage('loggedin successfully');
-              this.router.navigate(['/DashBoard']);
-              this.expenseservice.getExpense();
+            this.showMessage('loggedin successfully');
+            this.router.navigate(['/DashBoard']);
+            this.expenseservice.getExpense();
 
-              this.expenseservice.data.forEach((expense: any) => {
-                if (expense.markAspaid === false) {
-                  this.showMessage(`some expenses are due to pay `);
-                }
-              });
-            } catch (error) {
-              console.log(error);
-              this.showMessage(resultData.error.message);
-            }
-          }
-        },
-        (error) => {
-          console.log(error);
-          if (error.error.message) {
-            console.log(error.error.message);
-            this.showMessage(error.error.message);
-            this.router.navigate(['/login']);
-          } else {
-            alert('An error occurred. Please try again later.');
+            this.expenseservice.data.forEach((expense: any) => {
+              if (expense.markAspaid === false) {
+                this.showMessage(`some expenses are due to pay `);
+              }
+            });
+          } catch (error) {
+            console.log(error);
+            this.showMessage(resultData.error.message);
           }
         }
-      );
+      },
+      (error) => {
+        console.log(error);
+        if (error.error.message) {
+          console.log(error.error.message);
+          this.showMessage(error.error.message);
+          this.router.navigate(['/login']);
+        } else {
+          alert('An error occurred. Please try again later.');
+        }
+      }
+    );
   }
 
   forgotpassword() {
@@ -100,15 +99,11 @@ export class LoginComponent implements OnInit {
     if (this.forgotpasswordForm.valid) {
       let bodyData = this.forgotpasswordForm.value;
       this.http
-        .post(
-          'http://localhost:8000/api/v1/CollectiveCoin/user/forgotpassword',
-          bodyData
-        )
+        .post(`${environment.userApiUrl}/forgotpassword`, bodyData)
         .subscribe(
-          (resultData) => {
+          (resultData: resultData) => {
             console.log(resultData);
             this.data = resultData;
-            const token = this.data.resetToken;
             this.closebox2();
             this.showMessage(this.data.messege);
           },

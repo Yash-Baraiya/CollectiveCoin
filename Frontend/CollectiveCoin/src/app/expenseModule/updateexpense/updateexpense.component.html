@@ -67,10 +67,9 @@
                   <div class="input-control">
                     <div class="input-group">
                       <input
-                        type="text"
+                        type="date"
                         placeholder="Enter A Date"
                         class="form-control bs-datepicker-body"
-                        bsDatepicker
                         formControlName="date"
                       />
                       <div class="input-group-append">
@@ -100,13 +99,14 @@
                       name="category"
                       id="category"
                       formControlName="category"
+                      (change)="onCategoryChange($event)"
                     >
                       <option value="" disabled="">Select Option</option>
                       <option value="education">Education</option>
                       <option value="groceries">Groceries</option>
                       <option value="health">Health</option>
                       <option value="subscriptions">Subscriptions</option>
-
+                      <option value="monthlybills  ">Monthly Bills</option>
                       <option value="shopping">Shopping</option>
                       <option value="travelling">Travelling</option>
                       <option value="other">Other</option>
@@ -128,6 +128,34 @@
                       </div>
                     </div>
                   </div>
+                  <div *ngIf="showCheckbox">
+                    <label
+                      for="markAsPaid"
+                      style="display: inline-block; margin-right: 10px"
+                      >Mark as Paid</label
+                    >
+                    <input
+                      type="checkbox"
+                      name="markAsPaid"
+                      id="markAsPaid"
+                      formControlName="markAspaid"
+                      checked="checked"
+                    />
+                    <div
+                      class="input-control"
+                      *ngIf="
+                        updateExpenseForm.get('markAspaid').value === false
+                      "
+                    >
+                      <input
+                        type="date"
+                        placeholder="Due Date"
+                        class="form-control"
+                        formControlName="duedate"
+                      />
+                    </div>
+                  </div>
+
                   <div class="input-control">
                     <textarea
                       name="description"

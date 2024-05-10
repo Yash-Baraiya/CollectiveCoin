@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import IncomeResponse from '../../incomeModule/income.interface';
+import { IncomeResponse } from '../interfaces/income.interface';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-
+import { environment } from '../../environment';
 import { Observable } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -46,23 +46,15 @@ export class IncomeService {
   addIncome() {
     let bodyData = this.incomeForm.value;
     this.http
-      .post(
-        'http://localhost:8000/api/v1/CollectiveCoin/user/incomes/add-income',
-        bodyData
-      )
+      .post(`${environment.incomeApiUrl}/add-income`, bodyData)
       .subscribe(
         (resultData) => {
-          try {
-            console.log(resultData);
-            this.showMessage('income added successfully');
-            this.getIncome().subscribe(() => {
-              console.log('add income subscribe is getting called');
-            });
-            this.incomeForm.reset();
-          } catch (error) {
-            console.log(error);
-            this.incomeForm.reset();
-          }
+          console.log(resultData);
+          this.showMessage('income added successfully');
+          this.getIncome().subscribe(() => {
+            console.log('add income subscribe is getting called');
+          });
+          this.incomeForm.reset();
         },
         (error) => {
           if (error.error.message) {
@@ -77,82 +69,70 @@ export class IncomeService {
   }
   getIncome(): Observable<any> {
     return new Observable((obseraver) => {
-      this.http
-        .get(
-          'http://localhost:8000/api/v1/CollectiveCoin/user/incomes/get-incomes'
-        )
-        .subscribe(
-          (resultData: IncomeResponse) => {
-            try {
-              console.log('get income is getting called', resultData);
-              this.data = resultData.monthlyincome.map((income: any) => ({
-                title: income.title,
-                category: income.category,
-                amount: income.amount,
-                date: this.datepipe.transform(income.date, 'MM/dd/yyyy'),
-                id: income._id,
-                description: income.description,
-                addedBy: income.addedBy,
-              }));
-              this.yearlyTotalIncome = resultData.yearlyTotalincome;
-              this.totalIncome = resultData.totalincome;
+      this.http.get(`${environment.incomeApiUrl}/get-incomes`).subscribe(
+        (resultData: IncomeResponse) => {
+          console.log(resultData.monthlyincome);
+          this.data = resultData.monthlyincome.map((income: any) => ({
+            title: income.title,
+            category: income.category,
+            amount: income.amount,
+            date: this.datepipe.transform(income.date, 'MM/dd/yyyy'),
+            id: income._id,
+            description: income.description,
+            addedBy: income.addedBy,
+            type: income.type,
+          }));
+          this.yearlyTotalIncome =
+            resultData.yearlyTotalincome[0].yearlyTotalincome;
+          this.totalIncome = resultData.totalincome;
 
-              this.incamounts = resultData.monthlyincome
-                .map((income) => ({
-                  amount: income.amount[0],
-                  date: this.datepipe.transform(income.date, 'dd/MM/yyyy'),
-                }))
-                .sort((a, b) => {
-                  const dateA = new Date(a.date);
-                  const dateB = new Date(b.date);
+          this.incamounts = resultData.monthlyincome
+            .map((income) => ({
+              amount: income.amount[0],
+              date: this.datepipe.transform(income.date, 'dd/MM/yyyy'),
+            }))
+            .sort((a, b) => {
+              const dateA = new Date(a.date);
+              const dateB = new Date(b.date);
 
-                  return dateA.getTime() - dateB.getTime();
-                });
+              return dateA.getTime() - dateB.getTime();
+            });
 
-              this.data = this.data.sort((a, b) => {
-                const dateA = new Date(a.date);
-                const dateB = new Date(b.date);
+          this.data = this.data.sort((a, b) => {
+            const dateA = new Date(a.date);
+            const dateB = new Date(b.date);
 
-                return dateB.getTime() - dateA.getTime();
-              });
-              this.amountsvalue = this.incamounts.map((obj) => obj.amount);
-              obseraver.next();
-            } catch (error) {
-              console.log(error);
-            }
-          },
-          (error) => {
-            if (error.error.messege) {
-              this.showMessage(error.error.messege);
-            } else {
-              this.showMessage(
-                'there was problem loading this page please login again '
-              );
-              this.router.navigate(['/login']);
-            }
-            if (error.error.messege === 'please login first') {
-              this.router.navigate(['/login']);
-            }
+            return dateB.getTime() - dateA.getTime();
+          });
+          this.amountsvalue = this.incamounts.map((obj) => obj.amount);
+          obseraver.next();
+        },
+        (error) => {
+          if (error.error.messege) {
+            this.showMessage(error.error.messege);
+          } else {
+            this.showMessage(
+              'there was problem loading this page please login again '
+            );
+            this.router.navigate(['/login']);
           }
-        );
+          if (error.error.messege === 'please login first') {
+            this.router.navigate(['/login']);
+          }
+        }
+      );
     });
   }
 
   deleteIncome(id) {
     if (confirm('are you sure you want to delete this income')) {
       this.http
-        .delete(
-          `http://localhost:8000/api/v1/CollectiveCoin/user/incomes/delete-income/${id}`
-        )
+        .delete(`${environment.incomeApiUrl}/delete-income/${id}`)
         .subscribe(
           (resultData) => {
-            try {
-              console.log(resultData);
-              this.showMessage('income deleted successfully');
-              this.getIncome();
-            } catch (error) {
-              console.log(error);
-            }
+            console.log(resultData);
+            this.showMessage('income deleted successfully');
+            this.getIncome();
           },
           (error) => {
             console.log(error);

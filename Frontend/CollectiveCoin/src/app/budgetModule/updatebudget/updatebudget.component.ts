@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { environment } from '../../environment';
 
 @Component({
   selector: 'app-updatebudget',
@@ -29,7 +30,8 @@ export class UpdatebudgetComponent implements OnInit, OnDestroy {
       this.budgetId = param['id'];
       this.budgetservice.getBudgets().subscribe(() => {
         this.budgetservice.data.forEach((budget) => {
-          if (budget.id === this.budgetId) {
+          if (budget._id === this.budgetId) {
+            console.log('this is budget', budget);
             this.budgetData = budget;
             console.log(this.budgetData);
 
@@ -67,29 +69,18 @@ export class UpdatebudgetComponent implements OnInit, OnDestroy {
       date: new FormControl(this.budgetData.date, [Validators.required]),
     });
   }
-  ngOnDestroy(): void {
-    this.budgetData = {};
-    this.updateBudgetForm.reset();
-  }
 
-  Updateincome(id: any): Observable<any> {
+  Updatebudget(id: any): Observable<any> {
     return new Observable((obseraver) => {
       let bodyData = this.updateBudgetForm.value;
       if (confirm('are you sure you want to update this Budget')) {
         this.http
-          .patch(
-            `http://localhost:8000/api/v1/CollectiveCoin/user/budget/update-budget/${id}`,
-            bodyData
-          )
+          .patch(`${environment.budgetApiUrl}/update-budget/${id}`, bodyData)
           .subscribe(
             (resultData) => {
-              try {
-                this.showMessage('Budget updated successfully');
-                console.log(resultData);
-                obseraver.next();
-              } catch (error) {
-                console.log(error);
-              }
+              this.showMessage('Budget updated successfully');
+              console.log(resultData);
+              obseraver.next();
             },
             (error) => {
               console.log(error);
@@ -109,10 +100,10 @@ export class UpdatebudgetComponent implements OnInit, OnDestroy {
   save() {
     console.log('button is clicked');
     if (this.updateBudgetForm.valid) {
-      this.Updateincome(this.budgetId).subscribe(() => {
+      this.Updatebudget(this.budgetId).subscribe(() => {
         this.budgetservice.getBudgets().subscribe(() => {
           this.budgetservice.data.forEach((budget) => {
-            if (budget.id === this.budgetId) {
+            if (budget._id === this.budgetId) {
               this.budgetData = budget;
               console.log(this.budgetData);
             }
@@ -128,5 +119,9 @@ export class UpdatebudgetComponent implements OnInit, OnDestroy {
       duration: 5000,
       panelClass: ['snackbar-error'],
     });
+  }
+  ngOnDestroy(): void {
+    this.budgetData = {};
+    this.updateBudgetForm.reset();
   }
 }

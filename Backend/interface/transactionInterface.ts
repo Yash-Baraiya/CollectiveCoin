@@ -1,5 +1,5 @@
 import { Document } from "mongoose";
-export interface ExpenseIn extends Document {
+export interface TransactionIn extends Document {
   title: string;
   amount: number;
   type: string;
@@ -10,7 +10,6 @@ export interface ExpenseIn extends Document {
   familycode?: string;
   markAspaid?: boolean;
   duedate?: Date;
-  paidBy?:string;
-  recurrence:string
-
+  paidBy?: string;
+  recurrence: string;
 }

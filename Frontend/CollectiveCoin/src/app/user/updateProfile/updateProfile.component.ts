@@ -4,6 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { LoginDataService } from '../../shared/services/login-data.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { environment } from '../../environment';
 
 @Component({
   selector: 'app-updateProfile',
@@ -11,13 +12,11 @@ import { Router } from '@angular/router';
   styleUrl: './updateProfile.component.css',
 })
 export class UpdateProfileComponent implements OnInit {
-  isEarning: any;
-  data: any;
   updateProfileForm: FormGroup;
   updatePasswordForm: FormGroup;
-  photo: any;
-  username: any;
-  email: any;
+  photo: string;
+  username: string;
+  email: string;
   constructor(
     private http: HttpClient,
     private loginDataService: LoginDataService,
@@ -61,10 +60,7 @@ export class UpdateProfileComponent implements OnInit {
     const formData = this.updateProfileForm.value;
 
     this.http
-      .patch(
-        'http://localhost:8000/api/v1/CollectiveCoin/user/updateprofile',
-        formData
-      )
+      .patch(`${environment.userApiUrl}/updateprofile`, formData)
       .subscribe(
         (resultData: any) => {
           if (resultData.status === 'success') {
@@ -95,10 +91,7 @@ export class UpdateProfileComponent implements OnInit {
     formData.append('photo', file);
 
     this.http
-      .patch(
-        'http://localhost:8000/api/v1/CollectiveCoin/user/uploadimage',
-        formData
-      )
+      .patch(`${environment.userApiUrl}/uploadimage`, formData)
       .subscribe(
         (resultData: any) => {
           console.log(resultData);
@@ -122,10 +115,7 @@ export class UpdateProfileComponent implements OnInit {
     const formData = this.updatePasswordForm.value;
 
     this.http
-      .patch(
-        'http://localhost:8000/api/v1/CollectiveCoin/user/updatepassword',
-        formData
-      )
+      .patch(`${environment.userApiUrl}/updatepassword`, formData)
       .subscribe(
         (resultData: any) => {
           console.log(resultData);

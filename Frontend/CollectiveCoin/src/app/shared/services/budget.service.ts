@@ -2,10 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import BudgetResponse from '../../budgetModule/budget.interface';
+import { BudgetResponse, budget } from '../interfaces/budget.interface';
 import { Observable } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { environment } from '../../environment';
 
 @Injectable({
   providedIn: 'root',
@@ -14,8 +15,8 @@ export class BudgetService {
   budgetForm: FormGroup;
 
   date: Date = new Date();
-  data: any = [];
-  amounts: any = [];
+  data: Array<budget> = [];
+  amounts: Array<budget> = [];
   totalIncome: number = 0;
   amountsvalue: Array<number> = [];
   overbudget: Array<any> = [];
@@ -45,22 +46,14 @@ export class BudgetService {
     let bodyData = this.budgetForm.value;
     console.log(bodyData);
     this.http
-      .post(
-        'http://localhost:8000/api/v1/CollectiveCoin/user/budget/add-budget',
-        bodyData
-      )
+      .post(`${environment.budgetApiUrl}/add-budget`, bodyData)
       .subscribe(
         (resultData) => {
-          try {
-            this.showMessage('budget created successfully');
-            this.getBudgets().subscribe(() => {
-              console.log('getting budgets');
-            });
-            this.budgetForm.reset();
-          } catch (error) {
-            console.log(error);
-            this.budgetForm.reset();
-          }
+          this.showMessage('budget created successfully');
+          this.getBudgets().subscribe(() => {
+            console.log('getting budgets');
+          });
+          this.budgetForm.reset();
         },
         (error) => {
           if (error.error.message) {
@@ -75,82 +68,68 @@ export class BudgetService {
   }
   getBudgets(): Observable<any> {
     return new Observable((obseraver) => {
-      this.http
-        .get(
-          'http://localhost:8000/api/v1/CollectiveCoin/user/budget/get-budgets'
-        )
-        .subscribe(
-          (resultData: BudgetResponse) => {
-            try {
-              this.data = resultData.monthlybudget.map((budget: any) => ({
-                title: budget.title,
-                category: budget.category,
-                amount: budget.amount,
-                date: this.datepipe.transform(budget.date, 'MM/dd/yyyy'),
-                id: budget._id,
-                description: budget.description,
-                createdBy: budget.CreatedBy,
-              }));
-              this.overbudget = resultData.overbudget;
-              this.underbudget = resultData.underbudget;
-              this.expcategoryAmounts = resultData.expcategoryAmounts;
-              console.log(this.expcategoryAmounts);
-              this.amounts = resultData.monthlybudget
-                .map((budget) => ({
-                  amount: budget.amount,
-                  date: budget.date,
-                  category: budget.category,
-                }))
-                .sort((a, b) => {
-                  const dateA = new Date(a.date);
-                  const dateB = new Date(b.date);
+      this.http.get(`${environment.budgetApiUrl}/get-budgets`).subscribe(
+        (resultData: BudgetResponse) => {
+          this.data = resultData.monthlybudget.map((budget) => ({
+            title: budget.title,
+            category: budget.category,
+            amount: budget.amount,
+            date: this.datepipe.transform(budget.date, 'MM/dd/yyyy'),
+            _id: budget._id,
+            description: budget.description,
+            createdBy: budget.CreatedBy,
+          }));
+          this.overbudget = resultData.overbudget;
+          this.underbudget = resultData.underbudget;
+          this.expcategoryAmounts = resultData.expcategoryAmounts;
+          console.log(this.expcategoryAmounts);
+          this.amounts = resultData.monthlybudget
+            .map((budget) => ({
+              amount: budget.amount,
+              date: budget.date,
+              category: budget.category,
+            }))
+            .sort((a, b) => {
+              const dateA = new Date(a.date);
+              const dateB = new Date(b.date);
 
-                  return dateA.getTime() - dateB.getTime();
-                });
-              this.data = this.data.sort((a, b) => {
-                const dateA = new Date(a.date);
-                const dateB = new Date(b.date);
+              return dateA.getTime() - dateB.getTime();
+            });
+          this.data = this.data.sort((a, b) => {
+            const dateA = new Date(a.date);
+            const dateB = new Date(b.date);
 
-                return dateB.getTime() - dateA.getTime();
-              });
-              this.amountsvalue = this.amounts.map((obj) => obj.amount);
-              obseraver.next();
-            } catch (error) {
-              console.log(error);
-            }
-          },
-          (error) => {
-            if (error.error.messege) {
-              this.showMessage(error.error.messege);
-            } else {
-              this.showMessage(
-                'there was problem loading this page please login again '
-              );
-              this.router.navigate(['/login']);
-            }
-            if (error.error.messege === 'please login first') {
-              this.router.navigate(['/login']);
-            }
+            return dateB.getTime() - dateA.getTime();
+          });
+          this.amountsvalue = this.amounts.map((obj) => obj.amount);
+          obseraver.next();
+        },
+        (error) => {
+          if (error.error.messege) {
+            this.showMessage(error.error.messege);
+          } else {
+            this.showMessage(
+              'there was problem loading this page please login again '
+            );
+            this.router.navigate(['/login']);
           }
-        );
+          if (error.error.messege === 'please login first') {
+            this.router.navigate(['/login']);
+          }
+        }
+      );
     });
   }
 
   deleteBudget(id) {
     if (confirm('are you sure you want to delete this budget')) {
       this.http
-        .delete(
-          `http://localhost:8000/api/v1/CollectiveCoin/user/budget/delete-budget/${id}`
-        )
+        .delete(`${environment.budgetApiUrl}/delete-budget/${id}`)
         .subscribe(
           (resultData) => {
-            try {
-              console.log(resultData);
-              this.showMessage('budget deleted successfully');
-              this.getBudgets().subscribe();
-            } catch (error) {
-              console.log(error);
-            }
+            console.log(resultData);
+            this.showMessage('budget deleted successfully');
+            this.getBudgets().subscribe();
           },
           (error) => {
             console.log(error);
@@ -167,7 +146,7 @@ export class BudgetService {
   }
 
   //showing alert  message using angular material
-  showMessage(message: any) {
+  showMessage(message: string) {
     this.snackBar.open(message || 'An error occurred', 'Close', {
       duration: 5000,
       panelClass: ['snackbar-error'],

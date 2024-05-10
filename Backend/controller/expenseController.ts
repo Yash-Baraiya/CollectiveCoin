@@ -83,7 +83,7 @@ export const addExpense = async (req: Request, res: Response) => {
         }
       }, 0);
     }
-    console.log("add expense api ended")
+    console.log("add expense api ended");
     res.status(200).json({
       status: "success",
       message: "Expense Added",
@@ -102,9 +102,9 @@ export const addExpense = async (req: Request, res: Response) => {
 export const getExpense = async (req: Request, res: Response) => {
   try {
     console.log("get expense api called");
-    let totalexpense: number = 0;
+
     let monthlyexpense: Array<ExpenseIn> = [];
-    let yearlyTotalExpense: number = 0;
+
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("not authorized");
@@ -128,13 +128,42 @@ export const getExpense = async (req: Request, res: Response) => {
     const currentMonth = new Date().getMonth() + 1;
     const currentYear = new Date().getFullYear();
 
-    for (let expense of expenses) {
-      let expyear = expense.date.getFullYear();
+    let yearlyTotalExpense = await Expense.aggregate([
+      {
+        $match: {
+          familycode: familycode,
+          date: {
+            $gte: new Date(currentYear, 0, 1),
+            $lt: new Date(currentYear + 1, 0, 1),
+          },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          yearlyTotalExpense: { $sum: "$amount" },
+        },
+      },
+    ]);
 
-      if (expyear === currentYear) {
-        yearlyTotalExpense = yearlyTotalExpense + expense.amount;
-      }
-    }
+    // let totalexpense = await Expense.aggregate([
+    //   {
+    //     $match: {
+    //       familycode: familycode,
+    //       date: {
+    //         $gte: new Date(currentYear, currentMonth - 1, 1),
+    //         $lt: new Date(currentYear, currentMonth, 0),
+    //       },
+    //     },
+    //   },
+    //   {
+    //     $group: {
+    //       _id: null,
+    //       totalexpense: { $sum: "$amount" },
+    //     },
+    //   },
+    // ]);
+    let totalexpense = 0;
     for (let expense of expenses) {
       let expMonth = expense.date.getMonth() + 1;
       let expyear = expense.date.getFullYear();
@@ -221,7 +250,8 @@ export const deleteExpense = async (
 export const updateExpense = async (req: Request, res: Response) => {
   try {
     console.log("update expense api called");
-    const { title, amount, category, description, date } = req.body;
+    const { title, amount, category, description, date, markAspaid, duedate } =
+      req.body;
 
     const auth = req.headers.authorization;
     if (!auth) {
@@ -260,11 +290,13 @@ export const updateExpense = async (req: Request, res: Response) => {
         category: category,
         description: description,
         date: date,
+        markAspaid: markAspaid,
+        duedate: duedate,
       },
       { new: true }
     );
 
-    console.log("update expese api ended")
+    console.log("update expese api ended");
     res.status(200).json({
       status: "success",
       messasge: "expense updated successfully",
