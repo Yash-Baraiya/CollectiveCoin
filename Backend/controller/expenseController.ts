@@ -103,8 +103,6 @@ export const getExpense = async (req: Request, res: Response) => {
   try {
     console.log("get expense api called");
 
-    let monthlyexpense: Array<ExpenseIn> = [];
-
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("not authorized");
@@ -146,34 +144,36 @@ export const getExpense = async (req: Request, res: Response) => {
       },
     ]);
 
-    // let totalexpense = await Expense.aggregate([
-    //   {
-    //     $match: {
-    //       familycode: familycode,
-    //       date: {
-    //         $gte: new Date(currentYear, currentMonth - 1, 1),
-    //         $lt: new Date(currentYear, currentMonth, 0),
-    //       },
-    //     },
-    //   },
-    //   {
-    //     $group: {
-    //       _id: null,
-    //       totalexpense: { $sum: "$amount" },
-    //     },
-    //   },
-    // ]);
-    let totalexpense = 0;
-    for (let expense of expenses) {
-      let expMonth = expense.date.getMonth() + 1;
-      let expyear = expense.date.getFullYear();
-      if (expMonth === currentMonth && expyear === currentYear) {
-        monthlyexpense.push(expense);
-      }
-    }
-    for (let i = 0; i < monthlyexpense.length; i++) {
-      totalexpense = totalexpense + monthlyexpense[i].amount;
-    }
+    let totalexpense = await Expense.aggregate([
+      {
+        $match: {
+          familycode: familycode,
+          date: {
+            $gte: new Date(currentYear, currentMonth - 1, 1),
+            $lt: new Date(currentYear, currentMonth, 0),
+          },
+        },
+      },
+
+      {
+        $group: {
+          _id: null,
+          totalexpense: { $sum: "$amount" },
+        },
+      },
+    ]);
+    let monthlyexpense = await Expense.aggregate([
+      {
+        $match: {
+          familycode: familycode,
+          date: {
+            $gte: new Date(currentYear, currentMonth - 1, 1),
+            $lt: new Date(currentYear, currentMonth, 0),
+          },
+        },
+      },
+    ]);
+
     console.log("get expense api ended");
     res.status(200).json({
       status: "success",

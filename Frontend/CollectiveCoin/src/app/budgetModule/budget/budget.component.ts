@@ -18,9 +18,7 @@ export class BudgetComponent implements OnInit, OnDestroy {
     private logindataservice: LoginDataService
   ) {}
   updateBudget(id: string) {
-    console.log(this.budgetservice.data);
-    console.log(id);
-    this.router.navigate([`update-budget/${id}`], { relativeTo: this.route });
+    this.router.navigate([`Budget/update-budget/${id}`]);
   }
   ngOnInit(): void {
     this.logindataservice.isLoggedin().subscribe(() => {

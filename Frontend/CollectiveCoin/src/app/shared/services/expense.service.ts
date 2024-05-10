@@ -16,7 +16,7 @@ export class ExpenseService {
   date: Date = new Date();
   data: any = [];
   expamounts: any = [];
-  amountsvalue: Array<number> = [];
+
   totalexpense: number = 0;
   yearlyTotalExpense: number;
 
@@ -109,7 +109,7 @@ export class ExpenseService {
 
               return dateA.getTime() - dateB.getTime();
             });
-          this.totalexpense = resultData.totalexpense;
+          this.totalexpense = resultData.totalexpense[0].totalexpense;
           this.data = this.data.sort((a, b) => {
             const dateA = new Date(a.date);
             const dateB = new Date(b.date);
@@ -117,7 +117,7 @@ export class ExpenseService {
             return dateB.getTime() - dateA.getTime();
           });
           console.log(this.totalexpense);
-          this.amountsvalue = this.expamounts.map((obj) => obj.amount);
+
           obseraver.next();
         },
         (error) => {

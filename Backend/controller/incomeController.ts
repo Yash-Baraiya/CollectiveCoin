@@ -73,7 +73,6 @@ export const addIncome = async (req: Request, res: Response) => {
 export const getIncomes = async (req: Request, res: Response) => {
   try {
     console.log("get income api called");
-    let totalincome = 0;
 
     const auth = req.headers.authorization;
     if (!auth) {
@@ -89,7 +88,6 @@ export const getIncomes = async (req: Request, res: Response) => {
       const decodedToken = jwt.decode(token) as JwtPayload;
       const userId = decodedToken.id;
 
-      let monthlyincome: Array<IncomeIn> = [];
       const admin = await User.findOne({ _id: userId });
       if (!admin) {
         throw new Error("user not found");
@@ -121,17 +119,37 @@ export const getIncomes = async (req: Request, res: Response) => {
           },
         },
       ]);
-      console.log(yearlyTotalincome);
-      for (let income of incomes) {
-        let incMonth = income.date.getMonth() + 1;
-        let incYear = income.date.getFullYear();
-        if (incMonth === currentMonth && incYear === currentYear) {
-          monthlyincome.push(income);
-        }
-      }
-      for (let i = 0; i < monthlyincome.length; i++) {
-        totalincome = totalincome + monthlyincome[i].amount;
-      }
+      let totalincome = await Income.aggregate([
+        {
+          $match: {
+            familycode: familyCode,
+            date: {
+              $gte: new Date(currentYear, currentMonth - 1, 1),
+              $lt: new Date(currentYear, currentMonth, 0),
+            },
+          },
+        },
+
+        {
+          $group: {
+            _id: null,
+            totalincome: { $sum: "$amount" },
+          },
+        },
+      ]);
+      let monthlyincome = await Income.aggregate([
+        {
+          $match: {
+            familycode: familyCode,
+            date: {
+              $gte: new Date(currentYear, currentMonth - 1, 1),
+              $lt: new Date(currentYear, currentMonth, 0),
+            },
+          },
+        },
+      ]);
+
+      console.log(monthlyincome);
 
       console.log("get income api ended");
       return res.status(200).json({

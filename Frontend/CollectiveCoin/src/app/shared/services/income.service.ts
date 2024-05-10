@@ -17,7 +17,7 @@ export class IncomeService {
   data: any = [];
   incamounts: any = [];
   totalIncome: number = 0;
-  amountsvalue: Array<number> = [];
+
   yearlyTotalIncome: number;
   constructor(
     private http: HttpClient,
@@ -84,7 +84,7 @@ export class IncomeService {
           }));
           this.yearlyTotalIncome =
             resultData.yearlyTotalincome[0].yearlyTotalincome;
-          this.totalIncome = resultData.totalincome;
+          this.totalIncome = resultData.totalincome[0].totalincome;
 
           this.incamounts = resultData.monthlyincome
             .map((income) => ({
@@ -104,7 +104,7 @@ export class IncomeService {
 
             return dateB.getTime() - dateA.getTime();
           });
-          this.amountsvalue = this.incamounts.map((obj) => obj.amount);
+
           obseraver.next();
         },
         (error) => {

@@ -30,7 +30,7 @@ export class UpdatebudgetComponent implements OnInit, OnDestroy {
       this.budgetId = param['id'];
       this.budgetservice.getBudgets().subscribe(() => {
         this.budgetservice.data.forEach((budget) => {
-          if (budget._id === this.budgetId) {
+          if (budget.id === this.budgetId) {
             console.log('this is budget', budget);
             this.budgetData = budget;
             console.log(this.budgetData);
@@ -103,7 +103,7 @@ export class UpdatebudgetComponent implements OnInit, OnDestroy {
       this.Updatebudget(this.budgetId).subscribe(() => {
         this.budgetservice.getBudgets().subscribe(() => {
           this.budgetservice.data.forEach((budget) => {
-            if (budget._id === this.budgetId) {
+            if (budget.id === this.budgetId) {
               this.budgetData = budget;
               console.log(this.budgetData);
             }

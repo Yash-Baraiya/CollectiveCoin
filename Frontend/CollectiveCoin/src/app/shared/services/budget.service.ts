@@ -18,7 +18,6 @@ export class BudgetService {
   data: Array<budget> = [];
   amounts: Array<budget> = [];
   totalIncome: number = 0;
-  amountsvalue: Array<number> = [];
   overbudget: Array<any> = [];
   underbudget: Array<any> = [];
   expcategoryAmounts: object = {};
@@ -75,14 +74,14 @@ export class BudgetService {
             category: budget.category,
             amount: budget.amount,
             date: this.datepipe.transform(budget.date, 'MM/dd/yyyy'),
-            _id: budget._id,
+            id: budget._id,
             description: budget.description,
             createdBy: budget.CreatedBy,
           }));
           this.overbudget = resultData.overbudget;
           this.underbudget = resultData.underbudget;
           this.expcategoryAmounts = resultData.expcategoryAmounts;
-          console.log(this.expcategoryAmounts);
+
           this.amounts = resultData.monthlybudget
             .map((budget) => ({
               amount: budget.amount,
@@ -101,7 +100,7 @@ export class BudgetService {
 
             return dateB.getTime() - dateA.getTime();
           });
-          this.amountsvalue = this.amounts.map((obj) => obj.amount);
+
           obseraver.next();
         },
         (error) => {

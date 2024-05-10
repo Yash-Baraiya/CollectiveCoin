@@ -114,7 +114,7 @@
     >
       {{ item.title }}
       <span
-        [ngClass]="item.type === 'income' ? 'income-dot' : 'expense-dot'"
+        [ngClass]="item.type === 'expense' ? 'expense-dot' : 'income-dot'"
       ></span>
       <button
         *ngIf="item.category === 'monthlybills' && item.markAspaid === false"

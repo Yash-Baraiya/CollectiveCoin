@@ -37,7 +37,7 @@ export class TransactionService {
             this.data = resultData;
             this.incomedata = this.data.incomes.map((income: any) => ({
               title: income.title,
-              amount: income.amount[0],
+              amount: income.amount,
               category: income.category,
               date: income.date.split('T')[0],
               id: income._id,
@@ -74,6 +74,8 @@ export class TransactionService {
             });
             this.maxincome = this.incomedata[0].amount;
             this.minincome = this.incomedata[this.incomedata.length - 1].amount;
+
+            console.log(this.incomedata);
 
             this.maxexpense = this.expensedata[0].amount;
             this.minexpense =

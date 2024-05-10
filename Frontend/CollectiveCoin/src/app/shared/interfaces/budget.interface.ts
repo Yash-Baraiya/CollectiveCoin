@@ -14,6 +14,7 @@ interface budget {
   category?: string;
   CreatedBy?: string;
   description?: string;
+  id?: string;
   _id?: string;
 }
 

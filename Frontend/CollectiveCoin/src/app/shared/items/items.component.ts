@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TransactionService } from '../services/transaction.service';
 import { IncomeService } from '../services/income.service';
+import { BudgetService } from '../services/budget.service';
 
 @Component({
   selector: 'app-items',
@@ -21,11 +22,12 @@ export class ItemsComponent implements OnInit {
     private http: HttpClient,
     private snackBar: MatSnackBar,
     public transactionservice: TransactionService,
-    public incomeservice: IncomeService
+    public incomeservice: IncomeService,
+    public budgetservice: BudgetService
   ) {}
 
   ngOnInit(): void {
-    console.log('items called');
+    console.log('items called', this.item);
   }
 
   deleteItem(id: any) {
