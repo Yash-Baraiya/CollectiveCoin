@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ExpenseService } from '../../shared/services/expense.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import Stripe from 'stripe';
 
 @Component({
   selector: 'app-expense',
@@ -13,6 +12,7 @@ export class ExpenseComponent implements OnInit, OnDestroy {
   currentPage: number;
   totalItems: number;
   showrecurrence: boolean = false;
+  itemsPerPage: number = 4;
 
   constructor(
     public expenseservice: ExpenseService,
@@ -27,6 +27,14 @@ export class ExpenseComponent implements OnInit, OnDestroy {
     });
   }
 
+  nextPage() {
+    this.currentPage = this.currentPage + 1;
+    this.expenseservice.getExpense(this.currentPage, this.itemsPerPage);
+  }
+  previousPage() {
+    this.currentPage = this.currentPage - 1;
+    this.expenseservice.getExpense(this.currentPage, this.itemsPerPage);
+  }
   updateExpense(id: string) {
     this.router.navigate([`Expense/update-expense/${id}`]);
   }

@@ -80,9 +80,14 @@ export class ExpenseService {
       );
   }
 
-  getExpense(): Observable<any> {
+  getExpense(page?: number, limit?: number): Observable<any> {
     return new Observable((obseraver) => {
-      this.http.get(`${environment.expenseApiUrl}/get-expenses`).subscribe(
+      let apiUrl = `${environment.expenseApiUrl}/get-expenses`;
+
+      if (page !== undefined && limit !== undefined) {
+        apiUrl += `?page=${page}&limit=${limit}`;
+      }
+      this.http.get(apiUrl).subscribe(
         (resultData: ExpenseResponse) => {
           console.log(resultData);
           this.data = resultData.monthlyexpense.map((expense) => ({
@@ -98,7 +103,8 @@ export class ExpenseService {
             duedate: this.datepipe.transform(expense.duedate, 'MM/dd/yyyy'),
             paidBy: expense.paidBy,
           }));
-          this.yearlyTotalExpense = resultData.yearlyTotalExpense[0].yearlyTotalExpense;
+          this.yearlyTotalExpense =
+            resultData.yearlyTotalExpense[0].yearlyTotalExpense;
           this.totalexpense = resultData.totalexpense[0].totalexpense;
           this.minexpense = resultData.minAmountexpense;
           this.maxexpense = resultData.maxAmountexpense;
@@ -113,7 +119,7 @@ export class ExpenseService {
 
               return dateA.getTime() - dateB.getTime();
             });
-          
+
           obseraver.next();
         },
         (error) => {

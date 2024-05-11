@@ -102,7 +102,9 @@ export const addExpense = async (req: Request, res: Response) => {
 export const getExpense = async (req: Request, res: Response) => {
   try {
     console.log("get expense api called");
-
+    const page = parseInt(req.query.page as string);
+    const limit = parseInt(req.query.limit as string);
+    const skip = page ? (page - 1) * limit : 0;
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("not authorized");
@@ -182,6 +184,9 @@ export const getExpense = async (req: Request, res: Response) => {
         },
       },
     ]);
+    if (page !== undefined && limit !== undefined) {
+      monthlyexpense.slice();
+    }
     let maxAmountexpense = monthlyexpense.reduce((max, expense) => {
       return expense.amount > max.amount ? expense : max;
     }, monthlyexpense[0]);
