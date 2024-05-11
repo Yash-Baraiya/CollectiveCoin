@@ -12,7 +12,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TokenInterceptor } from './shared/interceptors/custom.interceptor';
 import { MembersComponent } from './members/members.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
+import { ResetpasswordComponent } from './user/resetpassword/resetpassword.component';
 import { LineChartComponent } from './line-chart/line-chart.component';
 import { DatePipe } from '@angular/common';
 import { SharedModule } from './shared/shared.module';

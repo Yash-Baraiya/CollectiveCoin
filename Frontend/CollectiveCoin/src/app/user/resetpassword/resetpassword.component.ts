@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { environment } from '../environment';
-import resultData from '../shared/interfaces/resultData.interface';
+import { environment } from '../../environment';
+import resultData from '../../shared/interfaces/resultData.interface';
 
 @Component({
   selector: 'app-resetpassword',

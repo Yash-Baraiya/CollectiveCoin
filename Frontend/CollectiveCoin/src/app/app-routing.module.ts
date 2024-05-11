@@ -6,7 +6,7 @@ import { LoginComponent } from './user/login/login.component';
 import { SignupComponent } from './user/signup/signup.component';
 import { MembersComponent } from './members/members.component';
 import { RouteGuard } from './shared/route.guard';
-import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
+import { ResetpasswordComponent } from './user/resetpassword/resetpassword.component';
 import { CoverpageComponent } from './coverpage/coverpage.component';
 import { UpdateProfileComponent } from './user/updateProfile/updateProfile.component';
 import { NotFoundComponent } from './404/404.component';

@@ -30,9 +30,17 @@ export class ItemsComponent implements OnInit {
 
   deleteItem(id: any) {
     if (this.deleteMethod) {
-      this.deleteMethod(id);
+      if (this.deleteMethod === this.incomeservice.deleteIncome) {
+        this.incomeservice.deleteIncome(id);
+      } else if (this.deleteMethod === this.expenseservice.deleteExpense) {
+        this.expenseservice.deleteExpense(id);
+      } else if (
+        (this.deleteMethod = this.transactionservice.deleteTransaction)
+      ) {
+        this.transactionservice.deleteTransaction(id);
+      }
     } else {
-      console.error('deleteMethod is not defined');
+      console.log('deleteMethod is not defined');
     }
   }
 
@@ -42,7 +50,7 @@ export class ItemsComponent implements OnInit {
     if (this.updateMethod) {
       this.updateMethod(id);
     } else {
-      console.error('updateMethod is not defined');
+      console.log('updateMethod is not defined');
     }
   }
   showMessage(message: string): void {

@@ -348,7 +348,8 @@ export const forgotPassword = async (
         <h2>Forgot Your Password?</h2>
         <p>Hi there,</p>
         <p>We received a request to reset your password. If this was you, please click the link below to reset your password:</p>
-        <p><a href="${resetURL}" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Reset Password</a></p>
+        <p><a href="${resetURL}" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Reset Password</a>
+</p>
         <p>If you didn't request to reset your password, please ignore this email. Your account is still safe and no changes have been made.</p>
         <p>Additionally, here is your One-Time Password (OTP) for verification: <strong>${otp}</strong></p>
         <p>Thank you,<br>CollectiveCoin Team</p>

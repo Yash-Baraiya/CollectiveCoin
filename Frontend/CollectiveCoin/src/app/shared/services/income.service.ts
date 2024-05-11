@@ -105,16 +105,15 @@ export class IncomeService {
           obseraver.next();
         },
         (error) => {
-          if (error.error.messege) {
-            this.showMessage(error.error.messege);
+          console.log(error);
+          if (error.error.message) {
+            this.showMessage(error.error.message);
           } else {
             this.showMessage(
               'there was problem loading this page please login again '
             );
-            this.router.navigate(['/login']);
           }
           if (error.error.messege === 'please login first') {
-            this.router.navigate(['/login']);
           }
         }
       );
@@ -129,7 +128,10 @@ export class IncomeService {
           (resultData) => {
             console.log(resultData);
             this.showMessage('income deleted successfully');
-            this.getIncome();
+
+            this.getIncome().subscribe(() => {
+              console.log('delete expense get income is getting called');
+            });
           },
           (error) => {
             console.log(error);

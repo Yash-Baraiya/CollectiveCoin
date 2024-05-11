@@ -82,7 +82,10 @@ export const deleteTransaction = async (
     }
 
     if (expense) {
-      if (user.name.trim() !== expense.addedBy?.toString()) {
+      console.log(user.name, expense.addedBy);
+      if (
+        user.name.trim().toLowerCase() !== expense.addedBy?.trim().toLowerCase()
+      ) {
         return res.status(403).json({
           status: "failed",
           message: `This expense is added by ${expense.addedBy}. You are not allowed to delete it`,
@@ -94,7 +97,9 @@ export const deleteTransaction = async (
       res.status(200).json({ status: "success", message: "Expense Deleted" });
     }
     if (income) {
-      if (user.name.trim().toString() !== income.addedBy?.trim().toString()) {
+      if (
+        user.name.trim().toLowerCase() !== income.addedBy?.trim().toLowerCase()
+      ) {
         return res.status(403).json({
           status: "failed",
           message: `This income is added by ${income.addedBy}. You are not allowed to delete it`,

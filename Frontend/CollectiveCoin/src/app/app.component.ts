@@ -1,7 +1,4 @@
-import { Component, HostListener, ViewChild } from '@angular/core';
-import { ClearStorageService } from './shared/services/clear-storage.service';
-import { LoginDataService } from './shared/services/login-data.service';
-import { SidebarComponent } from './shared/sidebar/sidebar.component';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -10,6 +7,6 @@ import { SidebarComponent } from './shared/sidebar/sidebar.component';
 })
 export class AppComponent {
   title = 'CollectiveCoin';
-  @ViewChild(SidebarComponent) sidebarcomponent!: SidebarComponent;
+
   constructor() {}
 }

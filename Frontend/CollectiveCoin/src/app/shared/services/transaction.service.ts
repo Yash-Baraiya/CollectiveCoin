@@ -91,26 +91,29 @@ export class TransactionService {
 
   deleteTransaction(id: string) {
     console.log('delete transactions id', id);
-    this.http
-      .delete(`${environment.transactionsApiUrl}/delete-transaction/${id}`)
-      .subscribe(
-        (resultData) => {
-          if (confirm('are you sure you want to delete this tranaction'))
+    if (confirm('are you sure you want to delete this tranaction')) {
+      this.http
+        .delete(`${environment.transactionsApiUrl}/delete-transaction/${id}`)
+        .subscribe(
+          (resultData) => {
             console.log(resultData);
-          this.showMessage('transaction deleted successfully');
-          this.gettAllTransactions();
-        },
-        (error) => {
-          console.log(error);
-          if (error.error.message) {
-            this.showMessage(error.error.message);
-          } else {
-            this.showMessage(
-              'somthing went wrong please try again after some time'
-            );
+            this.showMessage('transaction deleted successfully');
+            this.gettAllTransactions().subscribe(() => {
+              console.log('delete transactions is being called');
+            });
+          },
+          (error) => {
+            console.log(error);
+            if (error.error.message) {
+              this.showMessage(error.error.message);
+            } else {
+              this.showMessage(
+                'somthing went wrong please try again after some time'
+              );
+            }
           }
-        }
-      );
+        );
+    }
   }
 
   getFilteredTransactions(): void {
