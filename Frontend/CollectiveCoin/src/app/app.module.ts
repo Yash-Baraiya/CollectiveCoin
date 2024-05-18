@@ -19,13 +19,17 @@ import { SharedModule } from './shared/shared.module';
 import { CoverpageComponent } from './coverpage/coverpage.component';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
-import { reducer } from './members/memberstore/members.reducer';
+import { reducer as membersReducer } from './members/memberstore/members.reducer';
 import { MembersEffects } from './members/memberstore/members.effects';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { UpdateProfileComponent } from './user/updateProfile/updateProfile.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { NotFoundComponent } from './404/404.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { reducer as transactionReducer } from './transactions/trasactionStore/transactions.reducer';
+import { TransactionEffects } from './transactions/trasactionStore/transactions.effects';
+import { PreloadingStrategy } from '@angular/router';
+import { incomePreloadingStrategy } from './incomeModule/preloading';
 
 @NgModule({
   declarations: [
@@ -49,8 +53,10 @@ import { NgxPaginationModule } from 'ngx-pagination';
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MatSnackBarModule,
-    StoreModule.forRoot({ members: reducer }),
-    EffectsModule.forRoot([MembersEffects]),
+    StoreModule.forRoot({}),
+    StoreModule.forFeature('members', membersReducer),
+    StoreModule.forFeature('transactions', transactionReducer),
+    EffectsModule.forRoot([MembersEffects, TransactionEffects]),
     SharedModule,
     NgxSpinnerModule,
     NgxPaginationModule,
@@ -59,7 +65,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     provideAnimationsAsync(),
     DatePipe,
-    provideAnimationsAsync('noop'),
+    { provide: PreloadingStrategy, useClass: incomePreloadingStrategy },
   ],
   bootstrap: [AppComponent],
 })

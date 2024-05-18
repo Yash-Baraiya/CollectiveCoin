@@ -11,7 +11,10 @@
           </button>
         </div>
         <div *ngIf="showFilters">
-          <form class="filterform" [formGroup]="transactionservice.filtersForm">
+          <form
+            class="filterform"
+            [formGroup]="transactionsservice.filtersForm"
+          >
             <div class="form-row">
               <div class="selects input-control">
                 <label
@@ -43,7 +46,7 @@
               <div class="form-group">
                 <button
                   class="formbtn apply-btn"
-                  (click)="transactionservice.getFilteredTransactions()"
+                  (click)="getFilteredTransactions()"
                 >
                   Apply
                 </button>
@@ -56,20 +59,21 @@
         </div>
         <app-items
           *ngFor="
-            let transaction of transactionservice.alltransactions
+            let transaction of allTransactions$
+              | async
               | paginate
                 : {
                     itemsPerPage: 5,
                     currentPage: currentPage,
-                    totalItems: totalItems
+                    totalItems: totalItems$ | async
                   }
           "
           [item]="transaction"
-          [deleteMethod]="transactionservice.deleteTransaction"
+          [deleteMethod]="deleteMethod"
         ></app-items>
-        <li style="margin-left: 325px" *ngIf="totalItems > 5">
+        <li style="margin-left: 325px" *ngIf="(totalItems$ | async) > 5">
           <pagination-controls
-            (pageChange)="currentPage = $event"
+            (pageChange)="changePage($event)"
           ></pagination-controls>
         </li>
       </main>

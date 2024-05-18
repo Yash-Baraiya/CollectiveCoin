@@ -29,14 +29,18 @@ export const getalltransactions = async (
     }
     const familycode = await user.familycode;
 
-    const incomes = await Income.find({ familycode: familycode });
-    const expenses = await Expense.find({ familycode: familycode });
+    const incomes: Array<any> = await Income.find({ familycode: familycode });
+    const expenses: Array<any> = await Expense.find({ familycode: familycode });
+
+    const transactions: Array<any> = incomes.concat(expenses).sort((a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+      return dateB.getTime() - dateA.getTime();
+    });
 
     console.log("get all transactions api ended");
     res.status(200).json({
-      status: "success",
-      incomes,
-      expenses,
+      transactions,
     });
     return { incomes, expenses };
   } catch (error: any) {
@@ -217,9 +221,9 @@ export const getFilteredTransactions = async (
           (transactions = incomes.concat(expenses));
       }
 
+      console.log(req.query);
       console.log("get filtered transactions api finished");
       res.status(200).json({
-        status: "success",
         transactions,
       });
     }

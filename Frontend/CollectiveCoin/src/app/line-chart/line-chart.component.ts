@@ -3,6 +3,10 @@ import { Chart, registerables } from 'chart.js';
 import { IncomeService } from '../shared/services/income.service';
 import { ExpenseService } from '../shared/services/expense.service';
 import { Observable, timestamp } from 'rxjs';
+import { IncomeState } from '../incomeModule/incomeStore/income.reducer';
+import { Store } from '@ngrx/store';
+import { loadIncomes } from '../incomeModule/incomeStore/income.actions';
+import { selectIncomeData } from '../incomeModule/incomeStore/income.selector';
 
 @Component({
   selector: 'app-line-chart',
@@ -12,6 +16,7 @@ import { Observable, timestamp } from 'rxjs';
 export class LineChartComponent implements OnInit {
   incomeamounts: Array<number> = [];
   expenseamounts: Array<number> = [];
+  incomedata$: Observable<any[]>;
 
   labels = this.getDaysInMonth(
     new Date().getMonth() + 1,
@@ -19,18 +24,19 @@ export class LineChartComponent implements OnInit {
   ).map((date) => date);
 
   constructor(
-    private incomeservice: IncomeService,
-    private expenseservice: ExpenseService
+    private expenseservice: ExpenseService,
+    private store: Store<IncomeState>
   ) {
     Chart.register(...registerables);
+
+    this.incomedata$ = this.store.select(selectIncomeData);
   }
 
   ngOnInit() {
-    this.incomeservice.getIncome().subscribe(() => {
-      this.expenseservice.getExpense().subscribe(() => {
-        this.fetchData().subscribe(() => {
-          this.createChart();
-        });
+    this.store.dispatch(loadIncomes());
+    this.expenseservice.getExpense().subscribe(() => {
+      this.fetchData().subscribe(() => {
+        this.createChart();
       });
     });
   }
@@ -39,19 +45,14 @@ export class LineChartComponent implements OnInit {
   fetchData(): Observable<any> {
     return new Observable((obseraver) => {
       this.labels.forEach((label) => {
-        let value: boolean;
-
-        for (let i = 0; i < this.incomeservice.incamounts.length; i++) {
-          
-          if (this.incomeservice.incamounts[i].date === label) {
-            this.incomeamounts.push(this.incomeservice.incamounts[i].amount);
-            value = true;
-            break;
-          }
-        }
-        if (!value) {
-          this.incomeamounts.push(null);
-        }
+        this.incomedata$.subscribe((incomeData) => {
+          this.labels.forEach((label) => {
+            const income = incomeData.find(
+              (item) => this.formatDateString(item.date) === label
+            );
+            this.incomeamounts.push(income ? income.amount : null);
+          });
+        });
       });
       this.labels.forEach((label) => {
         let value: boolean;
@@ -107,6 +108,14 @@ export class LineChartComponent implements OnInit {
         responsive: true,
       },
     });
+  }
+  formatDateString(dateString: string): string {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is zero-based
+    const year = date.getFullYear();
+
+    return `${day}/${month}/${year}`;
   }
 
   //method for getting formated dates of every month

@@ -8,7 +8,7 @@
           <div class="con-content1">
             <h2 class="total-income">
               Total Income:
-              <span style="color: green">${{ incomeservice.totalIncome }}</span>
+              <span style="color: green">${{ totalIncome$ | async }}</span>
             </h2>
             <div class="income-content">
               <div class="form-container">
@@ -195,17 +195,9 @@
               </div>
               <div class="incomes">
                 <app-items
-                  *ngFor="
-                    let income of incomeservice.data
-                      | paginate
-                        : {
-                            itemsPerPage: 4,
-                            currentPage: currentPage,
-                            totalItems: totalItems
-                          }
-                  "
+                  *ngFor="let income of incomes$ | async"
                   [item]="income"
-                  [deleteMethod]="incomeservice.deleteIncome"
+                  [deleteMethod]="deleteMethod"
                   [updateMethod]="updateIncome"
                 ></app-items>
               </div>

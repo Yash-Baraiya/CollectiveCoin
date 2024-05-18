@@ -1,102 +1,153 @@
 import { Component, OnInit } from '@angular/core';
+import { Store, select } from '@ngrx/store';
+import { Observable, take } from 'rxjs';
 import * as jspdf from 'jspdf';
 import 'jspdf-autotable';
 import { Router } from '@angular/router';
+import {
+  TransactionState,
+  transactionReducer,
+} from './trasactionStore/transactions.reducer';
+import {
+  deleteTransaction,
+  filterTransactions,
+  loadTransactions,
+} from './trasactionStore/transactions.action';
+import {
+  selectAllTransactions,
+  selectTotalTransactions,
+} from './trasactionStore/transactions.selector';
+import { map } from 'rxjs';
 import { TransactionService } from '../shared/services/transaction.service';
+
 @Component({
   selector: 'app-transactions',
   templateUrl: './transactions.component.html',
-  styleUrl: './transactions.component.css',
+  styleUrls: ['./transactions.component.css'],
 })
 export class TransactionsComponent implements OnInit {
-  currentPage: number = 1;
+  // // previousPage() {
+  // //   if (this.currentPage > 1) {
+  // //     this.currentPage--;
+  // //     this.transactionservice.gettAllTransactions();
+  // //   }
+  // // }
 
-  totalItems: number;
+  // // nextPage() {
+  // //   if (this.currentPage < this.totalPages) {
+  // //     this.currentPage++;
+  // //     this.transactionservice.gettAllTransactions();
+  // //   }
+  // // }
+
+  // clearFilters() {
+  //   console.log('button is clicked');
+
+  //   // this.transactionservice.filtersForm.reset();
+  //   // this.transactionservice.gettAllTransactions();
+  // }
+
+  currentPage$: number = 1;
+
+  totalItems$: Observable<number>;
+  allTransactions$: Observable<any[]>;
   showFilters: boolean = false;
-  toggleFilters() {
-    this.showFilters = !this.showFilters;
-  }
+  deleteMethod: Function;
+  currentPage: any;
+
   constructor(
-    public transactionservice: TransactionService,
-    private router: Router
+    private store: Store<TransactionState>,
+    private router: Router,
+    public transactionsservice: TransactionService
   ) {}
 
   ngOnInit(): void {
-    this.transactionservice.gettAllTransactions().subscribe(() => {
-      this.currentPage = 1;
-      this.totalItems = this.transactionservice.alltransactions.length;
+    this.store.dispatch(loadTransactions());
+    this.deleteMethod = deleteTransaction;
+
+    this.allTransactions$ = this.store.select(selectAllTransactions);
+    this.allTransactions$.subscribe(() => {
+      console.log('trana', this.allTransactions$);
     });
+    this.totalItems$ = this.store.pipe(select(selectTotalTransactions));
   }
+
+  toggleFilters() {
+    this.showFilters = !this.showFilters;
+  }
+
   downloadTransactionsPDF(): void {
     try {
       const pdf = new jspdf.jsPDF();
 
       const columns = ['Title', 'Type', 'Amount', 'Date', 'Added By'];
 
-      const rows = this.transactionservice.alltransactions.map(
-        (transaction: any) => [
-          transaction.title,
-          transaction.type,
-          transaction.amount,
-          transaction.date,
-          transaction.addedBy,
-        ]
-      );
+      let rows = [];
+      console.log('coming here', this.allTransactions$);
+      // Ensure the observables are defined before subscribing
+      if (this.allTransactions$) {
+        this.allTransactions$.subscribe((transactions) => {
+          rows = transactions.map((transaction) => [
+            transaction.title,
+            transaction.type,
+            transaction.amount,
+            transaction.date,
+            transaction.addedBy,
+          ]);
 
-      pdf.text('CollectiveCoin', 20, 20);
+          pdf.text('CollectiveCoin', 20, 20);
+          (pdf as any).autoTable({
+            startY: 40,
+            head: [columns],
+            body: rows,
+          });
+          pdf.text('Transactions Details :', 20, 35);
 
-      (pdf as any).autoTable({
-        startY: 40,
-        head: [columns],
-        body: rows,
-      });
-      pdf.text('Transactions Details :', 20, 35);
+          // Ensure the totalItems$ observable is defined before subscribing
+          if (this.totalItems$) {
+            this.totalItems$.subscribe((total) => {
+              pdf.text(`Total Transactions: ${total}`, 20, 200);
+            });
+          }
 
-      pdf.text(
-        `total Transactions :${this.transactionservice.alltransactions.length}`,
-        20,
-        120
-      );
-
-      pdf.save('transactions.pdf');
+          pdf.save('transactions.pdf');
+        });
+      }
     } catch (error) {
       console.error('Error downloading transactions PDF:', error);
     }
   }
-
-  updateTransaction(id: string, type: string) {
-    console.log('transaction', id, type);
-    if (type === 'expense') {
-      this.router.navigate([`Expense/update-expense/${id}`]);
-    } else {
-      this.router.navigate([`Income/update-income/${id}`]);
-    }
+  getFilteredTransactions(): void {
+    const formData = this.transactionsservice.filtersForm.value;
+    console.log(formData);
+    this.store.dispatch(filterTransactions({ formData }));
   }
-  // previousPage() {
-  //   if (this.currentPage > 1) {
-  //     this.currentPage--;
-  //     this.transactionservice.gettAllTransactions();
-  //   }
-  // }
 
-  // nextPage() {
-  //   if (this.currentPage < this.totalPages) {
-  //     this.currentPage++;
-  //     this.transactionservice.gettAllTransactions();
-  //   }
-  // }
+  nextPage() {
+    this.currentPage = this.currentPage + 1;
+    this.store.dispatch(loadTransactions());
+  }
+  previousPage() {
+    this.currentPage = this.currentPage - 1;
+    this.store.dispatch(loadTransactions());
+  }
+  changePage(page: number) {
+    this.totalItems$.pipe(take(1)).subscribe((totalItems) => {
+      const totalPages = Math.ceil(totalItems / 5);
+      if (page >= 1 && page <= totalPages) {
+        this.currentPage = page;
+        this.loadCurrentPage();
+      }
+    });
+  }
 
-  // changePage(page: number) {
-  //   if (page >= 1 && page <= this.totalPages) {
-  //     this.currentPage = page;
-  //     this.transactionservice.gettAllTransactions();
-  //   }
-  // }
+  private loadCurrentPage() {
+    // this.store.dispatch(loadTransactions({ page: this.currentPage$, itemsPerPage: 5 }));
+  }
 
   clearFilters() {
     console.log('button is clicked');
-
-    this.transactionservice.filtersForm.reset();
-    this.transactionservice.gettAllTransactions();
+    this.transactionsservice.filtersForm.reset();
+    this.store.dispatch(loadTransactions());
   }
 }

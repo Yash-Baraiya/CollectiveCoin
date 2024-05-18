@@ -6,7 +6,10 @@ import { SharedModule } from '../shared/shared.module';
 import { IncomeModuleRoutingModule } from './income-module-routing.module';
 import { UpdateincomeComponent } from './updateincome/updateincome.component';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { ItemsComponent } from '../shared/items/items.component';
+import { StoreModule } from '@ngrx/store';
+import { incomeReducer } from './incomeStore/income.reducer';
+import { IncomeEffects } from './incomeStore/income.effects';
+import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
   declarations: [IncomeComponent, UpdateincomeComponent],
@@ -17,6 +20,8 @@ import { ItemsComponent } from '../shared/items/items.component';
     SharedModule,
     IncomeModuleRoutingModule,
     NgxPaginationModule,
+    StoreModule.forFeature('income', incomeReducer),
+    EffectsModule.forFeature([IncomeEffects]),
   ],
 })
 export class IncomeModule {

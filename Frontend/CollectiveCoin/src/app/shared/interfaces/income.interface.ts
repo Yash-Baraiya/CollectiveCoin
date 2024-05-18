@@ -1,5 +1,4 @@
 interface IncomeResponse {
-  status: string;
   totalincome: number;
   monthlyincome: Array<income>;
   yearlyTotalincome: number;

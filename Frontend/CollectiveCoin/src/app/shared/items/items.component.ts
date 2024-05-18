@@ -6,6 +6,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { TransactionService } from '../services/transaction.service';
 import { IncomeService } from '../services/income.service';
 import { BudgetService } from '../services/budget.service';
+import { Store } from '@ngrx/store';
+import { IncomeState } from '../../incomeModule/incomeStore/income.reducer';
+import * as incomeActions from './../../incomeModule/incomeStore/income.actions';
+import * as transactionsActions from './../../transactions/trasactionStore/transactions.action';
+import { TransactionState } from '../../transactions/trasactionStore/transactions.reducer';
 
 @Component({
   selector: 'app-items',
@@ -14,7 +19,7 @@ import { BudgetService } from '../services/budget.service';
 })
 export class ItemsComponent implements OnInit {
   @Input() item: any;
-  @Input() deleteMethod: Function;
+  @Input() deleteMethod?: Function;
   @Input() updateMethod?: Function;
   constructor(
     public expenseservice: ExpenseService,
@@ -23,28 +28,34 @@ export class ItemsComponent implements OnInit {
     private snackBar: MatSnackBar,
     public transactionservice: TransactionService,
     public incomeservice: IncomeService,
-    public budgetservice: BudgetService
+    public budgetservice: BudgetService,
+    private incomestore: Store<IncomeState>,
+    private transactionstore: Store<TransactionState>
   ) {}
 
   ngOnInit(): void {}
 
-  deleteItem(id: any) {
+  deleteItem() {
+    const id = this.item.id || this.item._id;
+
     if (this.deleteMethod) {
-      if (this.deleteMethod === this.incomeservice.deleteIncome) {
-        this.incomeservice.deleteIncome(id);
+      if (this.deleteMethod === incomeActions.deleteIncome) {
+        this.incomestore.dispatch(incomeActions.deleteIncome({ id }));
       } else if (this.deleteMethod === this.expenseservice.deleteExpense) {
         this.expenseservice.deleteExpense(id);
-      } else if (
-        (this.deleteMethod = this.transactionservice.deleteTransaction)
-      ) {
-        this.transactionservice.deleteTransaction(id);
+      } else if (this.deleteMethod === transactionsActions.deleteTransaction) {
+        console.log(id);
+        this.transactionstore.dispatch(
+          transactionsActions.deleteTransaction({ id })
+        );
       }
     } else {
       console.log('deleteMethod is not defined');
     }
   }
 
-  updateItem(id: string) {
+  updateItem() {
+    const id = this.item.id || this.item._id;
     console.log('update method is being called for id ', id);
 
     if (this.updateMethod) {
