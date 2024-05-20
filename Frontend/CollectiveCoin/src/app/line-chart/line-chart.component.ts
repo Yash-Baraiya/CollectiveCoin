@@ -48,7 +48,7 @@ export class LineChartComponent implements OnInit {
         this.incomedata$.subscribe((incomeData) => {
           this.labels.forEach((label) => {
             const income = incomeData.find(
-              (item) => this.formatDateString(item.date) === label
+              (income) => this.formatDateString(income.date) === label
             );
             this.incomeamounts.push(income ? income.amount : null);
           });

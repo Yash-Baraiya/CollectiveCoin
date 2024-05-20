@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { LoginDataService } from '../../shared/services/login-data.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -20,7 +20,6 @@ export class UpdateProfileComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private loginDataService: LoginDataService,
-    private router: Router,
     private snackBar: MatSnackBar
   ) {}
 

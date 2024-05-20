@@ -136,13 +136,8 @@ export class TransactionsComponent implements OnInit {
       const totalPages = Math.ceil(totalItems / 5);
       if (page >= 1 && page <= totalPages) {
         this.currentPage = page;
-        this.loadCurrentPage();
       }
     });
-  }
-
-  private loadCurrentPage() {
-    // this.store.dispatch(loadTransactions({ page: this.currentPage$, itemsPerPage: 5 }));
   }
 
   clearFilters() {

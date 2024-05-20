@@ -360,6 +360,6 @@ cron.schedule("0 0 1 * *", async () => {
       console.log("Monthly subscriptions expense added successfully.");
     });
   } catch (error) {
-    console.error("Error adding monthly subscriptions expense:", error);
+    console.log("Error adding monthly subscriptions expense:", error);
   }
 });
