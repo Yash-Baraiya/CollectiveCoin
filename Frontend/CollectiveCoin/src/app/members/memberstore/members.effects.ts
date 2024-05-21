@@ -34,7 +34,7 @@ export class MembersEffects {
             MembersActions.loadMembersSuccess({ members: response.members })
           ),
           catchError((error) => {
-            this.showErrorMessage(error.error.message);
+            this.showMessage(error.error.message);
             return of(MembersActions.loadMembersFailure({ error }));
           })
         )
@@ -49,7 +49,7 @@ export class MembersEffects {
         this.http.post(`${environment.userApiUrl}/add-member`, member).pipe(
           map(() => MembersActions.addMemberSuccess({ member })),
           catchError((error) => {
-            this.showErrorMessage(error.error.message);
+            this.showMessage(error.error.message);
 
             return of(MembersActions.addMemberFailure({ error }));
           })
@@ -67,10 +67,10 @@ export class MembersEffects {
           .pipe(
             map(() => MembersActions.deleteMemberSuccess({ id })),
             tap(() => {
-              this.store.dispatch(MembersActions.loadMembers());
+              this.showMessage('member deleted successfully');
             }),
             catchError((error) => {
-              this.showErrorMessage(error.error.message);
+              this.showMessage(error.error.message);
               return of(MembersActions.deleteMemberFailure({ error }));
             })
           )
@@ -88,7 +88,7 @@ export class MembersEffects {
             this.router.navigate(['/login']);
           }),
           catchError((error) => {
-            this.showErrorMessage(error.error.message);
+            this.showMessage(error.error.message);
             return of(MembersActions.deleteFamilyFailure({ error }));
           })
         )
@@ -101,12 +101,14 @@ export class MembersEffects {
       ofType(MembersActions.makeAdmin),
       switchMap(({ id }) =>
         this.http.patch(`${environment.userApiUrl}/makeadmin/${id}`, {}).pipe(
-          map(() => MembersActions.makeAdminSuccess({ id })),
+          map(() => {
+            return MembersActions.makeAdminSuccess({ id });
+          }),
           tap(() => {
-            this.store.dispatch(MembersActions.loadMembers());
+            this.showMessage('role changed successfully');
           }),
           catchError((error) => {
-            this.showErrorMessage(error.error.message);
+            this.showMessage(error.error.message);
             return of(MembersActions.makeAdminFailure({ error }));
           })
         )
@@ -119,13 +121,16 @@ export class MembersEffects {
       ofType(MembersActions.makeEarner),
       switchMap(({ id }) =>
         this.http.patch(`${environment.userApiUrl}/makeearner/${id}`, {}).pipe(
-          map(() => MembersActions.makeEarnerSuccess({ id })),
+          map((res) => {
+            console.log(res);
+            return MembersActions.makeEarnerSuccess({ id });
+          }),
           tap(() => {
-            this.store.dispatch(MembersActions.loadMembers());
+            this.showMessage('earning status changed successfully');
           }),
 
           catchError((error) => {
-            this.showErrorMessage(error.error.message);
+            this.showMessage(error.error.message);
             return of(MembersActions.makeEarnerFailure({ error }));
           })
         )
@@ -140,12 +145,12 @@ export class MembersEffects {
         this.http.post(`${environment.userApiUrl}/sendmail`, bodyData).pipe(
           map(() => MembersActions.emailAdminSuccess()),
           tap(() => {
-            this.store.dispatch(MembersActions.loadMembers());
+            this.showMessage('mail sent successfully');
           }),
 
           catchError((error) => {
             console.log(error.error.message);
-            this.showErrorMessage(error.error.message);
+            this.showMessage(error.error.message);
 
             return of(MembersActions.emailAdminFailure({ error }));
           })
@@ -153,7 +158,7 @@ export class MembersEffects {
       )
     )
   );
-  private showErrorMessage(message: string) {
+  private showMessage(message: string) {
     this.snackBar.open(message || 'An error occurred', 'Close', {
       duration: 5000,
       panelClass: ['snackbar-error'],

@@ -96,9 +96,10 @@ export class UpdateProfileComponent implements OnInit {
           console.log(resultData);
           if (resultData.status === 'success') {
             this.loginDataService.isLoggedin().subscribe(() => {
+              //this.loginDataService.photoSubject.next(resultData.data.photo);
               this.photo = this.loginDataService.photo;
             });
-            this.showMessage('Image uploaded successfully');
+            this.showMessage('Image updated successfully');
           } else {
             this.showMessage(resultData.message);
           }
@@ -120,6 +121,7 @@ export class UpdateProfileComponent implements OnInit {
           console.log(resultData);
           if (resultData.status === 'success') {
             this.loginDataService.setData(resultData);
+
             this.showMessage('password updated successfully');
           } else {
             this.showMessage(resultData.message);

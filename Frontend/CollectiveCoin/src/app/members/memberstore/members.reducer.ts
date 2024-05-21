@@ -35,7 +35,6 @@ export const membersReducer = createReducer(
   })),
   on(MembersActions.addMemberSuccess, (state, { member }) => ({
     ...state,
-    members: [...state.members],
   })),
   on(MembersActions.deleteMemberSuccess, (state, { id }) => ({
     ...state,
@@ -47,31 +46,23 @@ export const membersReducer = createReducer(
   })),
   on(MembersActions.makeAdminSuccess, (state, { id }) => ({
     ...state,
-    members: [
-      ...state.members,
-      state.members.map((member) => {
-        if (id === member.id) {
-          return { ...member, role: member.role === 'user' ? 'admin' : 'user' };
-        }
+    members: state.members.map((member) => {
+      if (id === member._id) {
+        console.log(member);
+        return { ...member, role: member.role === 'user' ? 'admin' : 'user' };
+      }
 
-        return member;
-      }),
-    ],
+      return member;
+    }),
   })),
   on(MembersActions.makeEarnerSuccess, (state, { id }) => ({
     ...state,
-    members: [
-      ...state.members,
-      state.members.map((member) => {
-        if (id === member.id) {
-          if (member.isEarning === true) {
-            member.isEarning = false;
-          } else {
-            member.isEarning = true;
-          }
-        }
-      }),
-    ],
+    members: state.members.map((member) => {
+      if (member._id === id) {
+        return { ...member, isEarning: !member.isEarning };
+      }
+      return member;
+    }),
   })),
   on(MembersActions.emailAdminSuccess, (state) => ({
     ...state,

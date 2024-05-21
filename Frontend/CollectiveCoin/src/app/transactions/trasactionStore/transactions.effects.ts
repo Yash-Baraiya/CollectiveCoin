@@ -7,6 +7,7 @@ import { TransactionService } from '../../shared/services/transaction.service';
 import { TransactionState } from './transactions.reducer';
 import { Store } from '@ngrx/store';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DatePipe } from '@angular/common';
 
 @Injectable()
 export class TransactionEffects {
@@ -14,7 +15,8 @@ export class TransactionEffects {
     private actions$: Actions,
     private transactionService: TransactionService,
     private store: Store<TransactionState>,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private datePipe: DatePipe
   ) {}
 
   loadTransactions$ = createEffect(() =>
@@ -22,11 +24,18 @@ export class TransactionEffects {
       ofType(TransactionActions.loadTransactions),
       switchMap(() =>
         this.transactionService.getAllTransactions().pipe(
-          map((data) =>
-            TransactionActions.transactionsLoaded({
-              transactions: data.transactions,
-            })
-          ),
+          map((data) => {
+            const formattedTransactions = data.transactions.map(
+              (transaction) => ({
+                ...transaction,
+                date: this.datePipe.transform(transaction.date, 'dd/MM/yyyy'),
+              })
+            );
+
+            return TransactionActions.transactionsLoaded({
+              transactions: formattedTransactions,
+            });
+          }),
           catchError((error) =>
             of(TransactionActions.transactionsLoadFailed({ error }))
           )

@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { AppState } from './memberstore/members.reducer';
 import * as MembersActions from './memberstore/members.action';
 import { LoginDataService } from '../shared/services/login-data.service';
+import { selectMembers } from './memberstore/members.selector';
 
 @Component({
   selector: 'app-members',
@@ -40,9 +41,9 @@ export class MembersComponent implements OnInit {
     this.logindataservice.isLoggedin().subscribe(() => {
       this.role = this.logindataservice.role;
       this.priority = this.logindataservice.priority;
-      this.allmembers$ = this.store.select((state) => state.members.members);
-
       this.store.dispatch(MembersActions.loadMembers());
+      this.allmembers$ = this.store.select(selectMembers);
+      console.log(this.allmembers$);
     });
   }
 

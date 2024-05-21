@@ -26,27 +26,6 @@ import { TransactionService } from '../shared/services/transaction.service';
   styleUrls: ['./transactions.component.css'],
 })
 export class TransactionsComponent implements OnInit {
-  // // previousPage() {
-  // //   if (this.currentPage > 1) {
-  // //     this.currentPage--;
-  // //     this.transactionservice.gettAllTransactions();
-  // //   }
-  // // }
-
-  // // nextPage() {
-  // //   if (this.currentPage < this.totalPages) {
-  // //     this.currentPage++;
-  // //     this.transactionservice.gettAllTransactions();
-  // //   }
-  // // }
-
-  // clearFilters() {
-  //   console.log('button is clicked');
-
-  //   // this.transactionservice.filtersForm.reset();
-  //   // this.transactionservice.gettAllTransactions();
-  // }
-
   currentPage$: number = 1;
 
   totalItems$: Observable<number>;
@@ -57,7 +36,6 @@ export class TransactionsComponent implements OnInit {
 
   constructor(
     private store: Store<TransactionState>,
-    private router: Router,
     public transactionsservice: TransactionService
   ) {}
 

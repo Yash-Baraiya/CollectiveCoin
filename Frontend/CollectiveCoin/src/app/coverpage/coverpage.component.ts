@@ -9,6 +9,6 @@ declare var $: any;
 })
 export class CoverpageComponent implements AfterViewInit {
   ngAfterViewInit(): void {
-    $('#carouselExampleIndicators').carousel();
+    //$('#carouselExampleIndicators').carousel();
   }
 }

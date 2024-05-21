@@ -23,7 +23,8 @@ export class UpdatebudgetComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private http: HttpClient,
     private datepipe: DatePipe,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router: Router
   ) {}
   ngOnInit(): void {
     this.route.params.subscribe((param) => {
@@ -48,6 +49,7 @@ export class UpdatebudgetComponent implements OnInit, OnDestroy {
               });
             } else {
               console.log('Budget data is undefined.');
+              this.router.navigate['/Budget'];
             }
           }
         });

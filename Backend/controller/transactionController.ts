@@ -178,6 +178,7 @@ export const getFilteredTransactions = async (
       }
 
       if (startDate && endDate && startDate !== "null" && endDate !== "null") {
+        console.log("coming here");
         const StartDateD = new Date(startDate as string);
         const EndDateD = new Date(endDate as string);
         if (isNaN(StartDateD.getTime()) || isNaN(EndDateD.getTime())) {

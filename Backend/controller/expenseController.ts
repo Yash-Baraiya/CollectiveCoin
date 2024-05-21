@@ -4,6 +4,7 @@ import User from "../models/userModel";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
 import sendEmail from "../utils/email";
+import * as fs from "fs";
 import * as cron from "node-cron";
 
 //method for adding the expense
@@ -297,7 +298,7 @@ export const updateExpense = async (req: Request, res: Response) => {
     console.log(req.params.expenseId);
     let expense = await Expense.findById({ _id: req.params.expenseId });
     if (!expense) {
-      throw new Error("income not found");
+      throw new Error("expense not found");
     }
     console.log(expense);
     if (
@@ -336,30 +337,96 @@ export const updateExpense = async (req: Request, res: Response) => {
   }
 };
 
-cron.schedule("0 0 1 * *", async () => {
+cron.schedule("0 0 * * *", async () => {
   try {
     const expenses = await Expense.find({ category: "subscriptions" });
 
-    const currentDate = new Date();
-    const firstDayOfMonth = new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth(),
-      1
-    );
+    const currentDayOfMonth = new Date().getDate();
 
-    expenses.forEach((expense) => {
-      Expense.create({
-        title: expense.title,
-        amount: expense.amount,
-        category: "subscriptions",
-        description: expense.description,
-        date: firstDayOfMonth,
-        addedBy: expense.addedBy,
-        familycode: expense.familycode,
-      });
-      console.log("Monthly subscriptions expense added successfully.");
-    });
+    for (const expense of expenses) {
+      const expenseDayOfMonth = expense.date.getDate();
+
+      if (currentDayOfMonth === expenseDayOfMonth) {
+        await Expense.create({
+          title: expense.title,
+          amount: expense.amount,
+          category: "subscriptions",
+          description: expense.description,
+          date: new Date(),
+          addedBy: expense.addedBy,
+          familycode: expense.familycode,
+        });
+
+        console.log("Monthly subscriptions expense added successfully.");
+      }
+    }
   } catch (error) {
     console.log("Error adding monthly subscriptions expense:", error);
+  }
+});
+
+cron.schedule("0 0 * * *", async () => {
+  const fiveDayGap = new Date();
+  fiveDayGap.setDate(fiveDayGap.getDate() + 5);
+
+  const expenses = await Expense.find({
+    category: "monthlybills",
+    markAspaid: false,
+    duedate: { $ne: null, $lte: fiveDayGap },
+  });
+
+  for (let expense of expenses) {
+    const users = await User.find({ familycode: expense.familycode });
+
+    for (let user of users) {
+      await sendEmail({
+        from: "collectivecoin@team.in",
+        to: user.email,
+        subject: "Bill Due Reminder",
+        html: `<div
+        style="
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 0;
+          background-color: #f4f4f4;
+        "
+      >
+        <div
+          style="
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          "
+        >
+          <h1 style="color: #333">Payment Reminder</h1>
+          <p>Dear ${user},</p>
+          <p style="margin-bottom: 20px">
+            This is a friendly reminder that your payment for ${expense.title} is due in five days.
+          </p>
+          <p>
+            Please ensure that the payment is made by the due date to avoid any
+            inconvenience.
+          </p>
+          <p>Thank you for your prompt attention to this matter.</p>
+          <a
+            href="localhost:4200/login"
+            style="
+              display: inline-block;
+              padding: 10px 20px;
+              background-color: #007bff;
+              color: #fff;
+              text-decoration: none;
+              border-radius: 5px;
+            "
+            >Make Payment</a
+          >
+        </div>
+      </div>
+      `,
+      });
+    }
   }
 });

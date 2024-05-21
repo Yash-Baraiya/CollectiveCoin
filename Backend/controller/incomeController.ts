@@ -214,7 +214,7 @@ export const deleteIncome = async (
 
     const income = await Income.findById(req.params.incomeId);
     if (!income) {
-      throw new Error("income not found with that id");
+      throw new Error("income not found");
     }
     console.log(income.addedBy);
 

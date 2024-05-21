@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../environment';
 import resultData from '../interfaces/resultData.interface';
 @Injectable({
@@ -14,6 +14,12 @@ export class LoginDataService {
   isEarning: boolean;
   priority: number;
   email: string;
+
+  photoSubject = new BehaviorSubject<string>(null);
+  nameSubject = new BehaviorSubject<string>(null);
+  photo$ = this.photoSubject.asObservable();
+  name$ = this.nameSubject.asObservable();
+
   constructor(private http: HttpClient) {}
 
   //method for setting the user's data to local storange
@@ -26,6 +32,9 @@ export class LoginDataService {
     this.isEarning = this.data.data.user.isEarning;
     this.priority = this.data.data.user.priority;
     this.email = this.data.data.user.email;
+
+    this.photoSubject.next(this.photo);
+    this.nameSubject.next(this.username);
 
     if (this.data.token) {
       localStorage.setItem('loginToken', this.data.token);

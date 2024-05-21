@@ -25,8 +25,12 @@ export class SidebarComponent implements OnInit {
   ngOnInit(): void {
     this.logindataservice.isLoggedin().subscribe((resultData) => {
       this.name = this.logindataservice.username;
-      this.photo = this.logindataservice.photo;
-      console.log(this.name, this.photo);
+      this.logindataservice.photo$.subscribe((photo) => {
+        this.photo = photo;
+      });
+      this.logindataservice.name$.subscribe((name) => {
+        this.name = name;
+      });
     });
   }
 

@@ -37,6 +37,19 @@ export const transactionReducer = createReducer(
     loading: false,
     error: null,
   })),
+  on(TransactionActions.deleteTransaction, (state, { id }) => ({
+    ...state,
+    transactions: {
+      transactions: state.transactions.transactions.filter(
+        (transaction) => transaction.id !== id || transaction._id !== id
+      ),
+    },
+    resentHistory: state.transactions.transactions
+      .filter((transaction) => transaction.id !== id)
+      .slice(0, 3),
+    loading: false,
+    error: null,
+  })),
   on(
     TransactionActions.filteredTransactionsLoaded,
     (state, { filteredTransactions }) => ({

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -12,6 +12,7 @@ import { IncomeState } from '../incomeStore/income.reducer';
 import { income } from '../../shared/interfaces/income.interface';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environment';
+import { loadIncomes } from '../incomeStore/income.actions';
 
 @Component({
   selector: 'app-updateincome',
@@ -29,7 +30,8 @@ export class UpdateincomeComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
     private store: Store<IncomeState>,
-    private http: HttpClient
+    private http: HttpClient,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -54,8 +56,7 @@ export class UpdateincomeComponent implements OnInit, OnDestroy {
 
       this.incomeDataSubscription = this.incomeData$.subscribe((incomeData) => {
         if (incomeData) {
-          this.incomeData = incomeData; // Assign incomeData
-          // Populate form fields with income data
+          this.incomeData = incomeData;
           this.updateIncomeForm.patchValue({
             title: incomeData.title,
             amount: incomeData.amount,
@@ -65,6 +66,7 @@ export class UpdateincomeComponent implements OnInit, OnDestroy {
           });
         } else {
           console.log('Income data not found.');
+          this.router.navigate(['/Income']);
         }
       });
     });
@@ -80,6 +82,7 @@ export class UpdateincomeComponent implements OnInit, OnDestroy {
           (resultData) => {
             try {
               this.showMessage('Income updated successfully');
+              this.store.dispatch(loadIncomes());
               console.log(resultData);
             } catch (error) {
               console.log(error);

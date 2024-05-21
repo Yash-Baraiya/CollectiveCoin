@@ -140,7 +140,6 @@ export const getMembers = async (req: Request, res: Response) => {
       return a.priority - b.priority;
     });
 
-    console.log(members);
     res.status(200).json({
       status: "success",
       members,
@@ -402,9 +401,10 @@ export const makeAdmin = async (req: Request, res: Response) => {
     }
 
     if (user.role === "user") {
-      const updateduser = await User.findByIdAndUpdate(
+      const updateduser = await User.findOneAndUpdate(
         { _id: req.params.id },
-        { role: "admin" }
+        { role: "admin" },
+        { new: true }
       );
       res.status(200).json({
         status: "success",
@@ -412,9 +412,10 @@ export const makeAdmin = async (req: Request, res: Response) => {
       });
     } else {
       if (user.priority > admin.priority) {
-        const updateduser = await User.findByIdAndUpdate(
+        const updateduser = await User.findOneAndUpdate(
           { _id: req.params.id },
-          { role: "user" }
+          { role: "user" },
+          { new: true }
         );
         res.status(200).json({
           status: "success",
@@ -465,20 +466,24 @@ export const toggleEarningState = async (req: Request, res: Response) => {
       (user.role === "admin" && user.priority > admin.priority)
     ) {
       if (user?.isEarning === false) {
-        const updateduser = await User.findByIdAndUpdate(
+        const updateduser = await User.findOneAndUpdate(
           { _id: req.params.id },
-          { isEarning: true }
+          { isEarning: true },
+          { new: true }
         );
+        console.log(updateduser);
         res.status(200).json({
           status: "success",
           updateduser,
         });
       } else {
-        const updateduser = await User.findByIdAndUpdate(
+        const updateduser = await User.findOneAndUpdate(
           { _id: req.params.id },
-          { isEarning: false }
+          { isEarning: false },
+          { new: true }
         );
         console.log("toggle earning state api ended");
+        console.log("updated user", updateduser);
         res.status(200).json({
           status: "success",
           updateduser,

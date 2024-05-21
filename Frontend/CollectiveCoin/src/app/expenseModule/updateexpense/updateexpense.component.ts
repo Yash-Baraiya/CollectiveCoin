@@ -24,7 +24,8 @@ export class UpdateexpenseComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private http: HttpClient,
     private datepipe: DatePipe,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router: Router
   ) {}
   ngOnInit(): void {
     this.updateExpenseForm = new FormGroup({
@@ -63,7 +64,8 @@ export class UpdateexpenseComponent implements OnInit, OnDestroy {
                 duedate: this.expenseData.duedate,
               });
             } else {
-              console.log('Budget data is undefined.');
+              console.log('Expense data is undefined.');
+              this.router.navigate(['/Expense']);
             }
           }
         });
