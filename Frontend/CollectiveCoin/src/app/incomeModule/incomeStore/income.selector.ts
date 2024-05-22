@@ -1,7 +1,7 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { IncomeState } from './income.reducer';
-import { state } from '@angular/animations';
 import { income } from '../../shared/interfaces/income.interface';
+import { state } from '@angular/animations';
 
 export const selectIncomeState = createFeatureSelector<IncomeState>('income');
 
@@ -38,3 +38,8 @@ export const selectIncomeById = (id: string) =>
   createSelector(selectIncomeState, (state: IncomeState) =>
     state.data.find((income: income) => income._id === id)
   );
+
+export const selectInocmesLength = createSelector(
+  selectIncomeState,
+  (state) => state.data.length
+);

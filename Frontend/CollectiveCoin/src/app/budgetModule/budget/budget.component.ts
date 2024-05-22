@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BudgetService } from '../../shared/services/budget.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { LoginDataService } from '../../shared/services/login-data.service';
+
 @Component({
   selector: 'app-budget',
   templateUrl: './budget.component.html',
@@ -11,10 +12,10 @@ export class BudgetComponent implements OnInit, OnDestroy {
   isEarning: boolean;
   currentPage: number;
   totalItems: number;
+
   constructor(
     public budgetservice: BudgetService,
     private router: Router,
-    private route: ActivatedRoute,
     private logindataservice: LoginDataService
   ) {}
   updateBudget(id: string) {

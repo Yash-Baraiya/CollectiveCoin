@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, Renderer2 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Store, select } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { AppState } from './memberstore/members.reducer';
 import * as MembersActions from './memberstore/members.action';
 import { LoginDataService } from '../shared/services/login-data.service';
 import { selectMembers } from './memberstore/members.selector';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-members',
@@ -21,7 +22,9 @@ export class MembersComponent implements OnInit {
 
   constructor(
     private store: Store<AppState>,
-    private logindataservice: LoginDataService
+    private logindataservice: LoginDataService,
+    private renderer: Renderer2,
+    @Inject(DOCUMENT) private document: any
   ) {}
 
   ngOnInit(): void {
@@ -51,7 +54,7 @@ export class MembersComponent implements OnInit {
     console.log('button clicked');
     const bodyData = this.memberrform.value;
     this.store.dispatch(MembersActions.addMember({ member: bodyData }));
-    this.closebox();
+    this.closebox('ContactForm');
   }
 
   deleteMember(id: string) {
@@ -76,7 +79,7 @@ export class MembersComponent implements OnInit {
   emailAdmin() {
     const bodyData = this.emailform.value;
     this.store.dispatch(MembersActions.emailAdmin({ bodyData }));
-    this.closebox2();
+    this.closebox2('contactForm');
   }
 
   makeAdmin(id: string) {
@@ -86,22 +89,41 @@ export class MembersComponent implements OnInit {
   makeEarner(id: string) {
     this.store.dispatch(MembersActions.makeEarner({ id }));
   }
-  openbox() {
-    document.getElementById('contactForm2').style.display = 'block';
-    document.getElementById('contactForm2').style.opacity = '1';
-    document.getElementById('overlay').style.display = 'block';
+  openbox(id) {
+    const contactForm = this.document.getElementById(id);
+    const overlay = this.document.getElementById('overlay');
+
+    if (contactForm && overlay) {
+      this.renderer.setStyle(contactForm, 'display', 'block');
+      this.renderer.setStyle(contactForm, 'opacity', '1');
+      this.renderer.setStyle(overlay, 'display', 'block');
+    }
   }
-  closebox() {
-    document.getElementById('contactForm2').style.display = 'none';
-    document.getElementById('overlay').style.display = 'none';
+  closebox(id) {
+    const contactForm = this.document.getElementById(id);
+    const overlay = this.document.getElementById('overlay');
+
+    if (contactForm && overlay) {
+      this.renderer.setStyle(contactForm, 'display', 'none');
+      this.renderer.setStyle(overlay, 'display', 'none');
+    }
   }
-  openbox2() {
-    document.getElementById('contactForm').style.display = 'block';
-    document.getElementById('contactForm').style.opacity = '1';
-    document.getElementById('overlay').style.display = 'block';
+  openbox2(id) {
+    const contactForm = this.document.getElementById(id);
+    const overlay = this.document.getElementById('overlay');
+    if (contactForm && overlay) {
+      this.renderer.setStyle(contactForm, 'display', 'block');
+      this.renderer.setStyle(contactForm, 'opacity', '1');
+      this.renderer.setStyle(overlay, 'display', 'block');
+    }
   }
-  closebox2() {
-    document.getElementById('contactForm').style.display = 'none';
-    document.getElementById('overlay').style.display = 'none';
+  closebox2(id) {
+    const contactForm = this.document.getElementById(id);
+    const overlay = this.document.getElementById('overlay');
+
+    if (contactForm && overlay) {
+      this.renderer.setStyle(contactForm, 'display', 'none');
+      this.renderer.setStyle(overlay, 'display', 'none');
+    }
   }
 }

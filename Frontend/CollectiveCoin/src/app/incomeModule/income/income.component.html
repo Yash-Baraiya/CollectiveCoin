@@ -195,7 +195,16 @@
               </div>
               <div class="incomes">
                 <app-items
-                  *ngFor="let income of incomes$ | async"
+                  *ngFor="
+                    let income of incomes$
+                      | async
+                      | paginate
+                        : {
+                            itemsPerPage: 4,
+                            currentPage: currentPage,
+                            totalItems: totalItems$ | async
+                          }
+                  "
                   [item]="income"
                   [deleteMethod]="deleteMethod"
                   [updateMethod]="updateIncome"
@@ -204,7 +213,7 @@
             </div>
           </div>
         </div>
-        <li *ngIf="totalItems > 4" style="margin-left: 505px">
+        <li style="margin-left: 505px">
           <pagination-controls
             (pageChange)="currentPage = $event"
           ></pagination-controls>

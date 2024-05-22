@@ -220,7 +220,7 @@
               margin-left: 45%;
               border-radius: 15px;
             "
-            (click)="openbox()"
+            (click)="openbox('contactForm2')"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -251,7 +251,7 @@
               border-radius: 15px;
               position: sticky;
             "
-            (click)="openbox2()"
+            (click)="openbox2('contactForm')"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -315,7 +315,11 @@
     <input placeholder="Email" formControlName="email" type="email" required />
 
     <button class="formBtn" (click)="addmember()">Add</button>
-    <button class="formBtn" (click)="closebox()" style="margin-left: 10px">
+    <button
+      class="formBtn"
+      (click)="closebox('contactForm2')"
+      style="margin-left: 10px"
+    >
       close
     </button>
   </form>
@@ -331,7 +335,11 @@
     <input formControlName="email" placeholder="Email" type="email" required />
     <textarea formControlName="message" placeholder="Comment"></textarea>
     <button class="formBtn" (click)="emailAdmin()">send</button>
-    <button class="formBtn" (click)="closebox2()" style="margin-left: 10px">
+    <button
+      class="formBtn"
+      (click)="closebox2('contactForm')"
+      style="margin-left: 10px"
+    >
       close
     </button>
   </form>
@@ -340,6 +348,6 @@
 <div
   id="overlay"
   class="overlay"
-  (click)="closebox()"
-  (click)="closebox2()"
+  (click)="closebox('contactForm2')"
+  (click)="closebox2('contactForm')"
 ></div>

@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, Renderer2, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginDataService } from '../../shared/services/login-data.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ExpenseService } from '../../shared/services/expense.service';
 import { environment } from '../../environment';
 import resultData from '../../shared/interfaces/resultData.interface';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-login',
@@ -25,7 +26,9 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private loginDataServeice: LoginDataService,
     private snackBar: MatSnackBar,
-    private expenseservice: ExpenseService
+    private expenseservice: ExpenseService,
+    private renderer: Renderer2,
+    @Inject(DOCUMENT) private document: any
   ) {}
 
   ngOnInit(): void {
@@ -47,14 +50,23 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  openbox2() {
-    document.getElementById('contactForm').style.display = 'block';
-    document.getElementById('contactForm').style.opacity = '1';
-    document.getElementById('overlay').style.display = 'block';
+  openbox3(id) {
+    const contactForm = this.document.getElementById(id);
+    const overlay = this.document.getElementById('overlay');
+    if (contactForm && overlay) {
+      this.renderer.setStyle(contactForm, 'display', 'block');
+      this.renderer.setStyle(contactForm, 'opacity', '1');
+      this.renderer.setStyle(overlay, 'display', 'block');
+    }
   }
-  closebox2() {
-    document.getElementById('contactForm').style.display = 'none';
-    document.getElementById('overlay').style.display = 'none';
+  closebox3(id) {
+    const contactForm = this.document.getElementById(id);
+    const overlay = this.document.getElementById('overlay');
+    if (contactForm && overlay) {
+      this.renderer.setStyle(contactForm, 'display', 'none');
+      this.renderer.setStyle(contactForm, 'opacity', '1');
+      this.renderer.setStyle(overlay, 'display', 'none');
+    }
   }
   login() {
     console.log('login button clicked');
@@ -104,17 +116,17 @@ export class LoginComponent implements OnInit {
           (resultData: resultData) => {
             console.log(resultData);
             this.data = resultData;
-            this.closebox2();
+            this.closebox3('contactForm');
             this.showMessage(this.data.messege);
           },
           (error) => {
             console.log(error);
 
             if (error.error.messege) {
-              this.closebox2();
+              this.closebox3('contactForm');
               this.showMessage(error.error.message);
             } else {
-              this.closebox2();
+              this.closebox3('contactForm');
               alert(
                 'there was a problem sending the mail please try agian after some time'
               );

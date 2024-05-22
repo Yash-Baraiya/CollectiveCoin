@@ -43,7 +43,7 @@ export const incomeReducer = createReducer(
   })),
   on(IncomeActions.addIncome, (state, { income }) => ({
     ...state,
-    data: [...state.data, income],
+    data: [...state.data],
   })),
   on(IncomeActions.deleteIncome, (state, { id }) => ({
     ...state,

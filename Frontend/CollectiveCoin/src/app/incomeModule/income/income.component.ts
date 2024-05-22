@@ -9,6 +9,7 @@ import * as incomeActions from './../incomeStore/income.actions';
 import {
   selectIncomeData,
   selectIncomeTotal,
+  selectInocmesLength,
   selectMaxIncome,
   selectMinIncome,
 } from '../incomeStore/income.selector';
@@ -22,15 +23,14 @@ import { income } from '../../shared/interfaces/income.interface';
 export class IncomeComponent implements OnInit, OnDestroy {
   isEarning: boolean;
   currentPage: number;
-  totalItems: number;
   totalIncome$: Observable<number>;
   incomes$: Observable<income[]>;
   deleteMethod: Function;
+  totalItems$: Observable<number>;
 
   constructor(
     public incomeservice: IncomeService,
     private router: Router,
-    private route: ActivatedRoute,
     private logindataservice: LoginDataService,
     private store: Store<IncomeState>
   ) {
@@ -44,6 +44,7 @@ export class IncomeComponent implements OnInit, OnDestroy {
 
     this.totalIncome$ = this.store.select(selectIncomeTotal);
     this.incomes$ = this.store.select(selectIncomeData);
+    this.totalItems$ = this.store.select(selectInocmesLength);
     console.log(this.incomes$);
   }
 
@@ -56,6 +57,7 @@ export class IncomeComponent implements OnInit, OnDestroy {
       this.store.dispatch(
         incomeActions.addIncome(this.incomeservice.incomeForm.value)
       );
+      this.totalItems$ = this.store.select(selectInocmesLength);
     } else {
       alert('please fill the form as directed');
     }

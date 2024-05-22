@@ -5,10 +5,10 @@ import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-bar-chart',
-  templateUrl: './bar-cart.component.html',
-  styleUrl: './bar-cart.component.css',
+  templateUrl: './bar-chart.component.html',
+  styleUrl: './bar-chart.component.css',
 })
-export class BarCartComponent {
+export class BarChartComponent {
   budgetdata = [];
   expensedata = [];
 

@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
-import { IncomeService } from '../shared/services/income.service';
 import { ExpenseService } from '../shared/services/expense.service';
-import { Observable, timestamp } from 'rxjs';
+import { Observable } from 'rxjs';
 import { IncomeState } from '../incomeModule/incomeStore/income.reducer';
 import { Store } from '@ngrx/store';
 import { loadIncomes } from '../incomeModule/incomeStore/income.actions';
@@ -44,16 +43,15 @@ export class LineChartComponent implements OnInit {
   //method for fetching the data
   fetchData(): Observable<any> {
     return new Observable((obseraver) => {
-      this.labels.forEach((label) => {
-        this.incomedata$.subscribe((incomeData) => {
-          this.labels.forEach((label) => {
-            const income = incomeData.find(
-              (income) => this.formatDateString(income.date) === label
-            );
-            this.incomeamounts.push(income ? income.amount : null);
-          });
+      this.incomedata$.subscribe((incomeData) => {
+        this.labels.forEach((label) => {
+          const income = incomeData.find(
+            (income) => this.formatDateString(income.date) === label
+          );
+          this.incomeamounts.push(income ? income.amount : null);
         });
       });
+
       this.labels.forEach((label) => {
         let value: boolean;
         for (let i = 0; i < this.expenseservice.expamounts.length; i++) {

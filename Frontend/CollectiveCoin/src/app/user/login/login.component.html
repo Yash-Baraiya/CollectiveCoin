@@ -140,7 +140,7 @@
                       Log in
                     </button>
                     <div class="text-center">
-                      <a class="text-muted" (click)="openbox2()"
+                      <a class="text-muted" (click)="openbox3('contactForm')"
                         >Forgot password?</a
                       >
                     </div>
@@ -224,7 +224,11 @@
       </div>
     </div>
     <button class="formBtn" (click)="forgotpassword()">send</button>
-    <button class="formBtn" (click)="closebox2()" style="margin-left: 10px">
+    <button
+      class="formBtn"
+      (click)="closebox3('contactForm')"
+      style="margin-left: 10px"
+    >
       close
     </button>
   </form>
@@ -233,6 +237,6 @@
 <div
   id="overlay"
   class="overlay"
-  (click)="closebox2()"
-  (click)="closebox2()"
+  (click)="closebox3('contactForm')"
+  (click)="closebox3('contactForm')"
 ></div>
