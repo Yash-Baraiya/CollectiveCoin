@@ -278,7 +278,7 @@ export const protect = async (
 };
 
 //method for restricting the non-earners from using some functionality
-export const restrictTo = async (
+export const restrictToEarner = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -420,7 +420,7 @@ export const resetPassword = async (req: Request, res: Response) => {
 };
 
 //restrincting some functionalities to only admins
-export const restrictToAdd = async (
+export const restrictToAdmin = async (
   req: Request,
   res: Response,
   next: NextFunction

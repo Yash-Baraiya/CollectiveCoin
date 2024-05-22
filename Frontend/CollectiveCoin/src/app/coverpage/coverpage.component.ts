@@ -1,14 +1,8 @@
-import { AfterViewInit, Component } from '@angular/core';
-
-declare var $: any;
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-coverpage',
   templateUrl: './coverpage.component.html',
   styleUrl: './coverpage.component.css',
 })
-export class CoverpageComponent implements AfterViewInit {
-  ngAfterViewInit(): void {
-    //$('#carouselExampleIndicators').carousel();
-  }
-}
+export class CoverpageComponent {}

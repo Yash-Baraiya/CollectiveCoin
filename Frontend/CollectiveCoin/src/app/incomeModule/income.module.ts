@@ -15,11 +15,8 @@ import { EffectsModule } from '@ngrx/effects';
   declarations: [IncomeComponent, UpdateincomeComponent],
   imports: [
     CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
     SharedModule,
     IncomeModuleRoutingModule,
-    NgxPaginationModule,
     StoreModule.forFeature('income', incomeReducer),
     EffectsModule.forFeature([IncomeEffects]),
   ],

@@ -1,5 +1,5 @@
 import express from "express";
-import { protect, restrictTo } from "../controller/authController";
+import { protect, restrictToEarner } from "../controller/authController";
 import {
   addIncome,
   getIncomes,
@@ -10,9 +10,14 @@ import {
 const router = express.Router();
 
 router
-  .post("/add-income", protect, restrictTo, addIncome)
+  .post("/add-income", protect, restrictToEarner, addIncome)
   .get("/get-incomes", protect, getIncomes)
-  .delete("/delete-income/:incomeId", protect, restrictTo, deleteIncome);
+  .delete("/delete-income/:incomeId", protect, restrictToEarner, deleteIncome);
 
-router.patch("/update-income/:incomeId", protect, restrictTo, updateIncome);
+router.patch(
+  "/update-income/:incomeId",
+  protect,
+  restrictToEarner,
+  updateIncome
+);
 export default router;

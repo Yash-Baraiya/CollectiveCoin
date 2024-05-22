@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
-import { ExpenseService } from '../shared/services/expense.service';
+import { ExpenseService } from '../../shared/services/expense.service';
 import { Observable } from 'rxjs';
-import { IncomeState } from '../incomeModule/incomeStore/income.reducer';
+import { IncomeState } from '../../incomeModule/incomeStore/income.reducer';
 import { Store } from '@ngrx/store';
-import { loadIncomes } from '../incomeModule/incomeStore/income.actions';
-import { selectIncomeData } from '../incomeModule/incomeStore/income.selector';
+import { loadIncomes } from '../../incomeModule/incomeStore/income.actions';
+import { selectIncomeData } from '../../incomeModule/incomeStore/income.selector';
 
 @Component({
   selector: 'app-line-chart',

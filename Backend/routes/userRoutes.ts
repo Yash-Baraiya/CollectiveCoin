@@ -4,9 +4,9 @@ import {
   signIn,
   signUp,
   resetPassword,
-  restrictTo,
+  restrictToEarner,
   forgotPassword,
-  restrictToAdd,
+  restrictToAdmin,
   updateUser,
   updatePassword,
   isLoggedin,
@@ -41,7 +41,7 @@ const router = express.Router();
 
 router.post("/signup", upload.single("photo"), signUp, uploadImage);
 router.post("/login", signIn);
-router.post("/add-member", protect, restrictToAdd, addUser);
+router.post("/add-member", protect, restrictToAdmin, addUser);
 router.get("/getmembers", protect, getMembers);
 router.patch("/delete-member/:id", protect, deleteuser);
 router.delete("/deletefamily", protect, deletefamily);
@@ -52,8 +52,8 @@ router.patch("/updatepassword", protect, updatePassword);
 
 router.patch("/uploadimage", protect, upload.single("photo"), uploadImage);
 router.post("/sendmail", protect, sendmailAdmin);
-router.patch("/makeadmin/:id", protect, restrictToAdd, makeAdmin);
-router.patch("/makeearner/:id", protect, restrictToAdd, toggleEarningState);
+router.patch("/makeadmin/:id", protect, restrictToAdmin, makeAdmin);
+router.patch("/makeearner/:id", protect, restrictToAdmin, toggleEarningState);
 router.get("/isloggedin", protect, isLoggedin);
 router.get("/EOInfo", ExicutiveOfficerInfo);
 

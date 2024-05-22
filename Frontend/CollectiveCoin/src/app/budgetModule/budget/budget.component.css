@@ -424,11 +424,10 @@ h1 {
   animation: scroll 10s linear infinite;
   display: flex;
   flex-direction: row;
-  width: 100%;
 }
 
 li {
   color: #222260;
-
   margin-right: 2px;
+  white-space: nowrap;
 }
