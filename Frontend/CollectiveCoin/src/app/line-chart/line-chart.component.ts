@@ -57,7 +57,10 @@ export class LineChartComponent implements OnInit {
       this.labels.forEach((label) => {
         let value: boolean;
         for (let i = 0; i < this.expenseservice.expamounts.length; i++) {
-          if (this.expenseservice.expamounts[i].date === label) {
+          if (
+            this.formatDateString(this.expenseservice.expamounts[i].date) ===
+            label
+          ) {
             this.expenseamounts.push(this.expenseservice.expamounts[i].amount);
             value = true;
             break;

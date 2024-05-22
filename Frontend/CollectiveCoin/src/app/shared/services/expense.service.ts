@@ -108,18 +108,7 @@ export class ExpenseService {
           this.totalexpense = resultData.totalexpense[0].totalexpense;
           this.minexpense = resultData.minAmountexpense;
           this.maxexpense = resultData.maxAmountexpense;
-          this.expamounts = resultData.monthlyexpense
-            .map((expense) => ({
-              amount: expense.amount,
-              date: this.datepipe.transform(expense.date, 'dd/MM/yyyy'),
-            }))
-            .sort((a, b) => {
-              const dateA = new Date(a.date);
-              const dateB = new Date(b.date);
-
-              return dateA.getTime() - dateB.getTime();
-            });
-
+          this.expamounts = resultData.expenseAmounts;
           obseraver.next();
         },
         (error) => {

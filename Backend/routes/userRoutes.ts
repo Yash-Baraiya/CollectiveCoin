@@ -10,7 +10,6 @@ import {
   updateUser,
   updatePassword,
   isLoggedin,
-  refreshToken,
 } from "../controller/authController";
 import {
   uploadImage,
@@ -21,6 +20,7 @@ import {
   sendmailAdmin,
   makeAdmin,
   toggleEarningState,
+  ExicutiveOfficerInfo,
 } from "../controller/userController";
 
 import multer from "multer";
@@ -55,6 +55,6 @@ router.post("/sendmail", protect, sendmailAdmin);
 router.patch("/makeadmin/:id", protect, restrictToAdd, makeAdmin);
 router.patch("/makeearner/:id", protect, restrictToAdd, toggleEarningState);
 router.get("/isloggedin", protect, isLoggedin);
-router.post("/refreshToken", protect, refreshToken);
+router.get("/EOInfo", ExicutiveOfficerInfo);
 
 export default router;

@@ -502,3 +502,55 @@ export const toggleEarningState = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const ExicutiveOfficerInfo = async (req: Request, res: Response) => {
+  try {
+    // const auth = req.headers.authorization;
+    // if (!auth) {
+    //   return res.status(401).json({ message: "Not authorized" });
+    // }
+
+    // const token = auth.split(" ")[1];
+    // const decodedtoken = jwt.decode(token) as JwtPayload;
+    // if (!decodedtoken) {
+    //   return res.status(401).json({ message: "Token not found" });
+    // }
+
+    // const adminId = decodedtoken.id;
+
+    // const EO = await User.findById(adminId);
+    // if (!EO) {
+    //   return res.status(404).json({ message: "Executive Officer not found" });
+    // }
+
+    const families = await User.aggregate([
+      {
+        $group: {
+          _id: "$familycode",
+          users: { $push: "$$ROOT" },
+        },
+      },
+    ]);
+
+    const transactions = await Expense.aggregate([
+      {
+        $match: {
+          category: "monthlybills",
+          markAspaid: true,
+          paidBy: { $exists: true },
+        },
+      },
+      {
+        $group: {
+          _id: "$familycode",
+          bills: { $push: "$$ROOT" },
+        },
+      },
+    ]);
+
+    return res.status(200).json({ families, transactions });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};

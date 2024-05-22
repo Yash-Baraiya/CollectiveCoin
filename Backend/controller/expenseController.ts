@@ -103,9 +103,11 @@ export const addExpense = async (req: Request, res: Response) => {
 export const getExpense = async (req: Request, res: Response) => {
   try {
     console.log("get expense api called");
-    const page = parseInt(req.query.page as string);
-    const limit = parseInt(req.query.limit as string);
+    console.log(req.query);
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 5;
     const skip = page ? (page - 1) * limit : 0;
+    console.log(page, limit);
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("not authorized");
@@ -162,7 +164,7 @@ export const getExpense = async (req: Request, res: Response) => {
         },
       },
     ]);
-    let monthlyexpense = await Expense.aggregate([
+    let results = await Expense.aggregate([
       {
         $match: {
           familycode: familycode,
@@ -174,31 +176,45 @@ export const getExpense = async (req: Request, res: Response) => {
       },
       {
         $addFields: {
-          covertedDate: {
+          convertedDate: {
             $toDate: "$date",
           },
         },
       },
       {
         $sort: {
-          covertedDate: -1,
+          convertedDate: -1,
+        },
+      },
+      {
+        $facet: {
+          paginatedResults: [{ $skip: skip }, { $limit: limit }],
+          expenseAmounts: [
+            {
+              $project: {
+                amount: 1,
+                date: 1,
+              },
+            },
+          ],
         },
       },
     ]);
+    let monthlyexpense = results[0].paginatedResults;
+    let expenseAmounts = results[0].expenseAmounts;
     if (page !== undefined && limit !== undefined) {
       monthlyexpense.slice();
     }
-    let maxAmountexpense = monthlyexpense.reduce((max, expense) => {
+    let maxAmountexpense = monthlyexpense.reduce((max: any, expense: any) => {
       return expense.amount > max.amount ? expense : max;
     }, monthlyexpense[0]);
 
-    let minAmountexpense = monthlyexpense.reduce((min, expense) => {
+    let minAmountexpense = monthlyexpense.reduce((min: any, expense: any) => {
       return expense.amount < min.amount ? expense : min;
     }, monthlyexpense[0]);
 
     maxAmountexpense = maxAmountexpense.amount;
     minAmountexpense = minAmountexpense.amount;
-
     console.log("get expense api ended");
     res.status(200).json({
       status: "success",
@@ -207,9 +223,11 @@ export const getExpense = async (req: Request, res: Response) => {
       yearlyTotalExpense,
       maxAmountexpense,
       minAmountexpense,
+      expenseAmounts,
     });
-  } catch (error) {
-    res.status(500).json({ message: "Server Error" });
+  } catch (error: any) {
+    console.log(error);
+    res.status(400).json({ message: error.message });
   }
 };
 

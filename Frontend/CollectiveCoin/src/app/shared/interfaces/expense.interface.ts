@@ -5,6 +5,7 @@ interface ExpenseResponse {
   yearlyTotalExpense: number;
   minAmountexpense: number;
   maxAmountexpense: number;
+  expenseAmounts :Array<any>
 }
 
 interface expense {

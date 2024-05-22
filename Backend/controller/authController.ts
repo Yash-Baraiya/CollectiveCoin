@@ -522,19 +522,55 @@ export const updatePassword = async (req: Request, res: Response) => {
     ) {
       throw new Error("Your current password is wrong.");
     }
+    if (
+      req.body.passwordCurrent.toString().trim().toLowerCase() ===
+      req.body.password.toString().trim().toLowerCase()
+    ) {
+      throw new Error("Your Current PassWord And New Password Can Not Be Same");
+    }
+    if (
+      req.body.passwordConfirm.toString().trim().toLowerCase() !==
+      req.body.password.toString().trim().toLowerCase()
+    ) {
+      throw new Error("Your Password and Confirm Password Must Be Same");
+    }
 
     user.password = req.body.password;
     user.passwordConfirm = req.body.passwordConfirm;
     await user.save();
 
     console.log("user updated successfully", user);
+    await sendEmail({
+      from: "collectivecoin@team.io",
+      to: user.email,
+      subject: "Password Updated ",
+      html: `<div style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; color: #333333;">
+      <div style="width: 100%; max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+          <div style="text-align: center; padding-bottom: 20px;">
+              <h1 style="margin: 0; color: #007bff;">Password Updated</h1>
+          </div>
+          <div style="line-height: 1.6; color: #555555;">
+              <p style="margin: 10px 0;">Dear ${user.name},</p>
+              <p style="margin: 10px 0;">We wanted to let you know that your password was successfully updated.</p>
+              <p style="margin: 10px 0;">If you made this change, you can ignore this email.</p>
+              <p style="margin: 10px 0; font-weight: bold; color: #d9534f;">If you did not update your password, please contact your administrator immediately to secure your account and request removal from the family.</p>
+              <p style="margin: 10px 0;">Thank you for your attention to this important matter.</p>
+          </div>
+          <div style="text-align: center; padding-top: 20px; font-size: 12px; color: #777777;">
+              <p style="margin: 10px 0;">© 2024 CollectiveCoin. All rights reserved.</p>
+          </div>
+      </div>
+  </div>
+  `,
+    });
     createSendToken(user, 200, res);
+
     console.log("update password api ended");
   } catch (error: any) {
     console.log(error);
     res.status(400).json({
       status: "failed",
-      messege: error.message,
+      message: error.message,
     });
   }
 };

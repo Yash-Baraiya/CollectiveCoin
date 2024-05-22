@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ExpenseService } from '../../shared/services/expense.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ItemsComponent } from '../../shared/items/items.component';
 
 @Component({
   selector: 'app-expense',
@@ -9,10 +10,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class ExpenseComponent implements OnInit, OnDestroy {
   showCheckbox: boolean = false;
-  currentPage: number;
+  currentPage: number = 1;
   totalItems: number;
   showrecurrence: boolean = false;
   itemsPerPage: number = 4;
+  totalPages: number;
 
   constructor(
     public expenseservice: ExpenseService,
@@ -21,19 +23,30 @@ export class ExpenseComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.expenseservice.getExpense().subscribe(() => {
-      this.currentPage = 1;
-      this.totalItems = this.expenseservice.data.length;
-    });
+    this.expenseservice
+      .getExpense(this.currentPage, this.itemsPerPage)
+      .subscribe(() => {
+        this.totalItems = this.expenseservice.expamounts.length;
+        this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
+      });
   }
 
   nextPage() {
     this.currentPage = this.currentPage + 1;
-    this.expenseservice.getExpense(this.currentPage, this.itemsPerPage);
+
+    this.expenseservice
+      .getExpense(this.currentPage, this.itemsPerPage)
+      .subscribe(() => {
+        console.log('calling getexese', this.currentPage, this.itemsPerPage);
+      });
   }
   previousPage() {
     this.currentPage = this.currentPage - 1;
-    this.expenseservice.getExpense(this.currentPage, this.itemsPerPage);
+    this.expenseservice
+      .getExpense(this.currentPage, this.itemsPerPage)
+      .subscribe(() => {
+        console.log('calling get excpese', this.currentPage, this.itemsPerPage);
+      });
   }
   updateExpense(id: string) {
     this.router.navigate([`Expense/update-expense/${id}`]);
