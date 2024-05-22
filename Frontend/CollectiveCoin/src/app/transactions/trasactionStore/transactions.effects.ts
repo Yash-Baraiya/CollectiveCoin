@@ -69,9 +69,14 @@ export class TransactionEffects {
       switchMap(({ formData }) =>
         this.transactionService.getFilteredTransactions(formData).pipe(
           map((filteredData) => {
-            console.log('filtered data', filteredData);
+            const formattedTransactions = filteredData.transactions.map(
+              (transaction) => ({
+                ...transaction,
+                date: this.datePipe.transform(transaction.date, 'dd/MM/yyyy'),
+              })
+            );
             return TransactionActions.filteredTransactionsLoaded({
-              filteredTransactions: filteredData.transactions,
+              filteredTransactions: formattedTransactions,
             });
           }),
           catchError((error) =>

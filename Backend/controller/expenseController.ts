@@ -420,7 +420,7 @@ cron.schedule("0 0 * * *", async () => {
           "
         >
           <h1 style="color: #333">Payment Reminder</h1>
-          <p>Dear ${user},</p>
+          <p>Dear ${user.name},</p>
           <p style="margin-bottom: 20px">
             This is a friendly reminder that your payment for ${expense.title} is due in five days.
           </p>

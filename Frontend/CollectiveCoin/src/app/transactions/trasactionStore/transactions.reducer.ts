@@ -54,7 +54,7 @@ export const transactionReducer = createReducer(
     TransactionActions.filteredTransactionsLoaded,
     (state, { filteredTransactions }) => ({
       ...state,
-      transactions: { transactions: filteredTransactions }, // Assuming your state structure remains the same
+      transactions: { transactions: filteredTransactions }, 
       loading: false,
       error: null,
     })

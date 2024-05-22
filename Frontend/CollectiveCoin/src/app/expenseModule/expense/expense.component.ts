@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ExpenseService } from '../../shared/services/expense.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ItemsComponent } from '../../shared/items/items.component';
 
 @Component({
   selector: 'app-expense',
@@ -37,7 +36,8 @@ export class ExpenseComponent implements OnInit, OnDestroy {
     this.expenseservice
       .getExpense(this.currentPage, this.itemsPerPage)
       .subscribe(() => {
-        console.log('calling getexese', this.currentPage, this.itemsPerPage);
+        this.totalItems = this.expenseservice.expamounts.length;
+        this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
       });
   }
   previousPage() {
@@ -45,7 +45,8 @@ export class ExpenseComponent implements OnInit, OnDestroy {
     this.expenseservice
       .getExpense(this.currentPage, this.itemsPerPage)
       .subscribe(() => {
-        console.log('calling get excpese', this.currentPage, this.itemsPerPage);
+        this.totalItems = this.expenseservice.expamounts.length;
+        this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
       });
   }
   updateExpense(id: string) {
