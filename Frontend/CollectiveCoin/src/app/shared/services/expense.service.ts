@@ -118,7 +118,6 @@ export class ExpenseService {
             this.showMessage(
               'there was problem loading this page please login again '
             );
-            this.router.navigate(['/login']);
           }
           if (error.error.messege === 'please login first') {
             this.router.navigate(['/login']);

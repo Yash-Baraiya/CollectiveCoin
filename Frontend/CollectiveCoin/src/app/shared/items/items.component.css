@@ -14,12 +14,7 @@
   padding-left: 1rem;
   position: relative;
 }
-.main-container .menu-items li i {
-  color: rgba(34, 34, 96, 0.6);
-  font-size: 1.4rem;
-  -webkit-transition: all 0.4s ease-in-out;
-  transition: all 0.4s ease-in-out;
-}
+
 .main-container .active {
   color: rgba(34, 34, 96, 1) !important;
 }
@@ -91,13 +86,6 @@ h6 {
   filter: blur(400px);
   -webkit-animation: DzvtB 15s alternate linear infinite;
   animation: DzvtB 15s alternate linear infinite;
-}
-.bs-datepicker-body {
-  background-color: #f6c3f4; /* Change to your preferred background color */
-  opacity: 1;
-}
-* {
-  box-sizing: border-box;
 }
 body {
   margin: 0;

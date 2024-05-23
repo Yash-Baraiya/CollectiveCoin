@@ -85,11 +85,7 @@
                         class="form-control bs-datepicker-body"
                         formControlName="date"
                       />
-                      <div class="input-group-append">
-                        <span class="input-group-text">
-                          <i class="bi bi-calendar-date-fill"></i>
-                        </span>
-                      </div>
+                      <div class="input-group-append"></div>
                     </div>
                     <div
                       *ngIf="
@@ -213,7 +209,7 @@
             </div>
           </div>
         </div>
-        <li style="margin-left: 505px">
+        <li style="margin-left: 505px" *ngIf="(totalItems$ | async) > 4">
           <pagination-controls
             (pageChange)="currentPage = $event"
           ></pagination-controls>

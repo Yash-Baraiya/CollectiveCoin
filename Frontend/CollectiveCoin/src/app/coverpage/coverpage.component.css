@@ -160,8 +160,6 @@ footer p {
   z-index: 1;
   border-radius: 10px;
   overflow: hidden;
-  -moz-transition: ease all 0.35s;
-  -o-transition: ease all 0.35s;
   -webkit-transition: ease all 0.35s;
   transition: ease all 0.35s;
   top: 0;
@@ -199,8 +197,6 @@ footer p {
   width: 0;
   background: #20247b;
   z-index: -1;
-  -moz-transition: ease all 0.35s;
-  -o-transition: ease all 0.35s;
   -webkit-transition: ease all 0.35s;
   transition: ease all 0.35s;
 }

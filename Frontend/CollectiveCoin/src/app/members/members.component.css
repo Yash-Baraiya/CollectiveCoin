@@ -192,13 +192,13 @@ h6 {
   animation: DzvtB 15s alternate linear infinite;
 }
 .bs-datepicker-body {
-  background-color: #f6c3f4; /* Change to your preferred background color */
+  background-color: #f6c3f4;
   opacity: 1;
 }
 
 .btn-con2 {
-  display: flex; /* Use flexbox to place buttons in a row */
-  justify-content: center; /* Center-align buttons horizontally */
+  display: flex;
+  justify-content: center;
 }
 
 .btn {
@@ -207,13 +207,12 @@ h6 {
   color: #fcf6f9;
   border: none;
   border-radius: 50px;
-  margin: 0 10px; /* Add some space between buttons */
+  margin: 0 10px;
 }
 .bottom-right-btn {
-  /* Position relative to the viewport */
-  bottom: 20px; /* Distance from the bottom of the viewport */
-  right: 20px; /* Distance from the right of the viewport */
-  padding: 10px 20px; /* Adjust padding as needed */
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 20px;
   background-color: #222260;
   color: #fcf6f9;
   border: none;

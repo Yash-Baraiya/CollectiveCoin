@@ -6,7 +6,7 @@ import { SpinnerService } from '../shared/services/spinner.service';
 import * as incomesActions from '../incomeModule/incomeStore/income.actions';
 import * as transactionsActions from '../transactions/trasactionStore/transactions.action';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, catchError, of } from 'rxjs';
 import { IncomeState } from '../incomeModule/incomeStore/income.reducer';
 import { TransactionState } from '../transactions/trasactionStore/transactions.reducer';
 import {
@@ -48,13 +48,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.incomestore.dispatch(incomesActions.loadIncomes());
     this.transactionstore.dispatch(transactionsActions.loadTransactions());
 
-    this.maxIncome$ = this.incomestore.select(selectMaxIncome);
-    this.minIncome$ = this.incomestore.select(selectMinIncome);
-    this.totalIncome$ = this.incomestore.select(selectIncomeTotal);
-    this.yearlyTotalIncomes$ = this.incomestore.select(selectYearlyTotalIncome);
-    this.recentHistory$ = this.transactionstore.select(
-      selectTransactionsHistory
-    );
+    this.maxIncome$ = this.incomestore
+      .select(selectMaxIncome)
+      .pipe(catchError(() => of(0)));
+    this.minIncome$ = this.incomestore
+      .select(selectMinIncome)
+      .pipe(catchError(() => of(0)));
+    this.totalIncome$ = this.incomestore
+      .select(selectIncomeTotal)
+      .pipe(catchError(() => of(0)));
+    this.yearlyTotalIncomes$ = this.incomestore
+      .select(selectYearlyTotalIncome)
+      .pipe(catchError(() => of(0)));
+    this.recentHistory$ = this.transactionstore
+      .select(selectTransactionsHistory)
+      .pipe(catchError(() => of([])));
 
     this.expenseservice.getExpense().subscribe(() => {});
   }

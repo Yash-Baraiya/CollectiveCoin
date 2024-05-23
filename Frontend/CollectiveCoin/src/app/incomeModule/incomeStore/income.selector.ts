@@ -10,29 +10,29 @@ export const selectIncomeData = createSelector(
 
   (state) => {
     console.log(state);
-    return state.data;
+    return state?.data ?? [];
   }
 );
 
 export const selectIncomeTotal = createSelector(selectIncomeState, (state) => {
-  return state.totalIncome;
+  return state?.totalIncome ?? 0;
 });
 
 export const selectYearlyTotalIncome = createSelector(
   selectIncomeState,
   (state) => {
-    return state.yearlyTotalIncome;
+    return state?.yearlyTotalIncome ?? 0;
   }
 );
 
 export const selectMaxIncome = createSelector(
   selectIncomeState,
-  (state) => state.maxIncome
+  (state) => state?.maxIncome ?? 0
 );
 
 export const selectMinIncome = createSelector(
   selectIncomeState,
-  (state) => state.minIncome
+  (state) => state?.minIncome ?? 0
 );
 export const selectIncomeById = (id: string) =>
   createSelector(selectIncomeState, (state: IncomeState) =>

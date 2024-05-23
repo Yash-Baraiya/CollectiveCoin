@@ -220,12 +220,6 @@
   -ms-flex: 1;
   flex: 1;
 }
-
-.fir-div {
-  height: 100vh;
-  background-image: url(/static/media/bg.5d6e37827d387d3b46c2.png);
-  position: relative;
-}
 .fir-div main {
   -webkit-flex: 1;
   -ms-flex: 1;
@@ -254,199 +248,40 @@ body {
   overflow: hidden;
   color: rgba(34, 34, 96, 0.6);
 }
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  color: var(--primary-color);
-}
-.error {
-  color: red;
-  -webkit-animation: shake 0.5s ease-in-out;
-  animation: shake 0.5s ease-in-out;
-}
-
-.emp-div {
-  width: 70vh;
-  height: 70vh;
-  position: absolute;
-  border-radius: 50%;
-  margin-left: -37vh;
-  margin-top: -37vh;
-  background: linear-gradient(180deg, #f56692 0%, #f2994a 100%);
-  -webkit-filter: blur(400px);
-  filter: blur(400px);
-  -webkit-animation: DzvtB 15s alternate linear infinite;
-  animation: DzvtB 15s alternate linear infinite;
-}
-.bs-datepicker-body {
-  background-color: #f6c3f4; /* Change to your preferred background color */
-  opacity: 1;
-}
-
-/* Add your global CSS styles here */
-
-/* Define specific styles for the income-item */
-.income-item {
+.incomes {
   background: #fcf6f9;
   border: 2px solid #ffffff;
   box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
   border-radius: 20px;
   padding: 1rem;
-  margin-bottom: 1rem;
   display: flex;
-  align-items: center;
-  gap: 1rem;
-  width: 100%;
-  color: #222260;
+  flex-direction: column;
 }
-
-/* Define specific styles for the icon */
-.icon {
-  width: 80px;
-  height: 80px;
-  border-radius: 20px;
-  background: #f5f5f5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid #ffffff;
-}
-
-.icon i {
-  font-size: 2.6rem;
-}
-
-/* Define specific styles for the content */
 .content {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
 }
-
-/* Define specific styles for the h5 element */
 .content h5 {
   font-size: 1.3rem;
   padding-left: 2rem;
   position: relative;
 }
-
-/* Define specific styles for the inner-content */
 .inner-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-
-/* Define specific styles for the text */
 .text {
   display: flex;
   align-items: center;
   gap: 1.5rem;
 }
-
 .text p {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   color: var(--primary-color);
   opacity: 0.8;
-}
-
-/* Define specific styles for the button container */
-
-* {
-  box-sizing: border-box;
-}
-body {
-  margin: 0;
-  padding: 0;
-  background: #333;
-  font-family: Raleway;
-  text-transform: uppercase;
-  font-size: 11px;
-}
-h1 {
-  margin: 0;
-  color: #222260;
-}
-
-#contactForm {
-  display: none;
-
-  border: 2px solid #222260;
-  border-radius: 55px;
-  padding: 2em;
-  width: 400px;
-  height: 300px;
-  text-align: center;
-  background: #fcf6f9;
-  position: fixed;
-  z-index: 10000;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  -webkit-transform: translate(-50%, -50%);
-}
-#contactForm2 {
-  display: none;
-
-  border: 2px solid #222260;
-  border-radius: 55px;
-  padding: 2em;
-  width: 400px;
-  height: 209px;
-  text-align: center;
-  background: #fcf6f9;
-  position: fixed;
-  z-index: 10000;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  -webkit-transform: translate(-50%, -50%);
-}
-
-input,
-textarea {
-  margin: 0.8em auto;
-  font-family: inherit;
-  text-transform: inherit;
-  font-size: inherit;
-
-  display: block;
-  width: 280px;
-  padding: 0.4em;
-  border-radius: 15px;
-}
-textarea {
-  height: 80px;
-  resize: none;
-}
-
-.formBtn {
-  width: 140px;
-  display: inline-block;
-  margin-right: 13px;
-  background: #222260;
-  border-radius: 23px;
-  color: #fff;
-  font-weight: 100;
-  font-size: 1.2em;
-  margin-top: 36px;
-  border: none;
-  height: 50px;
-  width: 81px;
-}
-.overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 9999;
 }

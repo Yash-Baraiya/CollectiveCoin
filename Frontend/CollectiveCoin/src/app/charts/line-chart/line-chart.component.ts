@@ -27,15 +27,16 @@ export class LineChartComponent implements OnInit {
     private store: Store<IncomeState>
   ) {
     Chart.register(...registerables);
-
-    this.incomedata$ = this.store.select(selectIncomeData);
   }
 
   ngOnInit() {
     this.store.dispatch(loadIncomes());
-    this.expenseservice.getExpense().subscribe(() => {
-      this.fetchData().subscribe(() => {
-        this.createChart();
+    this.incomedata$ = this.store.select(selectIncomeData);
+    this.incomedata$.subscribe(() => {
+      this.expenseservice.getExpense().subscribe(() => {
+        this.fetchData().subscribe(() => {
+          this.createChart();
+        });
       });
     });
   }

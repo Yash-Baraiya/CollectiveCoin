@@ -258,94 +258,23 @@ body {
   overflow: hidden;
   color: rgba(34, 34, 96, 0.6);
 }
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  color: var(--primary-color);
-}
-.error {
-  color: red;
-  -webkit-animation: shake 0.5s ease-in-out;
-  animation: shake 0.5s ease-in-out;
-}
 
-.emp-div {
-  width: 70vh;
-  height: 70vh;
-  position: absolute;
-  border-radius: 50%;
-  margin-left: -37vh;
-  margin-top: -37vh;
-  background: linear-gradient(180deg, #f56692 0%, #f2994a 100%);
-  -webkit-filter: blur(400px);
-  filter: blur(400px);
-  -webkit-animation: DzvtB 15s alternate linear infinite;
-  animation: DzvtB 15s alternate linear infinite;
-}
-.bs-datepicker-body {
-  background-color: #f6c3f4; /* Change to your preferred background color */
-  opacity: 1;
-}
-
-/* Add your global CSS styles here */
-
-/* Define specific styles for the income-item */
-.income-item {
-  background: #fcf6f9;
-  border: 2px solid #ffffff;
-  box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
-  border-radius: 20px;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  width: 100%;
-  color: #222260;
-}
-
-/* Define specific styles for the icon */
-.icon {
-  width: 80px;
-  height: 80px;
-  border-radius: 20px;
-  background: #f5f5f5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid #ffffff;
-}
-
-.icon i {
-  font-size: 2.6rem;
-}
-
-/* Define specific styles for the content */
 .content {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
 }
-
-/* Define specific styles for the h5 element */
 .content h5 {
   font-size: 1.3rem;
   padding-left: 2rem;
   position: relative;
 }
-
-/* Define specific styles for the inner-content */
 .inner-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-
-/* Define specific styles for the text */
 .text {
   display: flex;
   align-items: center;
@@ -358,20 +287,6 @@ h6 {
   gap: 0.5rem;
   color: var(--primary-color);
   opacity: 0.8;
-}
-
-/* Define specific styles for the button container */
-
-* {
-  box-sizing: border-box;
-}
-body {
-  margin: 0;
-  padding: 0;
-  background: #333;
-  font-family: Raleway;
-  text-transform: uppercase;
-  font-size: 11px;
 }
 h1 {
   margin: 0;
@@ -387,16 +302,6 @@ h1 {
   display: flex;
   flex-direction: column;
 }
-
-/* Define specific styles for the income items */
-.income-item {
-  background: #ffffff;
-  border: 1px solid #e5e5e5;
-  border-radius: 10px;
-  padding: 1rem;
-  margin-bottom: 1rem;
-}
-
 span {
   color: #222260;
 }

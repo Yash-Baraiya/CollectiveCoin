@@ -8,7 +8,7 @@ export const selectAllTransactions = createSelector(
   selectTransactionState,
   (state: TransactionState) => {
     console.log('State transactions:', state.transactions.transactions);
-    return state.transactions.transactions;
+    return state?.transactions?.transactions ?? [];
   }
 );
 
@@ -16,7 +16,7 @@ export const selectTransactionsHistory = createSelector(
   selectTransactionState,
   (state: TransactionState) => {
     console.log('recent', state.transactions.transactions.slice(0, 3));
-    return state.resentHistory;
+    return state?.resentHistory ?? [];
   }
 );
 export const selectTotalTransactions = createSelector(

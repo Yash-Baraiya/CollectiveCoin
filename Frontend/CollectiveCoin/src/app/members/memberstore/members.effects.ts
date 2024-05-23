@@ -30,9 +30,11 @@ export class MembersEffects {
       ofType(MembersActions.loadMembers),
       switchMap(() =>
         this.http.get<allMembers>(`${environment.userApiUrl}/getmembers`).pipe(
-          map((response: allMembers) =>
-            MembersActions.loadMembersSuccess({ members: response.members })
-          ),
+          map((response: allMembers) => {
+            return MembersActions.loadMembersSuccess({
+              members: response.members,
+            });
+          }),
           catchError((error) => {
             this.showMessage(error.error.message);
             return of(MembersActions.loadMembersFailure({ error }));

@@ -6,6 +6,8 @@ import { IncomeService } from '../../shared/services/income.service';
 import * as IncomeActions from './income.actions';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DatePipe } from '@angular/common';
+import { Store } from '@ngrx/store';
+import { IncomeState } from './income.reducer';
 
 @Injectable()
 export class IncomeEffects {
@@ -13,7 +15,8 @@ export class IncomeEffects {
     private actions$: Actions,
     public incomeService: IncomeService,
     private snackBar: MatSnackBar,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private store: Store<IncomeState>
   ) {}
 
   loadIncomes$ = createEffect(() =>
@@ -60,8 +63,7 @@ export class IncomeEffects {
         this.incomeService.addIncome(income).pipe(
           tap(() => this.showMessage('income added successfully')),
           map((res) => {
-            console.log(res);
-            IncomeActions.loadIncomes();
+            this.store.dispatch(IncomeActions.loadIncomes());
             return IncomeActions.addIncomeSuccess();
           }),
           catchError((error) => {

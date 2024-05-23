@@ -38,7 +38,7 @@ export const membersReducer = createReducer(
   })),
   on(MembersActions.deleteMemberSuccess, (state, { id }) => ({
     ...state,
-    members: state.members.filter((member) => member.id !== id),
+    members: state.members.filter((member) => member._id !== id),
   })),
   on(MembersActions.deleteFamilySuccess, (state) => ({
     ...state,

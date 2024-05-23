@@ -54,7 +54,7 @@ export class MembersComponent implements OnInit {
     console.log('button clicked');
     const bodyData = this.memberrform.value;
     this.store.dispatch(MembersActions.addMember({ member: bodyData }));
-    this.closebox('ContactForm');
+    this.closebox('contactForm2');
   }
 
   deleteMember(id: string) {

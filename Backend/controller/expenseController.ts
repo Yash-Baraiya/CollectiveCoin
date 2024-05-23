@@ -188,7 +188,7 @@ export const getExpense = async (req: Request, res: Response) => {
       },
       {
         $facet: {
-          paginatedResults: [{ $skip: skip }, { $limit: limit }],
+          paginatedExpenses: [{ $skip: skip }, { $limit: limit }],
           expenseAmounts: [
             {
               $project: {
@@ -200,7 +200,7 @@ export const getExpense = async (req: Request, res: Response) => {
         },
       },
     ]);
-    let monthlyexpense = results[0].paginatedResults;
+    let monthlyexpense = results[0].paginatedExpenses;
     let expenseAmounts = results[0].expenseAmounts;
     if (page !== undefined && limit !== undefined) {
       monthlyexpense.slice();

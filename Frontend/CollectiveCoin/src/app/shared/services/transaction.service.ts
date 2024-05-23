@@ -24,7 +24,6 @@ export class TransactionService {
   }
 
   deleteTransaction(id: string): Observable<any> {
-    console.log('service ', id);
     return this.http.delete(
       `${environment.transactionsApiUrl}/delete-transaction/${id}`
     );

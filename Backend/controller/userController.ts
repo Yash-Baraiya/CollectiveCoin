@@ -181,7 +181,7 @@ export const deleteuser = async (req: Request, res: Response) => {
     const memberId = req.params.id;
     console.log(req.params);
     const member = await User.findById(memberId);
-    if (AdminId === memberId) {
+    if (AdminId === memberId && member?.priority === 1) {
       throw new Error("you can not delete yourself");
     }
     if (member?.priority) {
