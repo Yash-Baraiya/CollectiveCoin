@@ -31,6 +31,13 @@ export const addBudget = async (req: Request, res: Response) => {
     if (cat) {
       throw new Error("budget with this category already exist");
     }
+    const currentMonth = new Date().getMonth();
+    const reqMonth = new Date(req.body.date).getMonth();
+    console.log(currentMonth, reqMonth);
+
+    if (currentMonth !== reqMonth) {
+      throw new Error("you can not create budget for another month");
+    }
 
     const user = await User.findById({ _id: userId });
     console.log(user?.name);

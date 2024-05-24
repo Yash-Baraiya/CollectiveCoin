@@ -37,7 +37,7 @@ export class ExpenseService {
       category: new FormControl('', [Validators.required]),
       description: new FormControl('', [
         Validators.required,
-        Validators.maxLength(40),
+        Validators.maxLength(80),
       ]),
       date: new FormControl('', [Validators.required]),
       markAspaid: new FormControl(true, [Validators.required]),

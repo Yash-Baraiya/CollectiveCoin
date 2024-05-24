@@ -6,12 +6,9 @@
       <main>
         <div class="upperdiv">
           <div class="con-content1">
-            <h2
-              class="total-income"
-              *ngIf="budgetservice.overbudget.length > 0"
-            >
+            <h2 class="total-income" *ngIf="(overbudget$ | async).length > 0">
               <ul class="scroll-container">
-                <li *ngFor="let obj of budgetservice.overbudget">
+                <li *ngFor="let obj of overbudget$ | async">
                   you are going over budget for
                   <span style="color: red">{{ obj.category }} </span> by
                   <span style="color: red"
@@ -211,7 +208,8 @@
               <div class="incomes">
                 <app-items
                   *ngFor="
-                    let budget of budgetservice.data
+                    let budget of budgets$
+                      | async
                       | paginate
                         : {
                             itemsPerPage: 4,
@@ -220,7 +218,7 @@
                           }
                   "
                   [item]="budget"
-                  [deleteMethod]="budgetservice.deleteBudget"
+                  [deleteMethod]="deleteMethod"
                   [updateMethod]="updateBudget"
                 ></app-items>
               </div>

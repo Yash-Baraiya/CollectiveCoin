@@ -24,7 +24,7 @@ export class IncomeService {
       category: new FormControl('', [Validators.required]),
       description: new FormControl('', [
         Validators.required,
-        Validators.maxLength(40),
+        Validators.maxLength(80),
       ]),
       date: new FormControl('', [Validators.required]),
     });
@@ -50,13 +50,6 @@ export class IncomeService {
     } else {
       return null;
     }
-  }
-
-  updateIncome(id: string, data: Partial<income>): Observable<income> {
-    return this.http.patch<income>(
-      `${environment.incomeApiUrl}/update-income/${id}`,
-      data
-    );
   }
 
   //method for showing alert message

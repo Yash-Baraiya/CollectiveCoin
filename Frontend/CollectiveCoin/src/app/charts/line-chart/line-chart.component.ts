@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 import { ExpenseService } from '../../shared/services/expense.service';
 import { Observable } from 'rxjs';
@@ -12,7 +12,7 @@ import { selectIncomeData } from '../../incomeModule/incomeStore/income.selector
   templateUrl: './line-chart.component.html',
   styleUrls: ['./line-chart.component.css'],
 })
-export class LineChartComponent implements OnInit {
+export class LineChartComponent implements OnInit, OnDestroy {
   incomeamounts: Array<number> = [];
   expenseamounts: Array<number> = [];
   incomedata$: Observable<any[]>;
@@ -79,6 +79,7 @@ export class LineChartComponent implements OnInit {
   async createChart() {
     var canvas = document.getElementById('myChart') as HTMLCanvasElement;
     var ctx = canvas.getContext('2d');
+
     var myChart = new Chart(ctx, {
       type: 'line',
       data: {
@@ -137,4 +138,6 @@ export class LineChartComponent implements OnInit {
     }
     return days;
   }
+
+  ngOnDestroy(): void {}
 }

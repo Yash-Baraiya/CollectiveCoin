@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ExpenseService } from '../services/expense.service';
-import { Router } from '@angular/router';
+import { Route, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TransactionService } from '../services/transaction.service';
@@ -11,6 +11,8 @@ import { IncomeState } from '../../incomeModule/incomeStore/income.reducer';
 import * as incomeActions from './../../incomeModule/incomeStore/income.actions';
 import * as transactionsActions from './../../transactions/trasactionStore/transactions.action';
 import { TransactionState } from '../../transactions/trasactionStore/transactions.reducer';
+import * as BudgetActions from './../../budgetModule/budgetStore/budget.actions';
+import { BudgetState } from '../../budgetModule/budgetStore/budget.reducer';
 
 @Component({
   selector: 'app-items',
@@ -23,14 +25,15 @@ export class ItemsComponent implements OnInit {
   @Input() updateMethod?: Function;
   constructor(
     public expenseservice: ExpenseService,
-    private router: Router,
-    private http: HttpClient,
     private snackBar: MatSnackBar,
     public transactionservice: TransactionService,
     public incomeservice: IncomeService,
     public budgetservice: BudgetService,
     private incomestore: Store<IncomeState>,
-    private transactionstore: Store<TransactionState>
+    private transactionstore: Store<TransactionState>,
+    private budgetstore: Store<BudgetState>,
+    private http: HttpClient,
+    private router: Router
   ) {}
 
   ngOnInit(): void {}
@@ -44,10 +47,11 @@ export class ItemsComponent implements OnInit {
       } else if (this.deleteMethod === this.expenseservice.deleteExpense) {
         this.expenseservice.deleteExpense(id);
       } else if (this.deleteMethod === transactionsActions.deleteTransaction) {
-        console.log(id);
         this.transactionstore.dispatch(
           transactionsActions.deleteTransaction({ id })
         );
+      } else if (this.deleteMethod === BudgetActions.deleteBudget) {
+        this.budgetstore.dispatch(BudgetActions.deleteBudget({ id }));
       }
     } else {
       console.log('deleteMethod is not defined');

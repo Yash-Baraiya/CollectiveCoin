@@ -3,11 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Store, select } from '@ngrx/store';
-import {
-  selectIncomeById,
-  selectIncomeData,
-} from '../incomeStore/income.selector';
+import { Store } from '@ngrx/store';
+import { selectIncomeById } from '../incomeStore/income.selector';
 import { IncomeState } from '../incomeStore/income.reducer';
 import { income } from '../../shared/interfaces/income.interface';
 import { HttpClient } from '@angular/common/http';
@@ -24,7 +21,7 @@ export class UpdateincomeComponent implements OnInit, OnDestroy {
   updateIncomeForm: FormGroup;
   incomeData$: Observable<income>;
   incomeDataSubscription: Subscription;
-  incomeData: income; // Define incomeData to hold the emitted value
+  incomeData: income;
 
   constructor(
     private route: ActivatedRoute,
@@ -44,7 +41,7 @@ export class UpdateincomeComponent implements OnInit, OnDestroy {
       category: new FormControl('', [Validators.required]),
       description: new FormControl('', [
         Validators.required,
-        Validators.maxLength(40),
+        Validators.maxLength(80),
       ]),
       date: new FormControl('', [Validators.required]),
     });

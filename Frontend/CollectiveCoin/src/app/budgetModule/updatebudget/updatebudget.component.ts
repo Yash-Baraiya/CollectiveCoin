@@ -3,10 +3,15 @@ import { BudgetService } from '../../shared/services/budget.service';
 import { HttpClient } from '@angular/common/http';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { environment } from '../../environment';
+import { budget } from '../../shared/interfaces/budget.interface';
+import { BudgetState } from '../budgetStore/budget.reducer';
+import { Store } from '@ngrx/store';
+import { selectBudgetById } from '../budgetStore/budget.selector';
+import * as BudgetActions from './../budgetStore/budget.actions';
 
 @Component({
   selector: 'app-updatebudget',
@@ -17,6 +22,8 @@ export class UpdatebudgetComponent implements OnInit, OnDestroy {
   budgetId = '';
   updateBudgetForm: FormGroup;
   budgetData: any = {};
+  budgetData$: Observable<budget>;
+  budgetDataSubscription: Subscription;
 
   constructor(
     public budgetservice: BudgetService,
@@ -24,35 +31,31 @@ export class UpdatebudgetComponent implements OnInit, OnDestroy {
     private http: HttpClient,
     private datepipe: DatePipe,
     private snackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private store: Store<BudgetState>
   ) {}
   ngOnInit(): void {
-    this.route.params.subscribe((param) => {
-      this.budgetId = param['id'];
-      this.budgetservice.getBudgets().subscribe(() => {
-        this.budgetservice.data.forEach((budget) => {
-          if (budget.id === this.budgetId) {
-            console.log('this is budget', budget);
-            this.budgetData = budget;
-            console.log(this.budgetData);
+    this.store.dispatch(BudgetActions.loadBudgets());
+    this.route.params.subscribe((params) => {
+      this.budgetId = params['id'];
 
-            if (this.budgetData) {
-              this.updateBudgetForm.patchValue({
-                title: this.budgetData.title,
-                amount: this.budgetData.amount,
-                category: this.budgetData.category,
-                description: this.budgetData.description,
-                date: this.datepipe.transform(
-                  this.budgetData.date,
-                  'MM/dd/yyyy'
-                ),
-              });
-            } else {
-              console.log('Budget data is undefined.');
-              this.router.navigate['/Budget'];
-            }
-          }
-        });
+      this.budgetData$ = this.store.select(selectBudgetById(this.budgetId));
+
+      this.budgetDataSubscription = this.budgetData$.subscribe((budgetData) => {
+        if (budgetData) {
+          this.budgetData = budgetData;
+
+          this.updateBudgetForm.patchValue({
+            title: budgetData.title,
+            amount: budgetData.amount,
+            category: budgetData.category,
+            description: budgetData.description,
+            date: budgetData.date,
+          });
+        } else {
+          console.log('Income data not found.');
+          this.router.navigate(['/Budget']);
+        }
       });
     });
     this.updateBudgetForm = new FormGroup({
@@ -66,7 +69,7 @@ export class UpdatebudgetComponent implements OnInit, OnDestroy {
       ]),
       description: new FormControl(this.budgetData.description, [
         Validators.required,
-        Validators.maxLength(40),
+        Validators.maxLength(80),
       ]),
       date: new FormControl(this.budgetData.date, [Validators.required]),
     });
@@ -75,12 +78,14 @@ export class UpdatebudgetComponent implements OnInit, OnDestroy {
   Updatebudget(id: any): Observable<any> {
     return new Observable((obseraver) => {
       let bodyData = this.updateBudgetForm.value;
+
       if (confirm('are you sure you want to update this Budget')) {
         this.http
           .patch(`${environment.budgetApiUrl}/update-budget/${id}`, bodyData)
           .subscribe(
             (resultData) => {
               this.showMessage('Budget updated successfully');
+              this.store.dispatch(BudgetActions.loadBudgets());
               console.log(resultData);
               obseraver.next();
             },
@@ -101,17 +106,8 @@ export class UpdatebudgetComponent implements OnInit, OnDestroy {
 
   save() {
     console.log('button is clicked');
-    if (this.updateBudgetForm.valid) {
-      this.Updatebudget(this.budgetId).subscribe(() => {
-        this.budgetservice.getBudgets().subscribe(() => {
-          this.budgetservice.data.forEach((budget) => {
-            if (budget.id === this.budgetId) {
-              this.budgetData = budget;
-              console.log(this.budgetData);
-            }
-          });
-        });
-      });
+    if (this.updateBudgetForm.valid && this.budgetData) {
+      this.Updatebudget(this.budgetId).subscribe(() => {});
     } else {
       this.showMessage('please fill form as directed');
     }
@@ -123,6 +119,9 @@ export class UpdatebudgetComponent implements OnInit, OnDestroy {
     });
   }
   ngOnDestroy(): void {
+    if (this.budgetDataSubscription) {
+      this.budgetDataSubscription.unsubscribe();
+    }
     this.budgetData = {};
     this.updateBudgetForm.reset();
   }

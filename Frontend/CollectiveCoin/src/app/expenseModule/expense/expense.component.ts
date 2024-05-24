@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { ExpenseService } from '../../shared/services/expense.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -14,6 +20,8 @@ export class ExpenseComponent implements OnInit, OnDestroy {
   showrecurrence: boolean = false;
   itemsPerPage: number = 4;
   totalPages: number;
+
+  @ViewChild('markAspaid') markAspaid: ElementRef<HTMLInputElement>;
 
   constructor(
     public expenseservice: ExpenseService,
@@ -64,6 +72,7 @@ export class ExpenseComponent implements OnInit, OnDestroy {
   saveadd() {
     if (this.expenseservice.expenseForm.valid) {
       this.expenseservice.addExpense();
+      this.markAspaid.nativeElement.checked = true;
     } else {
       alert('please fill the form as directed');
     }
@@ -72,5 +81,6 @@ export class ExpenseComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.expenseservice.totalexpense = 0;
     this.expenseservice.yearlyTotalExpense = 0;
+    this.expenseservice.expenseForm.reset();
   }
 }

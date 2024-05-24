@@ -25,10 +25,19 @@ export class TransactionEffects {
       switchMap(() =>
         this.transactionService.getAllTransactions().pipe(
           map((data) => {
-            const formattedTransactions = data.transactions.map(
+            const formattedDateTransactions = data.transactions.map(
               (transaction) => ({
                 ...transaction,
-                date: this.datePipe.transform(transaction.date, 'dd/MM/yyyy'),
+                date: this.datePipe.transform(transaction.date, 'MM/dd/yyyy'),
+              })
+            );
+            const formattedTransactions = formattedDateTransactions.map(
+              (transaction) => ({
+                ...transaction,
+                duedate: this.datePipe.transform(
+                  transaction.duedate,
+                  'MM/dd/yyyy'
+                ),
               })
             );
 
