@@ -412,3 +412,6 @@ li {
   margin-right: 2px;
   white-space: nowrap;
 }
+* {
+  overflow-x: hidden;
+}

@@ -9,7 +9,7 @@ export const selectIncomeData = createSelector(
   selectIncomeState,
 
   (state) => {
-    console.log(state);
+    console.log('state I', state);
     return state?.data ?? [];
   }
 );

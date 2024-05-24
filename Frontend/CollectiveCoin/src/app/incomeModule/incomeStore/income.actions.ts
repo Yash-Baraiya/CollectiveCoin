@@ -16,7 +16,10 @@ export const deleteIncome = createAction(
   '[Income] Delete Income',
   props<{ id: string }>()
 );
-export const deleteIncomeSuccess = createAction('[Income] Income Deleted');
+export const deleteIncomeSuccess = createAction(
+  '[Income] Income Deleted',
+  props<{ id: string }>()
+);
 export const incomeError = createAction(
   '[Income] Income Error',
   props<{ error: any }>()

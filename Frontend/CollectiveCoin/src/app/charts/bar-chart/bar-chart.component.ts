@@ -1,4 +1,4 @@
-import { Component, Output } from '@angular/core';
+import { Component, OnDestroy, OnInit, Output } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 import { BudgetService } from '../../shared/services/budget.service';
 import { Observable, map } from 'rxjs';
@@ -16,7 +16,7 @@ import { budget } from '../../shared/interfaces/budget.interface';
   templateUrl: './bar-chart.component.html',
   styleUrl: './bar-chart.component.css',
 })
-export class BarChartComponent {
+export class BarChartComponent implements OnInit, OnDestroy {
   budgetData = [];
   expenseData = [];
   budgetData$: Observable<budget[]>;
@@ -42,8 +42,10 @@ export class BarChartComponent {
     this.budgetData$ = this.store.select(selectMonthlyBudget);
     this.expenseData$ = this.store.select(selectExpCategoryAmounts);
 
-    this.budgetData$.subscribe(() => {
-      this.expenseData$.subscribe(() => {
+    this.budgetData$.subscribe((budgetData) => {
+      console.log('coming', budgetData);
+      this.expenseData$.subscribe((expenseData) => {
+        console.log('coming here', budgetData, expenseData);
         this.fetchData().subscribe(() => {
           this.createChart();
         });
@@ -107,4 +109,6 @@ export class BarChartComponent {
       },
     });
   }
+
+  ngOnDestroy(): void {}
 }

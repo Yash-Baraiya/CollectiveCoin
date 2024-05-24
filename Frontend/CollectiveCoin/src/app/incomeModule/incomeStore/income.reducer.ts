@@ -45,7 +45,7 @@ export const incomeReducer = createReducer(
     ...state,
     data: [...state.data],
   })),
-  on(IncomeActions.deleteIncome, (state, { id }) => ({
+  on(IncomeActions.deleteIncomeSuccess, (state, { id }) => ({
     ...state,
     data: state.data.filter((income) => income._id !== id),
   })),

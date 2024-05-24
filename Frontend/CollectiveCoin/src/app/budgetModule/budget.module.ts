@@ -8,9 +8,10 @@ import { StoreModule } from '@ngrx/store';
 import { budgetReducer } from './budgetStore/budget.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { BudgetEffects } from './budgetStore/budget.effect';
+import { BarChartComponent } from '../charts/bar-chart/bar-chart.component';
 
 @NgModule({
-  declarations: [BudgetComponent, UpdatebudgetComponent],
+  declarations: [BudgetComponent, UpdatebudgetComponent, BarChartComponent],
   imports: [
     CommonModule,
     SharedModule,
@@ -18,5 +19,6 @@ import { BudgetEffects } from './budgetStore/budget.effect';
     StoreModule.forFeature('budget', budgetReducer),
     EffectsModule.forFeature([BudgetEffects]),
   ],
+  exports: [BarChartComponent],
 })
 export class BudgetModule {}

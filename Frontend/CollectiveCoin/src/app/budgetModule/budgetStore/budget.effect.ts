@@ -86,7 +86,7 @@ export class BudgetEffects {
         console.log(id);
         return this.budgetservice.deleteBudget(id).pipe(
           tap(() => this.showMessage('budget deleted successfully')),
-          map(() => BudgetActions.deleteBudgetSuccess()),
+          map(() => BudgetActions.deleteBudgetSuccess({ id })),
           catchError((error) => {
             console.log(error);
             this.showMessage(error.error.message);

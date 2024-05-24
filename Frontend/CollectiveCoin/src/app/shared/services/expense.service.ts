@@ -89,7 +89,6 @@ export class ExpenseService {
       }
       this.http.get(apiUrl).subscribe(
         (resultData: ExpenseResponse) => {
-          console.log(resultData);
           this.data = resultData.monthlyexpense.map((expense) => ({
             title: expense.title,
             amount: expense.amount,

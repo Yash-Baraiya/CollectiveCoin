@@ -45,7 +45,7 @@ export const budgetReducer = createReducer(
     ...state,
     budgets: [...state.budgets, budget],
   })),
-  on(BudgetActions.deleteBudget, (state, { id }) => ({
+  on(BudgetActions.deleteBudgetSuccess, (state, { id }) => ({
     ...state,
     monthlybudget: state.monthlybudget.filter((budget) => budget._id !== id),
   })),

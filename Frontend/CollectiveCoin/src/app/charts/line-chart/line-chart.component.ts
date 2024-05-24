@@ -27,12 +27,15 @@ export class LineChartComponent implements OnInit, OnDestroy {
     private store: Store<IncomeState>
   ) {
     Chart.register(...registerables);
+    this.store.dispatch(loadIncomes());
+    this.incomedata$ = this.store.select(selectIncomeData);
   }
 
   ngOnInit() {
     this.store.dispatch(loadIncomes());
     this.incomedata$ = this.store.select(selectIncomeData);
-    this.incomedata$.subscribe(() => {
+    this.incomedata$.subscribe((incomeData) => {
+      console.log('calling every time', incomeData);
       this.expenseservice.getExpense().subscribe(() => {
         this.fetchData().subscribe(() => {
           this.createChart();

@@ -82,7 +82,10 @@ export class IncomeEffects {
         console.log(id);
         return this.incomeService.deleteIncome(id).pipe(
           tap(() => this.showMessage('income deleted successfully')),
-          map(() => IncomeActions.deleteIncomeSuccess()),
+          map(() => {
+            this.store.dispatch(IncomeActions.loadIncomes());
+            return IncomeActions.deleteIncomeSuccess({ id });
+          }),
           catchError((error) => {
             this.showMessage(error.error.message);
             return of(IncomeActions.incomeError({ error }));

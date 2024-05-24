@@ -9,7 +9,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [SidebarComponent, BarChartComponent, ItemsComponent],
+  declarations: [SidebarComponent, ItemsComponent],
   imports: [
     CommonModule,
     RouterModule,
@@ -21,7 +21,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   exports: [
     SidebarComponent,
     BsDatepickerModule,
-    BarChartComponent,
     ItemsComponent,
     NgxPaginationModule,
     FormsModule,

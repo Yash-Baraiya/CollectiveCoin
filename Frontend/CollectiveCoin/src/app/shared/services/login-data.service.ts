@@ -25,7 +25,7 @@ export class LoginDataService {
   //method for setting the user's data to local storange
   setData(parsedData: resultData) {
     this.data = parsedData;
-    console.log(this.data);
+
     this.role = this.data.data.user.role;
     this.username = this.data.data.user.name;
     this.photo = this.data.data.user.photo;
@@ -48,7 +48,6 @@ export class LoginDataService {
       this.http
         .get(`${environment.userApiUrl}/isloggedin`)
         .subscribe((resultData: resultData) => {
-          console.log('is logged in result data', resultData);
           this.setData(resultData);
           observer.next();
         });

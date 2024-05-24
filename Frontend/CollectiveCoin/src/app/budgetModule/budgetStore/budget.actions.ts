@@ -15,7 +15,10 @@ export const deleteBudget = createAction(
   '[Income] Delete Budget',
   props<{ id: string }>()
 );
-export const deleteBudgetSuccess = createAction('[Income] Budget Deleted');
+export const deleteBudgetSuccess = createAction(
+  '[Income] Budget Deleted',
+  props<{ id: string }>()
+);
 export const budgetError = createAction(
   '[Income] Budget Error',
   props<{ error: any }>()

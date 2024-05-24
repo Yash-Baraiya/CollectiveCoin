@@ -17,7 +17,7 @@ import { DatePipe } from '@angular/common';
 import { SharedModule } from './shared/shared.module';
 import { CoverpageComponent } from './coverpage/coverpage.component';
 import { EffectsModule } from '@ngrx/effects';
-import { StoreModule } from '@ngrx/store';
+import { Store, StoreModule } from '@ngrx/store';
 import { reducer as membersReducer } from './members/memberstore/members.reducer';
 import { MembersEffects } from './members/memberstore/members.effects';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -26,8 +26,11 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { NotFoundComponent } from './404/404.component';
 import { reducer as transactionReducer } from './transactions/trasactionStore/transactions.reducer';
 import { TransactionEffects } from './transactions/trasactionStore/transactions.effects';
-import { PreloadingStrategy } from '@angular/router';
-import { incomePreloadingStrategy } from './incomeModule/preloading';
+
+import { incomeReducer } from './incomeModule/incomeStore/income.reducer';
+import { IncomeEffects } from './incomeModule/incomeStore/income.effects';
+import { budgetReducer } from './budgetModule/budgetStore/budget.reducer';
+import { BudgetEffects } from './budgetModule/budgetStore/budget.effect';
 
 @NgModule({
   declarations: [
@@ -51,8 +54,11 @@ import { incomePreloadingStrategy } from './incomeModule/preloading';
     MatSnackBarModule,
     StoreModule.forRoot({}),
     StoreModule.forFeature('members', membersReducer),
+    StoreModule.forFeature('income', incomeReducer),
+    StoreModule.forFeature('budget', budgetReducer),
     StoreModule.forFeature('transactions', transactionReducer),
     EffectsModule.forRoot([MembersEffects, TransactionEffects]),
+    EffectsModule.forFeature([IncomeEffects, BudgetEffects]),
     SharedModule,
     NgxSpinnerModule,
   ],
@@ -60,7 +66,6 @@ import { incomePreloadingStrategy } from './incomeModule/preloading';
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     provideAnimationsAsync(),
     DatePipe,
-    { provide: PreloadingStrategy, useClass: incomePreloadingStrategy },
   ],
   bootstrap: [AppComponent],
 })

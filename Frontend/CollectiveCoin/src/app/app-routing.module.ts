@@ -10,7 +10,6 @@ import { ResetpasswordComponent } from './user/resetpassword/resetpassword.compo
 import { CoverpageComponent } from './coverpage/coverpage.component';
 import { UpdateProfileComponent } from './user/updateProfile/updateProfile.component';
 import { NotFoundComponent } from './404/404.component';
-import { incomePreloadingStrategy } from './incomeModule/preloading';
 
 const routes: Routes = [
   {
@@ -43,7 +42,7 @@ const routes: Routes = [
       const module = await import('./incomeModule/income.module');
       return module.IncomeModule;
     },
-    data: { preload: true },
+    // data: { preload: true },
   },
   {
     path: 'Expense',
@@ -81,11 +80,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [
-    RouterModule.forRoot(routes, {
-      preloadingStrategy: incomePreloadingStrategy,
-    }),
-  ],
+  imports: [RouterModule.forRoot(routes, {})],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

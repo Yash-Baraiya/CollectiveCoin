@@ -1,7 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { BudgetState } from './budget.reducer';
 import { budget } from '../../shared/interfaces/budget.interface';
-import { state } from '@angular/animations';
 
 export const selectBudgetState = createFeatureSelector<BudgetState>('budget');
 
@@ -9,7 +8,6 @@ export const selectMonthlyBudget = createSelector(
   selectBudgetState,
 
   (state) => {
-    console.log(state);
     return state?.monthlybudget ?? [];
   }
 );
