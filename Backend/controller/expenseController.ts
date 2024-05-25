@@ -105,7 +105,7 @@ export const getExpense = async (req: Request, res: Response) => {
     console.log("get expense api called");
     console.log(req.query);
     const page = parseInt(req.query.page as string) || 1;
-    const limit = parseInt(req.query.limit as string) || 5;
+    const limit = parseInt(req.query.limit as string) || 4;
     const skip = page ? (page - 1) * limit : 0;
     console.log(page, limit);
     const auth = req.headers.authorization;

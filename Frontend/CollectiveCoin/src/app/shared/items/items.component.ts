@@ -13,6 +13,8 @@ import * as transactionsActions from './../../transactions/trasactionStore/trans
 import { TransactionState } from '../../transactions/trasactionStore/transactions.reducer';
 import * as BudgetActions from './../../budgetModule/budgetStore/budget.actions';
 import { BudgetState } from '../../budgetModule/budgetStore/budget.reducer';
+import * as ExpenseActions from './../../expenseModule/expenseStore/expense.actions';
+import { ExpenseState } from '../../expenseModule/expenseStore/expense.reducer';
 
 @Component({
   selector: 'app-items',
@@ -32,6 +34,7 @@ export class ItemsComponent implements OnInit {
     private incomestore: Store<IncomeState>,
     private transactionstore: Store<TransactionState>,
     private budgetstore: Store<BudgetState>,
+    private expensestore: Store<ExpenseState>,
     private http: HttpClient,
     private router: Router
   ) {}
@@ -40,12 +43,12 @@ export class ItemsComponent implements OnInit {
 
   deleteItem() {
     const id = this.item.id || this.item._id;
-
+    console.log('dele', this.deleteMethod);
     if (this.deleteMethod) {
       if (this.deleteMethod === incomeActions.deleteIncome) {
         this.incomestore.dispatch(incomeActions.deleteIncome({ id }));
-      } else if (this.deleteMethod === this.expenseservice.deleteExpense) {
-        this.expenseservice.deleteExpense(id);
+      } else if (this.deleteMethod === ExpenseActions.deleteExpense) {
+        this.expensestore.dispatch(ExpenseActions.deleteExpense({ id }));
       } else if (this.deleteMethod === transactionsActions.deleteTransaction) {
         this.transactionstore.dispatch(
           transactionsActions.deleteTransaction({ id })

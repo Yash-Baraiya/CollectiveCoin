@@ -5,8 +5,6 @@ import { IncomeState } from './../../incomeModule/incomeStore/income.reducer';
 import * as IncomeActions from './../../incomeModule/incomeStore/income.actions';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environment';
-import { Observable } from 'rxjs';
-import { income } from '../interfaces/income.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -51,6 +49,4 @@ export class IncomeService {
       return null;
     }
   }
-
-  //method for showing alert message
 }

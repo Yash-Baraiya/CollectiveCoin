@@ -8,6 +8,13 @@ import { DatePipe } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { environment } from '../../environment';
 import { expense } from '../../shared/interfaces/expense.interface';
+import { ExpenseState } from '../expenseStore/expense.reducer';
+import { Store } from '@ngrx/store';
+import * as ExpenseActions from './../expenseStore/expense.actions';
+import {
+  selectExpenseById,
+  selectExpenseData,
+} from '../expenseStore/expense.selector';
 @Component({
   selector: 'app-updateexpense',
   templateUrl: './updateexpense.component.html',
@@ -18,6 +25,7 @@ export class UpdateexpenseComponent implements OnInit, OnDestroy {
   updateExpenseForm: FormGroup;
   expenseData: expense;
   showCheckbox: boolean = false;
+  expenseData$: Observable<expense>;
 
   constructor(
     public expenseservice: ExpenseService,
@@ -25,7 +33,8 @@ export class UpdateexpenseComponent implements OnInit, OnDestroy {
     private http: HttpClient,
     private datepipe: DatePipe,
     private snackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private store: Store<ExpenseState>
   ) {}
   ngOnInit(): void {
     this.updateExpenseForm = new FormGroup({
@@ -46,79 +55,74 @@ export class UpdateexpenseComponent implements OnInit, OnDestroy {
 
     this.route.params.subscribe((param) => {
       this.expenseId = param['id'];
-      this.expenseservice.getExpense().subscribe(() => {
-        this.expenseservice.data.forEach((expense) => {
-          if (expense.id === this.expenseId) {
-            this.expenseData = expense;
-            if (this.expenseData) {
-              this.updateExpenseForm.patchValue({
-                title: this.expenseData.title,
-                amount: this.expenseData.amount,
-                category: this.expenseData.category,
-                description: this.expenseData.description,
-                date: this.datepipe.transform(
-                  this.expenseData.date,
-                  'MM/dd/yyyy'
-                ),
-                markAsPaid: this.expenseData.markAspaid,
-                duedate: this.expenseData.duedate,
-              });
-            } else {
-              console.log('Expense data is undefined.');
-              this.router.navigate(['/Expense']);
-            }
-          }
-        });
+
+      this.expenseData$ = this.store.select(selectExpenseById(this.expenseId));
+
+      this.expenseData$.subscribe((expenseData) => {
+        if (expenseData) {
+          this.expenseData = expenseData;
+          this.updateExpenseForm.patchValue({
+            title: this.expenseData.title,
+            amount: this.expenseData.amount,
+            category: this.expenseData.category,
+            description: this.expenseData.description,
+            date: this.datepipe.transform(this.expenseData.date, 'MM/dd/yyyy'),
+            markAsPaid: this.expenseData.markAspaid,
+            duedate: this.expenseData.duedate,
+          });
+        } else {
+          console.log('Expense data is undefined.');
+          this.router.navigate(['/Expense']);
+        }
       });
     });
   }
 
-  UpdateExpense(id: string): Observable<any> {
-    return new Observable((obseraver) => {
+  UpdateExpense(id: any): Observable<any> {
+    return new Observable((observer) => {
       let bodyData = this.updateExpenseForm.value;
-      if (confirm('are you sure you want to update this expense')) {
+
+      if (confirm('Are you sure you want to update this expense?')) {
         this.http
           .patch(`${environment.expenseApiUrl}/update-expense/${id}`, bodyData)
           .subscribe(
             (resultData) => {
-              try {
-                this.showMessage('expense updated successfully');
-
-                console.log(resultData);
-                obseraver.next();
-              } catch (error) {
-                console.log(error);
-              }
+              this.showMessage('Expense updated successfully');
+              this.store.dispatch(ExpenseActions.loadExpense({}));
+              console.log(resultData);
+              observer.next(resultData);
+              observer.complete();
             },
             (error) => {
-              console.log(error);
+              console.error(error);
               if (error.error.message) {
                 this.showMessage(error.error.message);
               } else {
                 this.showMessage(
-                  'somthing went wrong please try again after some time'
+                  'Something went wrong, please try again after some time.'
                 );
               }
+              observer.error(error);
             }
           );
+      } else {
+        observer.complete();
       }
     });
   }
 
   save() {
     if (this.updateExpenseForm.valid) {
-      this.UpdateExpense(this.expenseId).subscribe(() => {
-        this.expenseservice.getExpense().subscribe(() => {
-          this.expenseservice.data.forEach((expense) => {
-            if (expense.id === this.expenseId) {
-              this.expenseData = expense;
-              console.log(this.expenseData);
-            }
-          });
-        });
-      });
+      this.UpdateExpense(this.expenseId).subscribe(
+        (resultData) => {
+          console.log('Update successful:', resultData);
+        },
+        (error) => {
+          console.error('Update failed', error);
+        }
+      );
     } else {
-      this.showMessage('please fill form as directed');
+      this.showMessage('Please fill out the form correctly.');
     }
   }
   onCategoryChange(event: any) {

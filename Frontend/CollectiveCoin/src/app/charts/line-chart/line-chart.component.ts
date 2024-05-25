@@ -1,11 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
-import { ExpenseService } from '../../shared/services/expense.service';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { IncomeState } from '../../incomeModule/incomeStore/income.reducer';
 import { Store } from '@ngrx/store';
 import { loadIncomes } from '../../incomeModule/incomeStore/income.actions';
 import { selectIncomeData } from '../../incomeModule/incomeStore/income.selector';
+import { ExpenseState } from '../../expenseModule/expenseStore/expense.reducer';
+import { loadExpense } from '../../expenseModule/expenseStore/expense.actions';
+import { selectExpAmounts } from '../../expenseModule/expenseStore/expense.selector';
 
 @Component({
   selector: 'app-line-chart',
@@ -16,74 +19,60 @@ export class LineChartComponent implements OnInit, OnDestroy {
   incomeamounts: Array<number> = [];
   expenseamounts: Array<number> = [];
   incomedata$: Observable<any[]>;
-
+  exepnsedata$: Observable<any[]>;
+  private chart: Chart;
+  private subscription: Subscription;
   labels = this.getDaysInMonth(
     new Date().getMonth() + 1,
     new Date().getFullYear()
   ).map((date) => date);
 
   constructor(
-    private expenseservice: ExpenseService,
-    private store: Store<IncomeState>
+    private incomestore: Store<IncomeState>,
+    private expensestore: Store<ExpenseState>
   ) {
     Chart.register(...registerables);
-    this.store.dispatch(loadIncomes());
-    this.incomedata$ = this.store.select(selectIncomeData);
   }
 
   ngOnInit() {
-    this.store.dispatch(loadIncomes());
-    this.incomedata$ = this.store.select(selectIncomeData);
-    this.incomedata$.subscribe((incomeData) => {
-      console.log('calling every time', incomeData);
-      this.expenseservice.getExpense().subscribe(() => {
-        this.fetchData().subscribe(() => {
-          this.createChart();
-        });
+    this.incomedata$ = this.incomestore.select(selectIncomeData);
+    this.exepnsedata$ = this.expensestore.select(selectExpAmounts);
+
+    this.incomestore.dispatch(loadIncomes());
+    this.expensestore.dispatch(loadExpense({}));
+
+    this.subscription = combineLatest([this.incomedata$, this.exepnsedata$])
+      .pipe(
+        map(([incomeData, expenseData]) => {
+          this.incomeamounts = this.labels.map((label) => {
+            const income = incomeData.find(
+              (income) => this.formatDateString(income.date) === label
+            );
+            return income ? income.amount : null;
+          });
+
+          this.expenseamounts = this.labels.map((label) => {
+            const expense = expenseData.find(
+              (expense) => this.formatDateString(expense.date) === label
+            );
+            return expense ? expense.amount : null;
+          });
+        })
+      )
+      .subscribe(() => {
+        this.createChart();
       });
-    });
   }
 
-  //method for fetching the data
-  fetchData(): Observable<any> {
-    return new Observable((obseraver) => {
-      this.incomedata$.subscribe((incomeData) => {
-        this.labels.forEach((label) => {
-          const income = incomeData.find(
-            (income) => this.formatDateString(income.date) === label
-          );
-          this.incomeamounts.push(income ? income.amount : null);
-        });
-      });
+  createChart() {
+    if (this.chart) {
+      this.chart.destroy();
+    }
 
-      this.labels.forEach((label) => {
-        let value: boolean;
-        for (let i = 0; i < this.expenseservice.expamounts.length; i++) {
-          if (
-            this.formatDateString(this.expenseservice.expamounts[i].date) ===
-            label
-          ) {
-            this.expenseamounts.push(this.expenseservice.expamounts[i].amount);
-            value = true;
-            break;
-          }
-        }
-        if (!value) {
-          this.expenseamounts.push(null);
-        }
-      });
+    const canvas = document.getElementById('myChart') as HTMLCanvasElement;
+    const ctx = canvas.getContext('2d');
 
-      obseraver.next();
-      obseraver.complete();
-    });
-  }
-
-  //method for creating the chart
-  async createChart() {
-    var canvas = document.getElementById('myChart') as HTMLCanvasElement;
-    var ctx = canvas.getContext('2d');
-
-    var myChart = new Chart(ctx, {
+    this.chart = new Chart(ctx, {
       type: 'line',
       data: {
         labels: this.labels,
@@ -112,9 +101,11 @@ export class LineChartComponent implements OnInit, OnDestroy {
           },
         },
         responsive: true,
+        maintainAspectRatio: false,
       },
     });
   }
+
   formatDateString(dateString: string): string {
     const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, '0');
@@ -124,7 +115,6 @@ export class LineChartComponent implements OnInit, OnDestroy {
     return `${day}/${month}/${year}`;
   }
 
-  //method for getting formated dates of every month
   getDaysInMonth(month: number, year: number): string[] {
     const date = new Date(year, month - 1, 1);
     const days: string[] = [];
@@ -142,5 +132,12 @@ export class LineChartComponent implements OnInit, OnDestroy {
     return days;
   }
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    if (this.chart) {
+      this.chart.destroy();
+    }
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
 }

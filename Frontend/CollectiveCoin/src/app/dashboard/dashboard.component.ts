@@ -16,6 +16,14 @@ import {
   selectYearlyTotalIncome,
 } from '../incomeModule/incomeStore/income.selector';
 import { selectTransactionsHistory } from '../transactions/trasactionStore/transactions.selector';
+import { ExpenseState } from '../expenseModule/expenseStore/expense.reducer';
+import * as expenseActions from './../expenseModule/expenseStore/expense.actions';
+import {
+  selectExpenseTotal,
+  selectMaxExpense,
+  selectMinExpense,
+  selectYearlyTotalExpense,
+} from '../expenseModule/expenseStore/expense.selector';
 
 @Component({
   selector: 'app-dashboard',
@@ -28,6 +36,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   totalIncome$: Observable<number>;
   yearlyTotalIncomes$: Observable<any>;
   recentHistory$: Observable<any[]>;
+  maxExpense$: Observable<any>;
+  minExpense$: Observable<any>;
+  yearlyTotalExpense$: Observable<any>;
+  totalExpense$: Observable<any>;
 
   constructor(
     public incomeservice: IncomeService,
@@ -35,7 +47,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     public transactionservice: TransactionService,
     private spinnerservice: SpinnerService,
     private incomestore: Store<IncomeState>,
-    private transactionstore: Store<TransactionState>
+    private transactionstore: Store<TransactionState>,
+    private expensestore: Store<ExpenseState>
   ) {}
 
   ngOnInit(): void {
@@ -46,6 +59,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }, 2000);
 
     this.incomestore.dispatch(incomesActions.loadIncomes());
+    this.expensestore.dispatch(expenseActions.loadExpense({}));
     this.transactionstore.dispatch(transactionsActions.loadTransactions());
 
     this.maxIncome$ = this.incomestore
@@ -63,12 +77,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.recentHistory$ = this.transactionstore
       .select(selectTransactionsHistory)
       .pipe(catchError(() => of([])));
-
-    this.expenseservice.getExpense().subscribe(() => {});
+    this.totalExpense$ = this.incomestore
+      .select(selectExpenseTotal)
+      .pipe(catchError(() => of(0)));
+    this.maxExpense$ = this.expensestore
+      .select(selectMaxExpense)
+      .pipe(catchError(() => of(0)));
+    this.minExpense$ = this.expensestore
+      .select(selectMinExpense)
+      .pipe(catchError(() => of(0)));
+    this.yearlyTotalExpense$ = this.expensestore
+      .select(selectYearlyTotalExpense)
+      .pipe(catchError(() => of(0)));
   }
 
-  ngOnDestroy(): void {
-    this.expenseservice.maxexpense = 0;
-    this.expenseservice.minexpense = 0;
-  }
+  ngOnDestroy(): void {}
 }

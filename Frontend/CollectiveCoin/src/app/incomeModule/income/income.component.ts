@@ -10,8 +10,6 @@ import {
   selectIncomeData,
   selectIncomeTotal,
   selectInocmesLength,
-  selectMaxIncome,
-  selectMinIncome,
 } from '../incomeStore/income.selector';
 import { income } from '../../shared/interfaces/income.interface';
 

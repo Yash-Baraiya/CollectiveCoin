@@ -31,6 +31,8 @@ import { incomeReducer } from './incomeModule/incomeStore/income.reducer';
 import { IncomeEffects } from './incomeModule/incomeStore/income.effects';
 import { budgetReducer } from './budgetModule/budgetStore/budget.reducer';
 import { BudgetEffects } from './budgetModule/budgetStore/budget.effect';
+import { expenseReducer } from './expenseModule/expenseStore/expense.reducer';
+import { ExpenseEffects } from './expenseModule/expenseStore/expense.effects';
 
 @NgModule({
   declarations: [
@@ -57,8 +59,9 @@ import { BudgetEffects } from './budgetModule/budgetStore/budget.effect';
     StoreModule.forFeature('income', incomeReducer),
     StoreModule.forFeature('budget', budgetReducer),
     StoreModule.forFeature('transactions', transactionReducer),
+    StoreModule.forFeature('expense', expenseReducer),
     EffectsModule.forRoot([MembersEffects, TransactionEffects]),
-    EffectsModule.forFeature([IncomeEffects, BudgetEffects]),
+    EffectsModule.forFeature([IncomeEffects, BudgetEffects, ExpenseEffects]),
     SharedModule,
     NgxSpinnerModule,
   ],

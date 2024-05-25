@@ -8,6 +8,11 @@ import { ExpenseService } from '../../shared/services/expense.service';
 import { environment } from '../../environment';
 import resultData from '../../shared/interfaces/resultData.interface';
 import { DOCUMENT } from '@angular/common';
+import { Store } from '@ngrx/store';
+import { ExpenseState } from '../../expenseModule/expenseStore/expense.reducer';
+import * as ExpenseActions from './../../expenseModule/expenseStore/expense.actions';
+import { Observable } from 'rxjs';
+import { selectExpenseData } from '../../expenseModule/expenseStore/expense.selector';
 
 @Component({
   selector: 'app-login',
@@ -19,6 +24,7 @@ export class LoginComponent implements OnInit {
   email: string = '';
   password: string = '';
   forgotpasswordForm: FormGroup;
+  Expenses$: Observable<any>;
   data: resultData;
 
   constructor(
@@ -27,6 +33,7 @@ export class LoginComponent implements OnInit {
     private loginDataServeice: LoginDataService,
     private snackBar: MatSnackBar,
     private expenseservice: ExpenseService,
+    private store: Store<ExpenseState>,
     private renderer: Renderer2,
     @Inject(DOCUMENT) private document: any
   ) {}
@@ -80,9 +87,12 @@ export class LoginComponent implements OnInit {
 
             this.showMessage('loggedin successfully');
             this.router.navigate(['/DashBoard']);
-            this.expenseservice.getExpense();
 
-            this.expenseservice.data.forEach((expense: any) => {
+            this.store.dispatch(ExpenseActions.loadExpense({}));
+
+            this.Expenses$ = this.store.select(selectExpenseData);
+
+            this.Expenses$.forEach((expense: any) => {
               if (expense.markAspaid === false) {
                 this.showMessage(`some expenses are due to pay `);
               }

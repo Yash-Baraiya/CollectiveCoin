@@ -7,6 +7,17 @@ import {
 } from '@angular/core';
 import { ExpenseService } from '../../shared/services/expense.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { ExpenseState } from '../expenseStore/expense.reducer';
+import { Store } from '@ngrx/store';
+import * as ExpenseActions from './../expenseStore/expense.actions';
+import {
+  selectExpenseData,
+  selectExpenseTotal,
+  selectExpensesLength,
+  selectTotalPages,
+} from '../expenseStore/expense.selector';
+import { expense } from '../../shared/interfaces/expense.interface';
 
 @Component({
   selector: 'app-expense',
@@ -16,46 +27,58 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class ExpenseComponent implements OnInit, OnDestroy {
   showCheckbox: boolean = false;
   currentPage: number = 1;
-  totalItems: number;
+  totalItems$: Observable<number>;
   showrecurrence: boolean = false;
+  totalPages$: Observable<number>;
+  totalExpense$: Observable<any[]>;
+  expenses$: Observable<expense[]>;
   itemsPerPage: number = 4;
-  totalPages: number;
+  deleteMethod: Function;
 
   @ViewChild('markAspaid') markAspaid: ElementRef<HTMLInputElement>;
 
   constructor(
     public expenseservice: ExpenseService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private store: Store<ExpenseState>
   ) {}
 
   ngOnInit(): void {
-    this.expenseservice
-      .getExpense(this.currentPage, this.itemsPerPage)
-      .subscribe(() => {
-        this.totalItems = this.expenseservice.expamounts.length;
-        this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
-      });
+    this.deleteMethod = ExpenseActions.deleteExpense;
+    this.store.dispatch(
+      ExpenseActions.loadExpense({
+        params: { page: this.currentPage, limit: this.itemsPerPage },
+      })
+    );
+
+    this.totalExpense$ = this.store.select(selectExpenseTotal);
+    this.expenses$ = this.store.select(selectExpenseData);
+    this.totalItems$ = this.store.select(selectExpensesLength);
+    this.totalPages$ = this.store.select(selectTotalPages);
   }
 
   nextPage() {
     this.currentPage = this.currentPage + 1;
+    this.store.dispatch(
+      ExpenseActions.loadExpense({
+        params: { page: this.currentPage, limit: this.itemsPerPage },
+      })
+    );
 
-    this.expenseservice
-      .getExpense(this.currentPage, this.itemsPerPage)
-      .subscribe(() => {
-        this.totalItems = this.expenseservice.expamounts.length;
-        this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
-      });
+    this.totalItems$ = this.store.select(selectExpensesLength);
+    this.totalPages$ = this.store.select(selectTotalPages);
   }
   previousPage() {
     this.currentPage = this.currentPage - 1;
-    this.expenseservice
-      .getExpense(this.currentPage, this.itemsPerPage)
-      .subscribe(() => {
-        this.totalItems = this.expenseservice.expamounts.length;
-        this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
-      });
+    this.store.dispatch(
+      ExpenseActions.loadExpense({
+        params: { page: this.currentPage, limit: this.itemsPerPage },
+      })
+    );
+
+    this.totalItems$ = this.store.select(selectExpensesLength);
+    this.totalPages$ = this.store.select(selectTotalPages);
   }
   updateExpense(id: string) {
     this.router.navigate([`Expense/update-expense/${id}`]);
@@ -71,7 +94,9 @@ export class ExpenseComponent implements OnInit, OnDestroy {
 
   saveadd() {
     if (this.expenseservice.expenseForm.valid) {
-      this.expenseservice.addExpense();
+      this.store.dispatch(
+        ExpenseActions.addExpense(this.expenseservice.expenseForm.value)
+      );
       this.markAspaid.nativeElement.checked = true;
     } else {
       alert('please fill the form as directed');
@@ -79,8 +104,6 @@ export class ExpenseComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.expenseservice.totalexpense = 0;
-    this.expenseservice.yearlyTotalExpense = 0;
     this.expenseservice.expenseForm.reset();
   }
 }

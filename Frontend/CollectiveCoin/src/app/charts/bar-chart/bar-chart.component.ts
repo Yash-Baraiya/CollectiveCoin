@@ -1,8 +1,8 @@
-import { Component, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
-import { BudgetService } from '../../shared/services/budget.service';
-import { Observable, map } from 'rxjs';
-import { Store, select } from '@ngrx/store';
+import { Observable, combineLatest, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
 import { BudgetState } from '../../budgetModule/budgetStore/budget.reducer';
 import * as BudgetActions from './../../budgetModule/budgetStore/budget.actions';
 import {
@@ -14,13 +14,15 @@ import { budget } from '../../shared/interfaces/budget.interface';
 @Component({
   selector: 'app-bar-chart',
   templateUrl: './bar-chart.component.html',
-  styleUrl: './bar-chart.component.css',
+  styleUrls: ['./bar-chart.component.css'],
 })
 export class BarChartComponent implements OnInit, OnDestroy {
-  budgetData = [];
-  expenseData = [];
+  budgetData: number[] = [];
+  expenseData: number[] = [];
   budgetData$: Observable<budget[]>;
   expenseData$: Observable<object>;
+  private subscription: Subscription;
+  chart: Chart;
 
   labels = [
     'groceries',
@@ -33,6 +35,7 @@ export class BarChartComponent implements OnInit, OnDestroy {
     'travelling',
     'monthlybills',
   ];
+
   constructor(private store: Store<BudgetState>) {
     Chart.register(...registerables);
   }
@@ -42,46 +45,33 @@ export class BarChartComponent implements OnInit, OnDestroy {
     this.budgetData$ = this.store.select(selectMonthlyBudget);
     this.expenseData$ = this.store.select(selectExpCategoryAmounts);
 
-    this.budgetData$.subscribe((budgetData) => {
-      console.log('coming', budgetData);
-      this.expenseData$.subscribe((expenseData) => {
-        console.log('coming here', budgetData, expenseData);
-        this.fetchData().subscribe(() => {
-          this.createChart();
-        });
+    this.subscription = combineLatest([this.budgetData$, this.expenseData$])
+      .pipe(
+        map(([budgetData, expenseData]) => {
+          this.budgetData = this.labels.map((label) => {
+            const budget = budgetData.find(
+              (budget) => budget.category === label
+            );
+            return budget ? budget.amount : null;
+          });
+
+          this.expenseData = this.labels.map((label) => {
+            const expense = expenseData[label] || 0;
+            return expense;
+          });
+        })
+      )
+      .subscribe(() => {
+        this.createChart();
       });
-    });
   }
 
-  //fetching the data to show in chart
-  fetchData(): Observable<void> {
-    return new Observable((observer) => {
-      // Fetch budget data
-      this.budgetData$.subscribe((monthlyBudget) => {
-        this.labels.forEach((label) => {
-          const budgetItem = monthlyBudget.find(
-            (item) => item.category === label
-          );
-          this.budgetData.push(budgetItem ? budgetItem.amount : 0);
-        });
-      });
+  // method for creating the chart
+  createChart() {
+    if (this.chart) {
+      this.chart.destroy();
+    }
 
-      // Fetch expense data
-      this.expenseData$.subscribe((expCategoryAmounts) => {
-        this.labels.forEach((label) => {
-          this.expenseData.push(
-            expCategoryAmounts[label] ? expCategoryAmounts[label] : 0
-          );
-        });
-
-        observer.next();
-        observer.complete();
-      });
-    });
-  }
-
-  //method for creating the chart
-  async createChart() {
     var canvas = document.getElementById('myChart2') as HTMLCanvasElement;
     var ctx = canvas.getContext('2d');
 
@@ -106,9 +96,17 @@ export class BarChartComponent implements OnInit, OnDestroy {
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
       },
     });
   }
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    if (this.chart) {
+      this.chart.destroy();
+    }
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
 }
