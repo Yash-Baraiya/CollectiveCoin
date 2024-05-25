@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import * as IncomeActions from './income.actions';
+import * as IncomeActions from '../actions/income.actions';
 import {
   IncomeResponse,
   income,

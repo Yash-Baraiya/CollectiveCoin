@@ -1,33 +1,8 @@
-//   payment(id: any) {
-//     this.http
-//       .post(`${environment.expenseApiUrl}/billpayment/${id}`, {})
-//       .subscribe(
-//         (resultData: any) => {
-//           const rediretLink = resultData.link;
-//           window.location.href = rediretLink;
-//         },
-//         (error) => {
-//           console.log(error);
-//           if (error.status === 303) {
-//             const redirectUrl = error.error.link;
-//             window.location.href = redirectUrl;
-//           } else if (error.error.message) {
-//             alert(error.error.message);
-//           } else {
-//             alert('There was a problem loading this page. Please login again.');
-//           }
-//           if (error.error.message === 'Please login first') {
-//             this.router.navigate(['/login']);
-//           }
-//         }
-//       );
-//   }
-
 import { Injectable } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { ExpenseState } from '../../expenseModule/expenseStore/expense.reducer';
-import * as ExpenseActions from './../../expenseModule/expenseStore/expense.actions';
+import { ExpenseState } from './../../store/reducer/expense.reducer';
+import * as ExpenseActions from '../../store/actions/expense.actions';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environment';
 

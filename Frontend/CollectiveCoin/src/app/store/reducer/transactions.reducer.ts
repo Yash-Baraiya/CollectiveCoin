@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import * as TransactionActions from './transactions.action';
+import * as TransactionActions from './../actions/transactions.action';
 import { Action } from '@ngrx/store';
 
 export interface TransactionState {
@@ -54,7 +54,7 @@ export const transactionReducer = createReducer(
     TransactionActions.filteredTransactionsLoaded,
     (state, { filteredTransactions }) => ({
       ...state,
-      transactions: { transactions: filteredTransactions }, 
+      transactions: { transactions: filteredTransactions },
       loading: false,
       error: null,
     })

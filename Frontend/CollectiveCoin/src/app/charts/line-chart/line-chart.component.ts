@@ -2,13 +2,13 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 import { combineLatest, Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { IncomeState } from '../../incomeModule/incomeStore/income.reducer';
+import { IncomeState } from '../../store/reducer/income.reducer';
 import { Store } from '@ngrx/store';
-import { loadIncomes } from '../../incomeModule/incomeStore/income.actions';
-import { selectIncomeData } from '../../incomeModule/incomeStore/income.selector';
-import { ExpenseState } from '../../expenseModule/expenseStore/expense.reducer';
-import { loadExpense } from '../../expenseModule/expenseStore/expense.actions';
-import { selectExpAmounts } from '../../expenseModule/expenseStore/expense.selector';
+import { loadIncomes } from '../../store/actions/income.actions';
+import { selectIncomeData } from '../../store/selectors/income.selector';
+import { ExpenseState } from './../../store/reducer/expense.reducer';
+import { loadExpense } from '../../store/actions/expense.actions';
+import { selectExpAmounts } from '../../store/selectors/expense.selector';
 
 @Component({
   selector: 'app-line-chart',

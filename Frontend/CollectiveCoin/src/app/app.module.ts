@@ -18,21 +18,21 @@ import { SharedModule } from './shared/shared.module';
 import { CoverpageComponent } from './coverpage/coverpage.component';
 import { EffectsModule } from '@ngrx/effects';
 import { Store, StoreModule } from '@ngrx/store';
-import { reducer as membersReducer } from './members/memberstore/members.reducer';
-import { MembersEffects } from './members/memberstore/members.effects';
+import { reducer as membersReducer } from './store/reducer/members.reducer';
+import { MembersEffects } from './store/effect/members.effects';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { UpdateProfileComponent } from './user/updateProfile/updateProfile.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { NotFoundComponent } from './404/404.component';
-import { reducer as transactionReducer } from './transactions/trasactionStore/transactions.reducer';
-import { TransactionEffects } from './transactions/trasactionStore/transactions.effects';
+import { reducer as transactionReducer } from './store/reducer/transactions.reducer';
+import { TransactionEffects } from './store/effect/transactions.effects';
 
-import { incomeReducer } from './incomeModule/incomeStore/income.reducer';
-import { IncomeEffects } from './incomeModule/incomeStore/income.effects';
-import { budgetReducer } from './budgetModule/budgetStore/budget.reducer';
-import { BudgetEffects } from './budgetModule/budgetStore/budget.effect';
-import { expenseReducer } from './expenseModule/expenseStore/expense.reducer';
-import { ExpenseEffects } from './expenseModule/expenseStore/expense.effects';
+import { incomeReducer } from './store/reducer/income.reducer';
+import { IncomeEffects } from './store/effect/income.effects';
+import { budgetReducer } from './store/reducer/budget.reducer';
+import { BudgetEffects } from './store/effect/budget.effect';
+import { expenseReducer } from './store/reducer/expense.reducer';
+import { ExpenseEffects } from './store/effect/expense.effects';
 
 @NgModule({
   declarations: [

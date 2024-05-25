@@ -1,5 +1,5 @@
 import { Action, createReducer, on } from '@ngrx/store';
-import * as MembersActions from './members.action';
+import * as MembersActions from '../../store/actions/members.action';
 
 export interface MembersState {
   members: any[];

@@ -222,6 +222,12 @@ export const getFilteredTransactions = async (
           (transactions = incomes.concat(expenses));
       }
 
+      transactions = transactions.sort((a, b) => {
+        const DateA = new Date(a.date);
+        const DateB = new Date(b.date);
+
+        return DateB.getTime() - DateA.getTime();
+      });
       console.log(req.query);
       console.log("get filtered transactions api finished");
       res.status(200).json({

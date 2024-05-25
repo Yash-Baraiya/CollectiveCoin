@@ -9,10 +9,10 @@ import { environment } from '../../environment';
 import resultData from '../../shared/interfaces/resultData.interface';
 import { DOCUMENT } from '@angular/common';
 import { Store } from '@ngrx/store';
-import { ExpenseState } from '../../expenseModule/expenseStore/expense.reducer';
-import * as ExpenseActions from './../../expenseModule/expenseStore/expense.actions';
+import { ExpenseState } from './../../store/reducer/expense.reducer';
+import * as ExpenseActions from '../../store/actions/expense.actions';
 import { Observable } from 'rxjs';
-import { selectExpenseData } from '../../expenseModule/expenseStore/expense.selector';
+import { selectExpenseData } from '../../store/selectors/expense.selector';
 
 @Component({
   selector: 'app-login',

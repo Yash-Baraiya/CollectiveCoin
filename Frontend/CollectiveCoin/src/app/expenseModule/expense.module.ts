@@ -5,9 +5,9 @@ import { ExpenseComponent } from './expense/expense.component';
 import { ExpenseModuleRoutingModule } from './expense-module-routing.module';
 import { UpdateexpenseComponent } from './updateexpense/updateexpense.component';
 import { StoreModule } from '@ngrx/store';
-import { expenseReducer } from './expenseStore/expense.reducer';
+import { expenseReducer } from './../store/reducer/expense.reducer';
 import { EffectsModule } from '@ngrx/effects';
-import { ExpenseEffects } from './expenseStore/expense.effects';
+import { ExpenseEffects } from '../store/effect/expense.effects';
 
 @NgModule({
   declarations: [ExpenseComponent, UpdateexpenseComponent],

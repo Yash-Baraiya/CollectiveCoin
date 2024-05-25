@@ -4,12 +4,12 @@ import { Router } from '@angular/router';
 import { LoginDataService } from '../../shared/services/login-data.service';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { BudgetState } from '../budgetStore/budget.reducer';
+import { BudgetState } from '../../store/reducer/budget.reducer';
 import {
   selectMonthlyBudget,
   selectOverBudget,
-} from '../budgetStore/budget.selector';
-import * as BudgetActions from '../budgetStore/budget.actions';
+} from '../../store/selectors/budget.selector';
+import * as BudgetActions from '../../store/actions/budget.actions';
 import { budget } from '../../shared/interfaces/budget.interface';
 
 @Component({

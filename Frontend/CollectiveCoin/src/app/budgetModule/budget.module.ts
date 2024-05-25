@@ -5,9 +5,9 @@ import { UpdatebudgetComponent } from './updatebudget/updatebudget.component';
 import { SharedModule } from '../shared/shared.module';
 import { BudgetModuleRoutingModule } from './budget-module-routing.module';
 import { StoreModule } from '@ngrx/store';
-import { budgetReducer } from './budgetStore/budget.reducer';
+import { budgetReducer } from '../store/reducer/budget.reducer';
 import { EffectsModule } from '@ngrx/effects';
-import { BudgetEffects } from './budgetStore/budget.effect';
+import { BudgetEffects } from '../store/effect/budget.effect';
 import { BarChartComponent } from '../charts/bar-chart/bar-chart.component';
 
 @NgModule({

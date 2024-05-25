@@ -8,10 +8,10 @@ import { DatePipe } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { environment } from '../../environment';
 import { budget } from '../../shared/interfaces/budget.interface';
-import { BudgetState } from '../budgetStore/budget.reducer';
+import { BudgetState } from '../../store/reducer/budget.reducer';
 import { Store } from '@ngrx/store';
-import { selectBudgetById } from '../budgetStore/budget.selector';
-import * as BudgetActions from './../budgetStore/budget.actions';
+import { selectBudgetById } from '../../store/selectors/budget.selector';
+import * as BudgetActions from '../../store/actions/budget.actions';
 
 @Component({
   selector: 'app-updatebudget',

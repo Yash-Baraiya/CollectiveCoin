@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { BudgetState } from './budget.reducer';
+import { BudgetState } from '../reducer/budget.reducer';
 import { budget } from '../../shared/interfaces/budget.interface';
 
 export const selectBudgetState = createFeatureSelector<BudgetState>('budget');

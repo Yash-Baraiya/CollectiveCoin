@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { ExpenseState } from './expense.reducer';
+import { ExpenseState } from './../reducer/expense.reducer';
 import { expense } from '../../shared/interfaces/expense.interface';
 
 export const selectExpenseState =

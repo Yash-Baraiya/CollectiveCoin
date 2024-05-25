@@ -8,15 +8,15 @@ import {
 import { ExpenseService } from '../../shared/services/expense.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { ExpenseState } from '../expenseStore/expense.reducer';
+import { ExpenseState } from './../../store/reducer/expense.reducer';
 import { Store } from '@ngrx/store';
-import * as ExpenseActions from './../expenseStore/expense.actions';
+import * as ExpenseActions from '../../store/actions/expense.actions';
 import {
   selectExpenseData,
   selectExpenseTotal,
   selectExpensesLength,
   selectTotalPages,
-} from '../expenseStore/expense.selector';
+} from '../../store/selectors/expense.selector';
 import { expense } from '../../shared/interfaces/expense.interface';
 
 @Component({

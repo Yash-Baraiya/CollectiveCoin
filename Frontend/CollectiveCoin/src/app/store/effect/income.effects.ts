@@ -3,11 +3,11 @@ import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { IncomeService } from '../../shared/services/income.service';
-import * as IncomeActions from './income.actions';
+import * as IncomeActions from '../actions/income.actions';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DatePipe } from '@angular/common';
 import { Store } from '@ngrx/store';
-import { IncomeState } from './income.reducer';
+import { IncomeState } from '../reducer/income.reducer';
 
 @Injectable()
 export class IncomeEffects {
@@ -63,6 +63,7 @@ export class IncomeEffects {
         this.incomeService.addIncome(income).pipe(
           tap(() => this.showMessage('income added successfully')),
           map((res) => {
+            this.incomeService.incomeForm.reset();
             this.store.dispatch(IncomeActions.loadIncomes());
             return IncomeActions.addIncomeSuccess();
           }),

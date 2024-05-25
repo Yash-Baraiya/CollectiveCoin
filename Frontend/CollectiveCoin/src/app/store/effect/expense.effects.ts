@@ -2,11 +2,11 @@ import { Injectable, resolveForwardRef } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
-import * as ExpenseActions from './expense.actions';
+import * as ExpenseActions from '../actions/expense.actions';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DatePipe } from '@angular/common';
 import { Store } from '@ngrx/store';
-import { ExpenseState } from './expense.reducer';
+import { ExpenseState } from './../reducer/expense.reducer';
 import { ExpenseService } from '../../shared/services/expense.service';
 
 @Injectable()
@@ -76,6 +76,7 @@ export class ExpenseEffects {
           tap(() => this.showMessage('expense added successfully')),
           map((res) => {
             console.log(res);
+            this.expenseservice.expenseForm.reset();
             this.store.dispatch(ExpenseActions.loadExpense({}));
             return ExpenseActions.addExpenseSuccess();
           }),
@@ -113,12 +114,25 @@ export class ExpenseEffects {
       switchMap(({ id }) => {
         return this.expenseservice.payment(id).pipe(
           map((response: any) => {
+            console.log(response);
             const redirectUrl = response.link;
             window.location.href = redirectUrl;
             return ExpenseActions.paymentSuccess(redirectUrl);
           }),
           catchError((error) => {
-            this.showMessage(error.error.message);
+            console.log(error);
+            if (error.status === 303) {
+              const redirectUrl = error.error.link;
+              window.location.href = redirectUrl;
+              this.store.dispatch(ExpenseActions.paymentSuccess(redirectUrl));
+            } else if (error.error.message) {
+              alert(error.error.message);
+            } else {
+              alert(
+                'There was a problem loading this page. Please login again.'
+              );
+            }
+
             return of(ExpenseActions.ExpenseError({ error }));
           })
         );

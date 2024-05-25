@@ -3,12 +3,12 @@ import { Chart, registerables } from 'chart.js';
 import { Observable, combineLatest, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import { BudgetState } from '../../budgetModule/budgetStore/budget.reducer';
-import * as BudgetActions from './../../budgetModule/budgetStore/budget.actions';
+import { BudgetState } from '../../store/reducer/budget.reducer';
+import * as BudgetActions from '../../store/actions/budget.actions';
 import {
   selectExpCategoryAmounts,
   selectMonthlyBudget,
-} from '../../budgetModule/budgetStore/budget.selector';
+} from '../../store/selectors/budget.selector';
 import { budget } from '../../shared/interfaces/budget.interface';
 
 @Component({
@@ -59,11 +59,12 @@ export class BarChartComponent implements OnInit, OnDestroy {
             const expense = expenseData[label] || 0;
             return expense;
           });
+
+          // Call chart creation here
+          this.createChart();
         })
       )
-      .subscribe(() => {
-        this.createChart();
-      });
+      .subscribe();
   }
 
   // method for creating the chart
@@ -75,7 +76,7 @@ export class BarChartComponent implements OnInit, OnDestroy {
     var canvas = document.getElementById('myChart2') as HTMLCanvasElement;
     var ctx = canvas.getContext('2d');
 
-    var myChart = new Chart(ctx, {
+    this.chart = new Chart(ctx, {
       type: 'bar',
       data: {
         labels: this.labels,

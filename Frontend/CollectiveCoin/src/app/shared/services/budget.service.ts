@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { IncomeState } from './../../incomeModule/incomeStore/income.reducer';
+import { IncomeState } from '../../store/reducer/income.reducer';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environment';
 

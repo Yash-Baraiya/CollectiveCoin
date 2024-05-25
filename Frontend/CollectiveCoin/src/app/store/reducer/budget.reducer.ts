@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import * as BudgetActions from './budget.actions';
+import * as BudgetActions from '../actions/budget.actions';
 import {
   BudgetResponse,
   budget,

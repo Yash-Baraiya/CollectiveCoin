@@ -3,27 +3,27 @@ import { IncomeService } from '../shared/services/income.service';
 import { ExpenseService } from '../shared/services/expense.service';
 import { TransactionService } from '../shared/services/transaction.service';
 import { SpinnerService } from '../shared/services/spinner.service';
-import * as incomesActions from '../incomeModule/incomeStore/income.actions';
-import * as transactionsActions from '../transactions/trasactionStore/transactions.action';
+import * as incomesActions from '../store/actions/income.actions';
+import * as transactionsActions from '../store/actions/transactions.action';
 import { Store } from '@ngrx/store';
 import { Observable, catchError, of } from 'rxjs';
-import { IncomeState } from '../incomeModule/incomeStore/income.reducer';
-import { TransactionState } from '../transactions/trasactionStore/transactions.reducer';
+import { IncomeState } from '../store/reducer/income.reducer';
+import { TransactionState } from './../store/reducer/transactions.reducer';
 import {
   selectMinIncome,
   selectMaxIncome,
   selectIncomeTotal,
   selectYearlyTotalIncome,
-} from '../incomeModule/incomeStore/income.selector';
-import { selectTransactionsHistory } from '../transactions/trasactionStore/transactions.selector';
-import { ExpenseState } from '../expenseModule/expenseStore/expense.reducer';
-import * as expenseActions from './../expenseModule/expenseStore/expense.actions';
+} from '../store/selectors/income.selector';
+import { selectTransactionsHistory } from '../store/selectors/transactions.selector';
+import { ExpenseState } from './../store/reducer/expense.reducer';
+import * as expenseActions from '../store/actions/expense.actions';
 import {
   selectExpenseTotal,
   selectMaxExpense,
   selectMinExpense,
   selectYearlyTotalExpense,
-} from '../expenseModule/expenseStore/expense.selector';
+} from '../store/selectors/expense.selector';
 
 @Component({
   selector: 'app-dashboard',

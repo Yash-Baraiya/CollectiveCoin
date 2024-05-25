@@ -7,14 +7,14 @@ import { TransactionService } from '../services/transaction.service';
 import { IncomeService } from '../services/income.service';
 import { BudgetService } from '../services/budget.service';
 import { Store } from '@ngrx/store';
-import { IncomeState } from '../../incomeModule/incomeStore/income.reducer';
-import * as incomeActions from './../../incomeModule/incomeStore/income.actions';
-import * as transactionsActions from './../../transactions/trasactionStore/transactions.action';
-import { TransactionState } from '../../transactions/trasactionStore/transactions.reducer';
-import * as BudgetActions from './../../budgetModule/budgetStore/budget.actions';
-import { BudgetState } from '../../budgetModule/budgetStore/budget.reducer';
-import * as ExpenseActions from './../../expenseModule/expenseStore/expense.actions';
-import { ExpenseState } from '../../expenseModule/expenseStore/expense.reducer';
+import { IncomeState } from '../../store/reducer/income.reducer';
+import * as incomeActions from '../../store/actions/income.actions';
+import * as transactionsActions from '../../store/actions/transactions.action';
+import { TransactionState } from './../../store/reducer/transactions.reducer';
+import * as BudgetActions from '../../store/actions/budget.actions';
+import { BudgetState } from '../../store/reducer/budget.reducer';
+import * as ExpenseActions from '../../store/actions/expense.actions';
+import { ExpenseState } from './../../store/reducer/expense.reducer';
 
 @Component({
   selector: 'app-items',
@@ -25,6 +25,11 @@ export class ItemsComponent implements OnInit {
   @Input() item: any;
   @Input() deleteMethod?: Function;
   @Input() updateMethod?: Function;
+
+  payment(id: any) {
+    console.log(id);
+    this.expensestore.dispatch(ExpenseActions.Payment({ id }));
+  }
   constructor(
     public expenseservice: ExpenseService,
     private snackBar: MatSnackBar,

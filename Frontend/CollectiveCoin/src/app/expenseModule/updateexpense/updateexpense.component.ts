@@ -8,13 +8,13 @@ import { DatePipe } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { environment } from '../../environment';
 import { expense } from '../../shared/interfaces/expense.interface';
-import { ExpenseState } from '../expenseStore/expense.reducer';
+import { ExpenseState } from './../../store/reducer/expense.reducer';
 import { Store } from '@ngrx/store';
-import * as ExpenseActions from './../expenseStore/expense.actions';
+import * as ExpenseActions from '../../store/actions/expense.actions';
 import {
   selectExpenseById,
   selectExpenseData,
-} from '../expenseStore/expense.selector';
+} from '../../store/selectors/expense.selector';
 @Component({
   selector: 'app-updateexpense',
   templateUrl: './updateexpense.component.html',

@@ -3,11 +3,11 @@ import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { BudgetService } from '../../shared/services/budget.service';
-import * as BudgetActions from './budget.actions';
+import * as BudgetActions from '../actions/budget.actions';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DatePipe } from '@angular/common';
 import { Store } from '@ngrx/store';
-import { BudgetState } from './budget.reducer';
+import { BudgetState } from '../reducer/budget.reducer';
 
 @Injectable()
 export class BudgetEffects {
@@ -66,7 +66,7 @@ export class BudgetEffects {
         this.budgetservice.addBudget(budget).pipe(
           tap(() => this.showMessage('budget added successfully')),
           map((res) => {
-            console.log('conming in res', res);
+            this.budgetservice.budgetForm.reset();
             this.store.dispatch(BudgetActions.loadBudgets());
             return BudgetActions.addBudgetSuccess();
           }),

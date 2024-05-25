@@ -3,14 +3,14 @@ import { IncomeService } from '../../shared/services/income.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoginDataService } from '../../shared/services/login-data.service';
 import { Observable } from 'rxjs';
-import { IncomeState } from '../incomeStore/income.reducer';
+import { IncomeState } from '../../store/reducer/income.reducer';
 import { Store, select } from '@ngrx/store';
-import * as incomeActions from './../incomeStore/income.actions';
+import * as incomeActions from '../../store/actions/income.actions';
 import {
   selectIncomeData,
   selectIncomeTotal,
   selectInocmesLength,
-} from '../incomeStore/income.selector';
+} from '../../store/selectors/income.selector';
 import { income } from '../../shared/interfaces/income.interface';
 
 @Component({

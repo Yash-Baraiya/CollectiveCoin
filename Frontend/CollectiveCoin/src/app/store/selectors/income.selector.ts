@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { IncomeState } from './income.reducer';
+import { IncomeState } from '../reducer/income.reducer';
 import { income } from '../../shared/interfaces/income.interface';
 import { state } from '@angular/animations';
 

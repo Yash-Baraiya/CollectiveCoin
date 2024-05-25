@@ -4,12 +4,12 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Store } from '@ngrx/store';
-import { selectIncomeById } from '../incomeStore/income.selector';
-import { IncomeState } from '../incomeStore/income.reducer';
+import { selectIncomeById } from '../../store/selectors/income.selector';
+import { IncomeState } from '../../store/reducer/income.reducer';
 import { income } from '../../shared/interfaces/income.interface';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environment';
-import { loadIncomes } from '../incomeStore/income.actions';
+import { loadIncomes } from '../../store/actions/income.actions';
 
 @Component({
   selector: 'app-updateincome',

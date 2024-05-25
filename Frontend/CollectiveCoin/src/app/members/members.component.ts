@@ -2,10 +2,10 @@ import { Component, Inject, OnInit, Renderer2 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { AppState } from './memberstore/members.reducer';
-import * as MembersActions from './memberstore/members.action';
+import { AppState } from './../store/reducer/members.reducer';
+import * as MembersActions from '../store/actions/members.action';
 import { LoginDataService } from '../shared/services/login-data.service';
-import { selectMembers } from './memberstore/members.selector';
+import { selectMembers } from '../store/selectors/members.selector';
 import { DOCUMENT } from '@angular/common';
 
 @Component({

@@ -7,16 +7,16 @@ import { Router } from '@angular/router';
 import {
   TransactionState,
   transactionReducer,
-} from './trasactionStore/transactions.reducer';
+} from './../store/reducer/transactions.reducer';
 import {
   deleteTransaction,
   filterTransactions,
   loadTransactions,
-} from './trasactionStore/transactions.action';
+} from '../store/actions/transactions.action';
 import {
   selectAllTransactions,
   selectTotalTransactions,
-} from './trasactionStore/transactions.selector';
+} from '../store/selectors/transactions.selector';
 import { map } from 'rxjs';
 import { TransactionService } from '../shared/services/transaction.service';
 

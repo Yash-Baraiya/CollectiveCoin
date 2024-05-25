@@ -5,8 +5,8 @@ import { SharedModule } from '../shared/shared.module';
 import { IncomeModuleRoutingModule } from './income-module-routing.module';
 import { UpdateincomeComponent } from './updateincome/updateincome.component';
 import { StoreModule } from '@ngrx/store';
-import { incomeReducer } from './incomeStore/income.reducer';
-import { IncomeEffects } from './incomeStore/income.effects';
+import { incomeReducer } from '../store/reducer/income.reducer';
+import { IncomeEffects } from '../store/effect/income.effects';
 import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
