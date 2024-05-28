@@ -3,6 +3,9 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../environment';
 import resultData from '../interfaces/resultData.interface';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -20,7 +23,11 @@ export class LoginDataService {
   photo$ = this.photoSubject.asObservable();
   name$ = this.nameSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private snackBar: MatSnackBar,
+    private router: Router
+  ) {}
 
   //method for setting the user's data to local storange
   setData(parsedData: resultData) {
@@ -45,12 +52,30 @@ export class LoginDataService {
 
   isLoggedin(): Observable<any> {
     return new Observable((observer) => {
-      this.http
-        .get(`${environment.userApiUrl}/isloggedin`)
-        .subscribe((resultData: resultData) => {
+      this.http.get(`${environment.userApiUrl}/isloggedin`).subscribe(
+        (resultData: resultData) => {
           this.setData(resultData);
           observer.next();
-        });
+        },
+        (error) => {
+          console.log(error);
+          this.router.navigate(['/login']);
+          if (error.error.message) {
+            this.showMessage(error.error.message);
+          } else {
+            this.showMessage(
+              'Something went wrong. Please try again after some time.'
+            );
+          }
+        }
+      );
+    });
+  }
+
+  showMessage(message: string): void {
+    this.snackBar.open(message || 'An error occurred', 'Close', {
+      duration: 5000,
+      panelClass: ['snackbar-error'],
     });
   }
 }

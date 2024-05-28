@@ -6,6 +6,7 @@ import incomeRouter from "./routes/incomeRoutes";
 import expenseRouter from "./routes/expenseRoutes";
 import budgetRouter from "./routes/budgetRoutes";
 import transactionRouter from "./routes/transactionsRoute";
+import * as stripe from "./utils/stripe";
 import cors from "cors";
 dotenv.config({ path: "./config.env" });
 

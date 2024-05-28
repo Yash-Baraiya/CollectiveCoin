@@ -9,7 +9,7 @@ import * as cron from "node-cron";
 
 //method for adding the expense
 export const addExpense = async (req: Request, res: Response) => {
-  console.log("add expense api called");
+  console.log("=> add expense api called");
   const { title, amount, category, description, date, markAspaid, duedate } =
     req.body;
   console.log(category);
@@ -58,6 +58,7 @@ export const addExpense = async (req: Request, res: Response) => {
       new Date(duedate).getTime() > new Date(date).getTime() &&
       markAspaid === false
     ) {
+      //setting the time out so that method does not h
       setTimeout(async () => {
         const users = await User.find({ familycode: user.familycode });
         for (const u of users) {
@@ -84,7 +85,7 @@ export const addExpense = async (req: Request, res: Response) => {
         }
       }, 0);
     }
-    console.log("add expense api ended");
+    console.log("=> add expense api ended");
     res.status(200).json({
       status: "success",
       message: "Expense Added",
@@ -102,7 +103,7 @@ export const addExpense = async (req: Request, res: Response) => {
 //method for geetting all the expenses
 export const getExpense = async (req: Request, res: Response) => {
   try {
-    console.log("get expense api called");
+    console.log("=> get expense api called");
     console.log(req.query);
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 4;
@@ -215,7 +216,7 @@ export const getExpense = async (req: Request, res: Response) => {
 
     maxAmountexpense = maxAmountexpense.amount;
     minAmountexpense = minAmountexpense.amount;
-    console.log("get expense api ended");
+    console.log("=> get expense api ended");
     res.status(200).json({
       status: "success",
       totalexpense,
@@ -238,7 +239,7 @@ export const deleteExpense = async (
   next: NextFunction
 ) => {
   try {
-    console.log("delete expense api called");
+    console.log("=> delete expense api called");
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("not authorized");
@@ -277,7 +278,7 @@ export const deleteExpense = async (
 
     await Expense.deleteOne({ _id: req.params.expenseId });
 
-    console.log("delete expense api ended");
+    console.log("=> delete expense api ended");
     res.status(200).json({ status: "success", message: "Expense Deleted" });
   } catch (error: any) {
     console.log(error);
@@ -293,7 +294,7 @@ export const deleteExpense = async (
 //method for updating the expense
 export const updateExpense = async (req: Request, res: Response) => {
   try {
-    console.log("update expense api called");
+    console.log("=> update expense api called");
     const { title, amount, category, description, date, markAspaid, duedate } =
       req.body;
 
@@ -340,7 +341,7 @@ export const updateExpense = async (req: Request, res: Response) => {
       { new: true }
     );
 
-    console.log("update expese api ended");
+    console.log("=> update expese api ended");
     res.status(200).json({
       status: "success",
       messasge: "expense updated successfully",

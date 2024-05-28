@@ -26,3 +26,4 @@ export class TokenInterceptor implements HttpInterceptor {
 }
 
 //sending the token from localstorage with every request
+// checkig if the the token is available in localstorage and if  present or not

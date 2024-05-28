@@ -59,8 +59,6 @@ export class TransactionsComponent implements OnInit {
       const columns = ['Title', 'Type', 'Amount', 'Date', 'Added By'];
       let rows = [];
 
-      console.log('coming here', this.allTransactions$);
-
       if (this.allTransactions$) {
         this.allTransactions$.subscribe((transactions) => {
           rows = transactions.map((transaction) => [

@@ -20,7 +20,6 @@ import {
   sendmailAdmin,
   makeAdmin,
   toggleEarningState,
-  ExicutiveOfficerInfo,
 } from "../controller/userController";
 
 import multer from "multer";
@@ -39,7 +38,7 @@ var storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 const router = express.Router();
 
-router.post("/signup", upload.single("photo"), signUp, uploadImage);
+router.post("/signup", upload.single("photo"), signUp);
 router.post("/login", signIn);
 router.post("/add-member", protect, restrictToAdmin, addUser);
 router.get("/getmembers", protect, getMembers);
@@ -55,6 +54,6 @@ router.post("/sendmail", protect, sendmailAdmin);
 router.patch("/makeadmin/:id", protect, restrictToAdmin, makeAdmin);
 router.patch("/makeearner/:id", protect, restrictToAdmin, toggleEarningState);
 router.get("/isloggedin", protect, isLoggedin);
-router.get("/EOInfo", ExicutiveOfficerInfo);
+//router.get("/EOInfo", ExicutiveOfficerInfo);
 
 export default router;

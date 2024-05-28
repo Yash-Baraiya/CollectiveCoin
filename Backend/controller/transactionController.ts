@@ -10,7 +10,7 @@ export const getalltransactions = async (
   res: Response
 ): Promise<{ incomes: any[]; expenses: any[] }> => {
   try {
-    console.log("get all transaction api called");
+    console.log("=> get all transaction api called");
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("not authorized");
@@ -38,7 +38,7 @@ export const getalltransactions = async (
       return dateB.getTime() - dateA.getTime();
     });
 
-    console.log("get all transactions api ended");
+    console.log("=> get all transactions api ended");
     res.status(200).json({
       transactions,
     });
@@ -59,7 +59,7 @@ export const deleteTransaction = async (
   next: NextFunction
 ) => {
   try {
-    console.log("delete transactions api called");
+    console.log("=> delete transactions api called");
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("not authorized");
@@ -85,6 +85,7 @@ export const deleteTransaction = async (
         .json({ status: "failed", message: "User or transaction not found" });
     }
 
+    // if transaction is type of expense
     if (expense) {
       console.log(user.name, expense.addedBy);
       if (
@@ -100,6 +101,8 @@ export const deleteTransaction = async (
 
       res.status(200).json({ status: "success", message: "Expense Deleted" });
     }
+
+    //if transaction is type of income
     if (income) {
       if (
         user.name.trim().toLowerCase() !== income.addedBy?.trim().toLowerCase()
@@ -112,7 +115,7 @@ export const deleteTransaction = async (
 
       await Income.deleteOne({ _id: req.params.id });
 
-      console.log("delete transactions  api ended");
+      console.log("=> delete transactions  api ended");
       res.status(200).json({ status: "success", message: "Income Deleted" });
     }
   } catch (error: any) {
@@ -132,7 +135,7 @@ export const getFilteredTransactions = async (
   res: Response
 ): Promise<void> => {
   try {
-    console.log("get filtered transactions api called");
+    console.log("=> get filtered transactions api called");
     let transactions: Array<any>;
     let incomes: Array<any>, expenses: Array<any>;
     const auth = req.headers.authorization;
@@ -155,6 +158,7 @@ export const getFilteredTransactions = async (
 
     const { type, startDate, endDate } = req.query;
 
+    // if filter query is run withou any field
     if (type === "null" && startDate === "null" && endDate === "null") {
       incomes = await Income.find({ familycode: familyCode });
       expenses = await Expense.find({ familycode: familyCode });
@@ -167,7 +171,7 @@ export const getFilteredTransactions = async (
       console.log(req.query);
       let query: any = { familycode: familyCode };
 
-      console.log("type :", type);
+      //of type is not any of income,expense , null then throw error
       if (type && type !== "null" && type !== null && type !== "") {
         if (type !== "income" && type !== "expense") {
           throw new Error(
@@ -177,14 +181,16 @@ export const getFilteredTransactions = async (
         query.type = type;
       }
 
+      //check if startdate and enddate are there and they are valid date
       if (startDate && endDate && startDate !== "null" && endDate !== "null") {
-        console.log("coming here");
+       
         const StartDateD = new Date(startDate as string);
         const EndDateD = new Date(endDate as string);
         if (isNaN(StartDateD.getTime()) || isNaN(EndDateD.getTime())) {
           throw new Error("Invalid date");
         }
 
+        //if start date is greater  then end date
         if (StartDateD.getTime() > EndDateD.getTime()) {
           throw new Error("start date can not be greater then end date");
         }
@@ -193,12 +199,14 @@ export const getFilteredTransactions = async (
           $lte: EndDateD,
         };
       } else if (startDate && endDate === "null") {
+        //if only start date is provided
         const StartDateD = new Date(startDate as string);
         if (isNaN(StartDateD.getTime())) {
           throw new Error("Invalid date");
         }
         query.date = { $gte: StartDateD };
       } else if (endDate && startDate === "null") {
+        //if only end date is provided
         const EndDateD = new Date(endDate as string);
         if (isNaN(EndDateD.getTime())) {
           throw new Error("Invalid date");
@@ -206,6 +214,7 @@ export const getFilteredTransactions = async (
         query.date = { $lte: EndDateD };
       }
 
+      //find the transaction from the database based on the type or date
       if (query.type) {
         if (query.type === "income") {
           transactions = await Income.find(query);
@@ -229,7 +238,7 @@ export const getFilteredTransactions = async (
         return DateB.getTime() - DateA.getTime();
       });
       console.log(req.query);
-      console.log("get filtered transactions api finished");
+      console.log("=> get filtered transactions api finished");
       res.status(200).json({
         transactions,
       });

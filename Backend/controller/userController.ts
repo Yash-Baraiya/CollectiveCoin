@@ -11,7 +11,7 @@ import { createSendToken } from "./authController";
 
 //method for adding the user
 export const addUser = async (req: Request, res: Response) => {
-  console.log("add user api called");
+  console.log("=> add user api called");
   const email1 = req.body.email;
   const auth = req.headers.authorization;
   if (!auth) {
@@ -35,8 +35,10 @@ export const addUser = async (req: Request, res: Response) => {
   if (!req.body.email) {
     throw new Error("please enter valid email address");
   }
+
   const user = await User.findOne({ email: email1 });
 
+  //if user with this email is already present in  database then send this mail
   if (user) {
     const loginURL = `localhost:4200/login`;
 
@@ -67,6 +69,7 @@ export const addUser = async (req: Request, res: Response) => {
       });
     }
   } else {
+    //if  there is no user with that mail in the database
     console.log(Admin);
     const signupURL = `localhost:4200/signup`;
 
@@ -86,7 +89,7 @@ export const addUser = async (req: Request, res: Response) => {
         <p>Warm regards,<br>Your Name</p></div>`,
       });
 
-      console.log("add user api ended");
+      console.log("=> add user api ended");
       res.status(200).json({
         status: "success",
         messege: "your request sent via email",
@@ -103,7 +106,7 @@ export const addUser = async (req: Request, res: Response) => {
 //method for getting all the members of family
 export const getMembers = async (req: Request, res: Response) => {
   try {
-    console.log("get member api called");
+    console.log("=> get member api called");
 
     let firstadmin: any = "";
     const auth = req.headers.authorization;
@@ -128,7 +131,7 @@ export const getMembers = async (req: Request, res: Response) => {
 
     members.forEach((member) => {
       if (!member.priority) {
-        throw new Error("loggedinAt not found");
+        throw new Error("priority not found");
       } else if (firstadmin === "") {
         firstadmin = member;
       } else if (member.priority < firstadmin.priority) {
@@ -145,7 +148,7 @@ export const getMembers = async (req: Request, res: Response) => {
       members,
       firstadmin,
     });
-    console.log("get members api ended");
+    console.log("=> get members api ended");
   } catch (error: any) {
     console.log(error);
     res.status(400).json({
@@ -158,7 +161,7 @@ export const getMembers = async (req: Request, res: Response) => {
 //method for removing the user from the family. user will not be removed from database
 export const deleteuser = async (req: Request, res: Response) => {
   try {
-    console.log("delete user api called");
+    console.log("=> delete user api called");
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("not Authorized");
@@ -204,7 +207,7 @@ export const deleteuser = async (req: Request, res: Response) => {
       message: "user removed successfully",
       member,
     });
-    console.log("delete member api ended");
+    console.log("=> delete member api ended");
   } catch (error: any) {
     console.log(error);
     res.status(400).json({
@@ -217,7 +220,7 @@ export const deleteuser = async (req: Request, res: Response) => {
 //method for deleting the whole family from the database
 export const deletefamily = async (req: Request, res: Response) => {
   try {
-    console.log("delete family api called");
+    console.log("=>delete family api called");
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("Not Authorized");
@@ -253,7 +256,7 @@ export const deletefamily = async (req: Request, res: Response) => {
       status: "success",
       messege: "family deleted succesfully",
     });
-    console.log("delete family api ended");
+    console.log("=> delete family api ended");
   } catch (error: any) {
     res.status(400).json({
       status: "faied",
@@ -265,7 +268,7 @@ export const deletefamily = async (req: Request, res: Response) => {
 //method for uploading the image to cloudinary storage
 export const uploadImage = async (req: Request, res: Response) => {
   try {
-    console.log("upload image api called");
+    console.log("=> upload image api called");
     const auth = req.headers.authorization;
     if (!auth) throw new Error("not Authorized");
 
@@ -286,8 +289,8 @@ export const uploadImage = async (req: Request, res: Response) => {
 
     let photo = `${file.filename}`;
 
+    // create promise  to upload the photo to cloudinary  storage
     const cloudinaryUpload = new Promise((resolve, reject) => {
-      4;
       cloudinaryconfig();
       cloudinary.uploader.upload(file.path, (error: any, result: any) => {
         if (error) {
@@ -300,6 +303,7 @@ export const uploadImage = async (req: Request, res: Response) => {
       });
     });
 
+    //await for that promise to finish up
     const result = await cloudinaryUpload;
 
     user = await User.findByIdAndUpdate(
@@ -307,7 +311,7 @@ export const uploadImage = async (req: Request, res: Response) => {
       { photo: photo },
       { new: true }
     );
-    console.log("upload image api ended");
+    console.log("=> upload image api ended");
     createSendToken(user, 200, res);
   } catch (error: any) {
     console.log(error);
@@ -318,10 +322,10 @@ export const uploadImage = async (req: Request, res: Response) => {
   }
 };
 
-//method for communicating with your admin
+//method for communicating with your family admin admin
 export const sendmailAdmin = async (req: Request, res: Response) => {
   try {
-    console.log("send admin email api called");
+    console.log("=> send admin email api called");
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("not Authorized");
@@ -365,7 +369,7 @@ export const sendmailAdmin = async (req: Request, res: Response) => {
         messege: error.message,
       });
     }
-    console.log("send email admin api ended");
+    console.log("=> send email admin api ended");
   } catch (error: any) {
     console.log(error);
     res.status(400).json({
@@ -375,10 +379,10 @@ export const sendmailAdmin = async (req: Request, res: Response) => {
   }
 };
 
-//method for changing  user's role
+//method for changing  user's role from user to admin or from admin to user
 export const makeAdmin = async (req: Request, res: Response) => {
   try {
-    console.log("make admin api called");
+    console.log("=> make admin api called");
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("not Authorized");
@@ -427,6 +431,7 @@ export const makeAdmin = async (req: Request, res: Response) => {
         );
       }
     }
+    console.log("=> make admin api ended");
   } catch (error: any) {
     console.log(error);
     res.status(200).json({
@@ -439,7 +444,7 @@ export const makeAdmin = async (req: Request, res: Response) => {
 //for chaging the user's earning status
 export const toggleEarningState = async (req: Request, res: Response) => {
   try {
-    console.log("toggle earning state api called");
+    console.log("=> toggle earning state api called");
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("not Authorized");
@@ -482,7 +487,7 @@ export const toggleEarningState = async (req: Request, res: Response) => {
           { isEarning: false },
           { new: true }
         );
-        console.log("toggle earning state api ended");
+        console.log("=> toggle earning state api ended");
         console.log("updated user", updateduser);
         res.status(200).json({
           status: "success",
@@ -503,54 +508,54 @@ export const toggleEarningState = async (req: Request, res: Response) => {
   }
 };
 
-export const ExicutiveOfficerInfo = async (req: Request, res: Response) => {
-  try {
-    // const auth = req.headers.authorization;
-    // if (!auth) {
-    //   return res.status(401).json({ message: "Not authorized" });
-    // }
+// export const ExicutiveOfficerInfo = async (req: Request, res: Response) => {
+//   try {
+//     // const auth = req.headers.authorization;
+//     // if (!auth) {
+//     //   return res.status(401).json({ message: "Not authorized" });
+//     // }
 
-    // const token = auth.split(" ")[1];
-    // const decodedtoken = jwt.decode(token) as JwtPayload;
-    // if (!decodedtoken) {
-    //   return res.status(401).json({ message: "Token not found" });
-    // }
+//     // const token = auth.split(" ")[1];
+//     // const decodedtoken = jwt.decode(token) as JwtPayload;
+//     // if (!decodedtoken) {
+//     //   return res.status(401).json({ message: "Token not found" });
+//     // }
 
-    // const adminId = decodedtoken.id;
+//     // const adminId = decodedtoken.id;
 
-    // const EO = await User.findById(adminId);
-    // if (!EO) {
-    //   return res.status(404).json({ message: "Executive Officer not found" });
-    // }
+//     // const EO = await User.findById(adminId);
+//     // if (!EO) {
+//     //   return res.status(404).json({ message: "Executive Officer not found" });
+//     // }
 
-    const families = await User.aggregate([
-      {
-        $group: {
-          _id: "$familycode",
-          users: { $push: "$$ROOT" },
-        },
-      },
-    ]);
+//     const families = await User.aggregate([
+//       {
+//         $group: {
+//           _id: "$familycode",
+//           users: { $push: "$$ROOT" },
+//         },
+//       },
+//     ]);
 
-    const transactions = await Expense.aggregate([
-      {
-        $match: {
-          category: "monthlybills",
-          markAspaid: true,
-          paidBy: { $exists: true },
-        },
-      },
-      {
-        $group: {
-          _id: "$familycode",
-          bills: { $push: "$$ROOT" },
-        },
-      },
-    ]);
+//     const transactions = await Expense.aggregate([
+//       {
+//         $match: {
+//           category: "monthlybills",
+//           markAspaid: true,
+//           paidBy: { $exists: true },
+//         },
+//       },
+//       {
+//         $group: {
+//           _id: "$familycode",
+//           bills: { $push: "$$ROOT" },
+//         },
+//       },
+//     ]);
 
-    return res.status(200).json({ families, transactions });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Server error" });
-  }
-};
+//     return res.status(200).json({ families, transactions });
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({ message: "Server error" });
+//   }
+// };

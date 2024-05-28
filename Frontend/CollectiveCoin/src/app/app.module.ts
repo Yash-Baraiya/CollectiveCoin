@@ -26,7 +26,6 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { NotFoundComponent } from './404/404.component';
 import { reducer as transactionReducer } from './store/reducer/transactions.reducer';
 import { TransactionEffects } from './store/effect/transactions.effects';
-
 import { incomeReducer } from './store/reducer/income.reducer';
 import { IncomeEffects } from './store/effect/income.effects';
 import { budgetReducer } from './store/reducer/budget.reducer';

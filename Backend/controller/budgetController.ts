@@ -8,7 +8,7 @@ import { Request, Response, NextFunction } from "express";
 //method for adding the budget
 export const addBudget = async (req: Request, res: Response) => {
   try {
-    console.log("add budget called");
+    console.log("=> add budget called");
     const { title, amount, category, description, date } = req.body;
 
     const auth = req.headers.authorization;
@@ -63,7 +63,7 @@ export const addBudget = async (req: Request, res: Response) => {
         .json({ message: "Amount must be a positive number!" });
     }
 
-    console.log("add budget api ended");
+    console.log("=> add budget api ended");
     res.status(200).json({
       status: "success",
       message: "Budget Added",
@@ -81,7 +81,7 @@ export const addBudget = async (req: Request, res: Response) => {
 //method for getting the budget
 export const getBudget = async (req: Request, res: Response) => {
   try {
-    console.log("get budget api called");
+    console.log("=> get budget api called");
     let monthlybudget: Array<BudgetIn> = [];
     let expcategoryAmounts: { [key: string]: number } = {};
     let budgetcategoryamounts: { [key: string]: number } = {};
@@ -144,6 +144,7 @@ export const getBudget = async (req: Request, res: Response) => {
       createdAt: -1,
     });
 
+    //extract budgets of this month
     for (let budget of budgets) {
       let budMonth = budget.date.getMonth() + 1;
       let budYear = budget.date.getFullYear();
@@ -152,6 +153,7 @@ export const getBudget = async (req: Request, res: Response) => {
       }
     }
 
+    //extracting category and ther amounts to show the chart data with their category forn budgets and expenses
     monthlybudget.forEach((budget) => {
       let category = budget.category;
       let amount = budget.amount;
@@ -178,7 +180,7 @@ export const getBudget = async (req: Request, res: Response) => {
         });
       }
     }
-    console.log("get budgets api ended");
+    console.log("=> get budgets api ended");
     res.status(200).json({
       status: "success",
       budgets,
@@ -203,7 +205,7 @@ export const deleteBudget = async (
   next: NextFunction
 ) => {
   try {
-    console.log("delete budget api called");
+    console.log("=> delete budget api called");
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("not authorized");
@@ -237,7 +239,7 @@ export const deleteBudget = async (
 
     await Budget.deleteOne({ _id: req.params.budgetId });
 
-    console.log("delete budget api eded");
+    console.log("=> delete budget api eded");
     res.status(200).json({ status: "success", message: "budget Deleted" });
   } catch (error: any) {
     console.log(error);
@@ -253,7 +255,7 @@ export const deleteBudget = async (
 //method for updating the budget
 export const updateBudget = async (req: Request, res: Response) => {
   try {
-    console.log("update budget api called");
+    console.log("=> update budget api called");
     const { title, amount, category, description, date } = req.body;
 
     const auth = req.headers.authorization;
@@ -276,9 +278,6 @@ export const updateBudget = async (req: Request, res: Response) => {
     if (!budget) {
       throw new Error("budget not found");
     }
-
-    console.log(budget.CreatedBy);
-    console.log(user.name);
     if (
       budget?.CreatedBy.trim().toLowerCase() !== user.name.trim().toLowerCase()
     ) {
@@ -298,7 +297,7 @@ export const updateBudget = async (req: Request, res: Response) => {
       { new: true }
     );
 
-    console.log("update budget api ended");
+    console.log("=> update budget api ended");
     res.status(200).json({
       status: "success",
       messasge: "budget updated successfully",

@@ -1,17 +1,17 @@
 import { Request, Response } from "express";
 import stripe from "stripe";
-
+import dotenv from "dotenv";
 import Expense from "../models/expenseModel";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import User from "../models/userModel";
+dotenv.config({ path: "config.env" });
 
-//stripe method for creating the checkout session
-const stripeInstance = new stripe(
-  "sk_test_51P7XldSCqlnBTgeBB3yyoExsvWe4JEsuXdJPUVqjDKXLZJ6Q8cVYOTS6gkWekx2Qh42RkezGuHiNa7kdlZGuDeZ000JkqXeA61"
-);
+const stripeInstance = new stripe(`${process.env.STRIPE_SECRET_KEY}`);
+//stripe method for cr  eating the checkout session
 
 export const createCheckOutSession = async (req: Request, res: Response) => {
   try {
+    console.log("=> createcheckout session called");
     const auth = req.headers.authorization;
     if (!auth) {
       throw new Error("Not Authorized");
@@ -62,6 +62,7 @@ export const createCheckOutSession = async (req: Request, res: Response) => {
       },
     });
 
+    console.log("=> createcheckout session ended");
     res.status(303).json({
       status: "success",
       link: session.url,
@@ -78,6 +79,7 @@ export const createCheckOutSession = async (req: Request, res: Response) => {
 //for updating the expense's after the payment has been done
 export const handleStripeEvent = async (req: Request, res: Response) => {
   try {
+    console.log("=> webhook called");
     const payload = (req as any).rawBody;
     const sig = req.headers["stripe-signature"] as string;
 
@@ -103,6 +105,7 @@ export const handleStripeEvent = async (req: Request, res: Response) => {
       });
     }
 
+    console.log("=> webhook ended");
     res.status(200).json({
       status: "success",
     });

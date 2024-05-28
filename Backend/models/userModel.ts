@@ -4,62 +4,65 @@ import crypto from "crypto";
 import bcrypt from "bcryptjs";
 import { UserIn } from "../interface/userInterface";
 
-const userSchema = new Schema<UserIn>({
-  name: {
-    type: String,
-    required: [true, "Please tell us your name!"],
-  },
-  email: {
-    type: String,
-    required: [true, "Please provide your email"],
-    unique: true,
-    lowercase: true,
-    validate: [validator.isEmail, "Please provide a valid email"],
-  },
-  photo: {
-    type: String,
-    default: "default.jpg",
-  },
-  role: {
-    type: String,
-    enum: ["user", "admin"],
-    default: "admin",
-  },
-  isEarning: {
-    type: Boolean,
-    required: [true, "Please provide earning status"],
-    default: true,
-  },
-  password: {
-    type: String,
-    required: [true, "Please provide a password"],
-    minlength: 8,
-    select: false,
-  },
-  passwordConfirm: {
-    type: String,
+const userSchema = new Schema<UserIn>(
+  {
+    name: {
+      type: String,
+      required: [true, "Please tell us your name!"],
+    },
+    email: {
+      type: String,
+      required: [true, "Please provide your email"],
+      unique: true,
+      lowercase: true,
+      validate: [validator.isEmail, "Please provide a valid email"],
+    },
+    photo: {
+      type: String,
+      default: "default.jpg",
+    },
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "admin",
+    },
+    isEarning: {
+      type: Boolean,
+      required: [true, "Please provide earning status"],
+      default: true,
+    },
+    password: {
+      type: String,
+      required: [true, "Please provide a password"],
+      minlength: 8,
+      select: false,
+    },
+    passwordConfirm: {
+      type: String,
 
-    minlength: 8,
-    select: false,
+      minlength: 8,
+      select: false,
+    },
+    familycode: {
+      type: String,
+      required: [
+        true,
+        "You have to enter code to share account with your family",
+      ],
+      minlength: 5,
+      maxlength: 5,
+    },
+    deleteduser: {
+      type: [String],
+    },
+    passwordChangedAt: Date,
+    passwordResetToken: String,
+    passwordResetExpires: Date,
+    forgotpasswordotp: String,
+    priority: Number,
   },
-  familycode: {
-    type: String,
-    required: [
-      true,
-      "You have to enter code to share account with your family",
-    ],
-    minlength: 5,
-    maxlength: 5,
-  },
-  deleteduser: {
-    type: [String],
-  },
-  passwordChangedAt: Date,
-  passwordResetToken: String,
-  passwordResetExpires: Date,
-  forgotpasswordotp: String,
-  priority: Number,
-});
+  { timestamps: true }
+);
 
 //method for resetting the  user's password
 userSchema.pre<UserIn>("save", async function (next) {
