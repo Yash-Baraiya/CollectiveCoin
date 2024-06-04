@@ -71,7 +71,8 @@ export const membersReducer = createReducer(
   on(MembersActions.emailAdminFailure, (state) => ({
     ...state,
     members: state.members,
-  }))
+  })),
+  on(MembersActions.cleareMemberStore, () => initialState)
 );
 
 export function reducer(state: MembersState | undefined, action: Action) {

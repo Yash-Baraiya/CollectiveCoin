@@ -134,8 +134,13 @@
   border: 2px solid #fff;
   background: transparent;
   resize: none;
-  box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
+  box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.12);
   color: rgba(34, 34, 96, 0.9);
+  display: inline;
+  margin-left: 6px;
+}
+.formcon label {
+  margin-left: 2px;
 }
 .formcon input::-webkit-input-placeholder,
 .formcon textarea::-webkit-input-placeholder,

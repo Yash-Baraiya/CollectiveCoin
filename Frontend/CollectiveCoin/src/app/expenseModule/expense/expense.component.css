@@ -61,56 +61,6 @@
 .main-container .user-con p {
   color: rgba(34, 34, 96, 0.6);
 }
-.main-container .menu-items {
-  -webkit-flex: 1;
-  -ms-flex: 1;
-  flex: 1;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-}
-.main-container .menu-items li {
-  display: grid;
-  grid-template-columns: 40px auto;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  margin: 0.6rem 0;
-  font-weight: 500;
-  cursor: pointer;
-  -webkit-transition: all 0.4s ease-in-out;
-  transition: all 0.4s ease-in-out;
-  color: rgba(34, 34, 96, 0.6);
-  padding-left: 1rem;
-  position: relative;
-}
-.main-container .menu-items li i {
-  color: rgba(34, 34, 96, 0.6);
-  font-size: 1.4rem;
-  -webkit-transition: all 0.4s ease-in-out;
-  transition: all 0.4s ease-in-out;
-}
-.main-container .active {
-  color: rgba(34, 34, 96, 1) !important;
-}
-.main-container .active i {
-  color: rgba(34, 34, 96, 1) !important;
-}
-.main-container .active::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 4px;
-  height: 100%;
-  background: #222260;
-  border-radius: 0 10px 10px 0;
-}
 
 .formbtn {
   outline: none;
@@ -153,7 +103,7 @@
   border: 2px solid #fff;
   background: transparent;
   resize: none;
-  box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
+  box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.12);
   color: rgba(34, 34, 96, 0.9);
 }
 .exenseform input::-webkit-input-placeholder,
@@ -226,7 +176,7 @@
   align-items: center;
   background: #fcf6f9;
   border: 2px solid #ffffff;
-  box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
+  box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.09);
   border-radius: 20px;
   padding: 1rem;
   margin: 1rem 0;

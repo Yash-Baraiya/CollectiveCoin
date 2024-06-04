@@ -51,7 +51,7 @@ export class BudgetComponent implements OnInit, OnDestroy {
         BudgetActions.addBudget(this.budgetservice.budgetForm.value)
       );
     } else {
-      alert('please fill the form as directed');
+      alert('Please fill the form as directed');
     }
   }
   ngOnDestroy(): void {

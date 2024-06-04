@@ -4,6 +4,7 @@ import {
   BudgetResponse,
   budget,
 } from '../../shared/interfaces/budget.interface';
+import { state } from '@angular/animations';
 
 export interface BudgetState {
   budgets: budget[];
@@ -53,5 +54,6 @@ export const budgetReducer = createReducer(
     ...state,
     loading: false,
     error,
-  }))
+  })),
+  on(BudgetActions.clearBudgetStore, () => initialState)
 );

@@ -55,5 +55,6 @@ export const expenseReducer = createReducer(
     ...state,
     loading: false,
     error,
-  }))
+  })),
+  on(ExpenseActions.clearExpenseStore, () => initialState)
 );

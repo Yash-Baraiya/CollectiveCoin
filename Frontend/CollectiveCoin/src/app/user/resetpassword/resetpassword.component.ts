@@ -51,7 +51,7 @@ export class ResetpasswordComponent {
         .subscribe(
           (resultData: resultData) => {
             if (resultData.status === 'success') {
-              this.showMessage('password reseted successfully');
+              this.showMessage('Password reseted successfully');
               this.router.navigate(['/login']);
             } else {
               this.showMessage(resultData.messege);

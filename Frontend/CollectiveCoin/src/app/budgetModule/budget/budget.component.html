@@ -32,8 +32,8 @@
             <div class="income-content">
               <div class="form-container">
                 <form
-                  *ngIf="isEarning === true"
                   class="formcon"
+                  *ngIf="isEarning === true"
                   [formGroup]="budgetservice.budgetForm"
                 >
                   <div class="input-control">
@@ -104,11 +104,6 @@
                         class="form-control bs-datepicker-body"
                         formControlName="date"
                       />
-                      <div class="input-group-append">
-                        <span class="input-group-text">
-                          <i class="bi bi-calendar-date-fill"></i>
-                        </span>
-                      </div>
                     </div>
                     <div
                       *ngIf="

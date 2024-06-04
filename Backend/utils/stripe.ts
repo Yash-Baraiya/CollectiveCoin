@@ -97,7 +97,6 @@ export const handleStripeEvent = async (req: Request, res: Response) => {
       }
       const expenseId = session.metadata.expenseId;
       const username = session.metadata.username;
-      console.log(expenseId);
 
       await Expense.findByIdAndUpdate(expenseId, {
         markAspaid: true,

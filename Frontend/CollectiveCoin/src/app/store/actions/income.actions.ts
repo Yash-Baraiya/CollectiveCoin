@@ -24,3 +24,5 @@ export const incomeError = createAction(
   '[Income] Income Error',
   props<{ error: any }>()
 );
+
+export const clearIncomeStore = createAction('[Income] Income Store Cleared');

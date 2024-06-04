@@ -42,6 +42,8 @@ export class SignupComponent implements OnInit {
   register() {
     const formData = new FormData();
 
+    //appended one by one from control's value so that photo can be assigned seperatly
+
     formData.append('name', this.signupForm.get('name').value);
     formData.append('email', this.signupForm.get('email').value);
     formData.append('password', this.signupForm.get('password').value);
@@ -55,7 +57,7 @@ export class SignupComponent implements OnInit {
       (resultData: any) => {
         if (resultData.status === 'success') {
           this.loginDataService.setData(resultData);
-          this.showMessage('signedUp successfully');
+          this.showMessage('SignedUp successfully');
           this.router.navigate(['/DashBoard']);
         } else {
           this.showMessage(resultData.message);

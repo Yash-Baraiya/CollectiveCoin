@@ -45,6 +45,7 @@ export class BarChartComponent implements OnInit, OnDestroy {
     this.budgetData$ = this.store.select(selectMonthlyBudget);
     this.expenseData$ = this.store.select(selectExpCategoryAmounts);
 
+    //to fethch the latest value for budgetdata and expense data
     this.subscription = combineLatest([this.budgetData$, this.expenseData$])
       .pipe(
         map(([budgetData, expenseData]) => {

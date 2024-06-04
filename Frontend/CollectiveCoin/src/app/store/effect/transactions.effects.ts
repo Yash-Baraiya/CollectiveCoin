@@ -60,7 +60,7 @@ export class TransactionEffects {
         console.log(id);
         return this.transactionService.deleteTransaction(id).pipe(
           map(() => {
-            this.showMessage('transaction deleted successfully');
+            this.showMessage('Transaction deleted successfully');
             this.store.dispatch(TransactionActions.loadTransactions());
             return TransactionActions.deleteTransactionSuccess();
           }),

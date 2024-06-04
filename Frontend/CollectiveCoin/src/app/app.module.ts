@@ -17,7 +17,7 @@ import { DatePipe } from '@angular/common';
 import { SharedModule } from './shared/shared.module';
 import { CoverpageComponent } from './coverpage/coverpage.component';
 import { EffectsModule } from '@ngrx/effects';
-import { Store, StoreModule } from '@ngrx/store';
+import { StoreModule } from '@ngrx/store';
 import { reducer as membersReducer } from './store/reducer/members.reducer';
 import { MembersEffects } from './store/effect/members.effects';
 import { MatSnackBarModule } from '@angular/material/snack-bar';

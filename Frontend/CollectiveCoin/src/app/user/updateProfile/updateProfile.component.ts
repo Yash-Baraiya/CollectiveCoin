@@ -3,7 +3,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { LoginDataService } from '../../shared/services/login-data.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
 import { environment } from '../../environment';
 
 @Component({
@@ -58,30 +57,32 @@ export class UpdateProfileComponent implements OnInit {
   updateProfile() {
     const formData = this.updateProfileForm.value;
 
-    this.http
-      .patch(`${environment.userApiUrl}/updateprofile`, formData)
-      .subscribe(
-        (resultData: any) => {
-          if (resultData.status === 'success') {
-            this.loginDataService.isLoggedin().subscribe(() => {
-              this.username = this.loginDataService.username;
-              this.email = this.loginDataService.email;
-            });
-            this.showMessage('updated successfully');
-          } else {
-            this.showMessage(resultData.message);
+    if (this.updateProfileForm.value) {
+      this.http
+        .patch(`${environment.userApiUrl}/updateprofile`, formData)
+        .subscribe(
+          (resultData: any) => {
+            if (resultData.status === 'success') {
+              this.loginDataService.isLoggedin().subscribe(() => {
+                this.username = this.loginDataService.username;
+                this.email = this.loginDataService.email;
+              });
+              this.showMessage('Updated successfully');
+            } else {
+              this.showMessage(resultData.message);
+            }
+          },
+          (error) => {
+            console.log(error);
+            if (error.error.message) {
+              console.log(error.error.message);
+              this, this.showMessage(error.error.message);
+            } else {
+              alert('An error occurred. Please try again later.');
+            }
           }
-        },
-        (error) => {
-          console.log(error);
-          if (error.error.message) {
-            console.log(error.error.message);
-            this, this.showMessage(error.error.message);
-          } else {
-            alert('An error occurred. Please try again later.');
-          }
-        }
-      );
+        );
+    }
   }
 
   updateImage(event: any): void {
@@ -96,7 +97,6 @@ export class UpdateProfileComponent implements OnInit {
           console.log(resultData);
           if (resultData.status === 'success') {
             this.loginDataService.isLoggedin().subscribe(() => {
-              //this.loginDataService.photoSubject.next(resultData.data.photo);
               this.photo = this.loginDataService.photo;
             });
             this.showMessage('Image updated successfully');
@@ -114,29 +114,31 @@ export class UpdateProfileComponent implements OnInit {
   updatePassword() {
     const formData = this.updatePasswordForm.value;
 
-    this.http
-      .patch(`${environment.userApiUrl}/updatepassword`, formData)
-      .subscribe(
-        (resultData: any) => {
-          console.log(resultData);
-          if (resultData.status === 'success') {
-            this.loginDataService.setData(resultData);
+    if (this.updatePasswordForm.valid) {
+      this.http
+        .patch(`${environment.userApiUrl}/updatepassword`, formData)
+        .subscribe(
+          (resultData: any) => {
+            console.log(resultData);
+            if (resultData.status === 'success') {
+              this.loginDataService.setData(resultData);
 
-            this.showMessage('password updated successfully');
-          } else {
-            this.showMessage(resultData.message);
+              this.showMessage('Password updated successfully');
+            } else {
+              this.showMessage(resultData.message);
+            }
+          },
+          (error) => {
+            console.log(error);
+            if (error.error.message) {
+              console.log(error.error.message);
+              this, this.showMessage(error.error.message);
+            } else {
+              alert('An error occurred. Please try again later.');
+            }
           }
-        },
-        (error) => {
-          console.log(error);
-          if (error.error.message) {
-            console.log(error.error.message);
-            this, this.showMessage(error.error.message);
-          } else {
-            alert('An error occurred. Please try again later.');
-          }
-        }
-      );
+        );
+    }
   }
   showMessage(message: any) {
     this.snackBar.open(message || 'An error occurred', 'Close', {

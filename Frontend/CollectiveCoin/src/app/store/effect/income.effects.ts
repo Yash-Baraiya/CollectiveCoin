@@ -49,6 +49,7 @@ export class IncomeEffects {
           }),
           catchError((error) => {
             this.showMessage(error.error.message);
+            console.log(error);
             return of(IncomeActions.incomeError({ error }));
           })
         )

@@ -25,7 +25,7 @@ export const deleteTransactionFailure = createAction(
 );
 export const filterTransactions = createAction(
   '[Transaction] Filter Transactions',
-  props<{ formData: any }>() // Adjust the type of formData as per your form data structure
+  props<{ formData: any }>()
 );
 
 export const filteredTransactionsLoaded = createAction(
@@ -36,4 +36,8 @@ export const filteredTransactionsLoaded = createAction(
 export const filterTransactionsFailed = createAction(
   '[Transaction] Filter Transactions Failed',
   props<{ error: any }>()
+);
+
+export const clearTransactionsStore = createAction(
+  '[Transaction] Tranaction store cleared'
 );

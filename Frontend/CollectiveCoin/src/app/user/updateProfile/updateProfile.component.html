@@ -47,25 +47,33 @@
           <div class="formcon">
             <h2>Update Profile</h2>
             <form action="" [formGroup]="updateProfileForm">
-              <div class="form-group">
-                <label for="fullName">Name :</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="fullName"
-                  placeholder="Enter name"
-                  formControlName="name"
-                />
+              <div
+                class="form-group"
+                style="display: inline-flex; flex-direction: row"
+              >
+                <label for="fullName"
+                  >Name :
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="fullName"
+                    placeholder="Enter name"
+                    formControlName="name"
+                /></label>
               </div>
-              <div class="form-group">
-                <label for="eMail">Email :</label>
-                <input
-                  type="email"
-                  class="form-control"
-                  id="eMail"
-                  placeholder="Enter email ID"
-                  formControlName="email"
-                />
+              <div
+                class="form-group"
+                style="display: inline-flex; flex-direction: row"
+              >
+                <label for="eMail"
+                  >Email :<input
+                    type="email"
+                    class="form-control"
+                    id="eMail"
+                    placeholder="Enter email ID"
+                    formControlName="email"
+                /></label>
+
                 <div
                   *ngIf="
                     updateProfileForm.get('email').invalid &&
@@ -96,36 +104,137 @@
             </form>
 
             <h2>Update Password</h2>
-            <form action="" [formGroup]="updatePasswordForm">
-              <div class="form-group">
-                <label for="currentPassword">Current Password :</label>
-                <input
-                  type="password"
-                  class="form-control"
-                  id="currentPassword"
-                  placeholder="Current Password"
-                  formControlName="passwordCurrent"
-                />
+            <form
+              action=""
+              [formGroup]="updatePasswordForm"
+              style="
+                justify-content: space-around;
+                display: flex;
+                flex-direction: column;
+              "
+            >
+              <div
+                class="form-group"
+                style="display: inline-flex; flex-direction: row"
+              >
+                <label for="currentPassword"
+                  >Current Password :
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="currentPassword"
+                    placeholder="Current Password"
+                    formControlName="passwordCurrent"
+                  />
+                </label>
+                <div
+                  *ngIf="
+                    updatePasswordForm.get('passwordCurrent').invalid &&
+                    (updatePasswordForm.get('passwordCurrent').dirty ||
+                      updatePasswordForm.get('passwordCurrent').touched)
+                  "
+                  class="text-danger"
+                >
+                  <div
+                    *ngIf="
+                      updatePasswordForm.controls.passwordCurrent.errors
+                        ?.required
+                    "
+                  >
+                    Password is required
+                  </div>
+                  <div
+                    *ngIf="
+                      updatePasswordForm.controls.passwordCurrent.errors
+                        ?.pattern &&
+                      updatePasswordForm.controls.passwordCurrent.touched
+                    "
+                  >
+                    Password must contain at least 8 characters, including at
+                    least one letter and one number
+                  </div>
+                </div>
               </div>
-              <div class="form-group">
-                <label for="newPassword">New Password :</label>
-                <input
-                  type="password"
-                  class="form-control"
-                  id="newPassword"
-                  placeholder="New Password"
-                  formControlName="password"
-                />
+              <div
+                class="form-group"
+                style="display: inline-flex; flex-direction: row"
+              >
+                <label for="newPassword"
+                  >New Password :
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="newPassword"
+                    placeholder="New Password"
+                    formControlName="password"
+                  />
+                </label>
+                <div
+                  *ngIf="
+                    updatePasswordForm.get('password').invalid &&
+                    (updatePasswordForm.get('password').dirty ||
+                      updatePasswordForm.get('password').touched)
+                  "
+                  class="text-danger"
+                >
+                  <div
+                    *ngIf="
+                      updatePasswordForm.controls.password.errors?.required
+                    "
+                  >
+                    Password is required
+                  </div>
+                  <div
+                    *ngIf="
+                      updatePasswordForm.controls.password.errors?.pattern &&
+                      updatePasswordForm.controls.password.touched
+                    "
+                  >
+                    Password must contain at least 8 characters, including at
+                    least one letter and one number
+                  </div>
+                </div>
               </div>
-              <div class="form-group">
-                <label for="confirmPassword">Confirm New Password :</label>
-                <input
-                  type="password"
-                  class="form-control"
-                  id="confirmPassword"
-                  placeholder="Confirm New Password"
-                  formControlName="passwordConfirm"
-                />
+              <div
+                class="form-group"
+                style="display: inline-flex; flex-direction: row"
+              >
+                <label for="confirmPassword"
+                  >Confirm New Password :
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="confirmPassword"
+                    placeholder="Confirm New Password"
+                    formControlName="passwordConfirm"
+                /></label>
+                <div
+                  *ngIf="
+                    updatePasswordForm.get('passwordConfirm').invalid &&
+                    (updatePasswordForm.get('passwordConfirm').dirty ||
+                      updatePasswordForm.get('passwordConfirm').touched)
+                  "
+                  class="text-danger"
+                >
+                  <div
+                    *ngIf="
+                      updatePasswordForm.controls.passwordConfirm.errors
+                        ?.required
+                    "
+                  >
+                    Password is required
+                  </div>
+                  <div
+                    *ngIf="
+                      updatePasswordForm.controls.passwordConfirm.errors
+                        ?.pattern &&
+                      updatePasswordForm.controls.passwordConfirm.touched
+                    "
+                  >
+                    Password must contain at least 8 characters, including at
+                    least one letter and one number
+                  </div>
+                </div>
               </div>
               <div class="text-right">
                 <button type="button" class="canbtn">Cancel</button>

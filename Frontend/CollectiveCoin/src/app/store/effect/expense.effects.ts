@@ -140,30 +140,6 @@ export class ExpenseEffects {
     )
   );
 
-  //   payment(id: any) {
-  //     this.http
-  //       .post(`${environment.expenseApiUrl}/billpayment/${id}`, {})
-  //       .subscribe(
-  //         (resultData: any) => {
-  //           const rediretLink = resultData.link;
-  //           window.location.href = rediretLink;
-  //         },
-  //         (error) => {
-  //           console.log(error);
-  //           if (error.status === 303) {
-  //             const redirectUrl = error.error.link;
-  //             window.location.href = redirectUrl;
-  //           } else if (error.error.message) {
-  //             alert(error.error.message);
-  //           } else {
-  //             alert('There was a problem loading this page. Please login again.');
-  //           }
-  //           if (error.error.message === 'Please login first') {
-  //             this.router.navigate(['/login']);
-  //           }
-  //         }
-  //       );
-  //   }
   private showMessage(message: any) {
     this.snackBar.open(message || 'An error occurred', 'Close', {
       duration: 5000,

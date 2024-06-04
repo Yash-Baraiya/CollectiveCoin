@@ -42,7 +42,6 @@ const routes: Routes = [
       const module = await import('./incomeModule/income.module');
       return module.IncomeModule;
     },
-    // data: { preload: true },
   },
   {
     path: 'Expense',

@@ -58,7 +58,8 @@ export const transactionReducer = createReducer(
       loading: false,
       error: null,
     })
-  )
+  ),
+  on(TransactionActions.clearTransactionsStore, () => initialState)
 );
 
 export function reducer(state: TransactionState | undefined, action: Action) {

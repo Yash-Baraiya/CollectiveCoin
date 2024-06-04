@@ -53,5 +53,6 @@ export const incomeReducer = createReducer(
     ...state,
     loading: false,
     error,
-  }))
+  })),
+  on(IncomeActions.clearIncomeStore, ()=>initialState)
 );

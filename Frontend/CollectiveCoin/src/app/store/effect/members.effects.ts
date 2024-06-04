@@ -50,6 +50,7 @@ export class MembersEffects {
       switchMap(({ member }) =>
         this.http.post(`${environment.userApiUrl}/add-member`, member).pipe(
           map(() => MembersActions.addMemberSuccess({ member })),
+          tap(() => this.showMessage('Mail sent  successfully')),
           catchError((error) => {
             this.showMessage(error.error.message);
 

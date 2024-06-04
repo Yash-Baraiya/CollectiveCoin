@@ -1,4 +1,4 @@
-.main-container .menu-items li {
+.main-container .income-item li {
   display: grid;
   grid-template-columns: 40px auto;
   -webkit-align-items: center;

@@ -76,7 +76,6 @@ export class LoginComponent implements OnInit {
     }
   }
   login() {
-    console.log('login button clicked');
     let bodyData = this.loginForm.value;
 
     this.http.post(`${environment.userApiUrl}/login`, bodyData).subscribe(
@@ -85,7 +84,7 @@ export class LoginComponent implements OnInit {
           try {
             this.loginDataServeice.setData(resultData);
 
-            this.showMessage('loggedin successfully');
+            this.showMessage('Loggedin successfully');
             this.router.navigate(['/DashBoard']);
 
             this.store.dispatch(ExpenseActions.loadExpense({}));
@@ -94,7 +93,7 @@ export class LoginComponent implements OnInit {
 
             this.Expenses$.forEach((expense: any) => {
               if (expense.markAspaid === false) {
-                this.showMessage(`some expenses are due to pay `);
+                this.showMessage(`Some expenses are due to pay `);
               }
             });
           } catch (error) {
@@ -117,7 +116,6 @@ export class LoginComponent implements OnInit {
   }
 
   forgotpassword() {
-    console.log('button clicked');
     if (this.forgotpasswordForm.valid) {
       let bodyData = this.forgotpasswordForm.value;
       this.http

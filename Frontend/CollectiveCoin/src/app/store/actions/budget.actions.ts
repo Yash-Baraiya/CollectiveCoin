@@ -12,14 +12,16 @@ export const addBudget = createAction(
 );
 export const addBudgetSuccess = createAction('[Budget] Budget Added');
 export const deleteBudget = createAction(
-  '[Income] Delete Budget',
+  '[Budget] Delete Budget',
   props<{ id: string }>()
 );
 export const deleteBudgetSuccess = createAction(
-  '[Income] Budget Deleted',
+  '[Budget] Budget Deleted',
   props<{ id: string }>()
 );
 export const budgetError = createAction(
-  '[Income] Budget Error',
+  '[Budget] Budget Error',
   props<{ error: any }>()
 );
+
+export const clearBudgetStore = createAction('[Budget] Budget Store Cleared');

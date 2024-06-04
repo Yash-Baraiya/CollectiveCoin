@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IncomeService } from '../../shared/services/income.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { LoginDataService } from '../../shared/services/login-data.service';
 import { Observable } from 'rxjs';
 import { IncomeState } from '../../store/reducer/income.reducer';
-import { Store, select } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import * as incomeActions from '../../store/actions/income.actions';
 import {
   selectIncomeData,
@@ -57,7 +57,7 @@ export class IncomeComponent implements OnInit, OnDestroy {
       );
       this.totalItems$ = this.store.select(selectInocmesLength);
     } else {
-      alert('please fill the form as directed');
+      alert('Please fill the form as directed');
     }
   }
   delete(id) {

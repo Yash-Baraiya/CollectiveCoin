@@ -41,6 +41,7 @@ export class LineChartComponent implements OnInit, OnDestroy {
     this.incomestore.dispatch(loadIncomes());
     this.expensestore.dispatch(loadExpense({}));
 
+    //to fetch the income data and expesed data's latest value
     this.subscription = combineLatest([this.incomedata$, this.exepnsedata$])
       .pipe(
         map(([incomeData, expenseData]) => {

@@ -39,3 +39,7 @@ export const ExpenseError = createAction(
   '[Expense] Expense Error',
   props<{ error: any }>()
 );
+
+export const clearExpenseStore = createAction(
+  '[Expense] Expense Store Cleared'
+);

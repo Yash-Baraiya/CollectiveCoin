@@ -115,6 +115,7 @@ export const getIncomes = async (req: Request, res: Response) => {
           },
         },
       ]);
+      
       let totalincome = await Income.aggregate([
         {
           $match: {

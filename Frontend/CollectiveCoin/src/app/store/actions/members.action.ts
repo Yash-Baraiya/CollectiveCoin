@@ -80,3 +80,5 @@ export const makeEarnerFailure = createAction(
   '[Members] Make Earner Failure',
   props<{ error: any }>()
 );
+
+export const cleareMemberStore = createAction('[Members] Member Store Cleared');
