@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { Observable, take } from 'rxjs';
+import { Observable, Subject, take, takeUntil } from 'rxjs';
 import * as jspdf from 'jspdf';
 import 'jspdf-autotable';
 import { Router } from '@angular/router';
@@ -25,7 +25,7 @@ import { TransactionService } from '../shared/services/transaction.service';
   templateUrl: './transactions.component.html',
   styleUrls: ['./transactions.component.css'],
 })
-export class TransactionsComponent implements OnInit {
+export class TransactionsComponent implements OnInit, OnDestroy {
   currentPage$: number = 1;
 
   totalItems$: Observable<number>;
@@ -33,6 +33,8 @@ export class TransactionsComponent implements OnInit {
   showFilters: boolean = false;
   deleteMethod: Function;
   currentPage: any;
+
+  private unSubscribe = new Subject<void>();
 
   constructor(
     private store: Store<TransactionState>,
@@ -60,57 +62,62 @@ export class TransactionsComponent implements OnInit {
       let rows = [];
 
       if (this.allTransactions$) {
-        this.allTransactions$.subscribe((transactions) => {
-          rows = transactions.map((transaction) => [
-            transaction.title,
-            transaction.type,
-            transaction.amount,
-            transaction.date,
-            transaction.addedBy,
-          ]);
+        this.allTransactions$
+          .pipe(takeUntil(this.unSubscribe), take(1))
+          .subscribe((transactions) => {
+            rows = transactions.map((transaction) => [
+              transaction.title,
+              transaction.type,
+              transaction.amount,
+              transaction.date,
+              transaction.addedBy,
+            ]);
 
-          const logoUrl = 'https://img.icons8.com/matisse/100/rupee.png';
+            const logoUrl = 'https://img.icons8.com/matisse/100/rupee.png';
 
-          const img = new Image();
-          img.crossOrigin = 'anonymous';
-          img.onload = () => {
-            const imgWidth = 30;
-            const imgHeight = 20;
-            const imgX = (pdf.internal.pageSize.getWidth() - imgWidth) / 2;
-            const imgY = 10;
-            pdf.addImage(img, 'PNG', imgX, imgY, imgWidth, imgHeight);
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.onload = () => {
+              const imgWidth = 30;
+              const imgHeight = 20;
+              const imgX = (pdf.internal.pageSize.getWidth() - imgWidth) / 2;
+              const imgY = 10;
+              pdf.addImage(img, 'PNG', imgX, imgY, imgWidth, imgHeight);
 
-            pdf.text('CollectiveCoin', imgX - 4, imgY + 25);
+              pdf.text('CollectiveCoin', imgX - 4, imgY + 25);
 
-            pdf.text('Transactions Details', 20, imgY + 52);
+              pdf.text('Transactions Details', 20, imgY + 52);
 
-            (pdf as any).autoTable({
-              startY: imgY + 62,
-              head: [columns],
-              body: rows,
-            });
-
-            pdf.text(
-              'Total Transactions:',
-              20,
-              pdf.internal.pageSize.getHeight() - 20
-            );
-
-            if (this.totalItems$) {
-              this.totalItems$.subscribe((total) => {
-                pdf.text(
-                  `${total}`,
-                  70,
-                  pdf.internal.pageSize.getHeight() - 20
-                );
+              (pdf as any).autoTable({
+                startY: imgY + 62,
+                head: [columns],
+                body: rows,
               });
-            }
 
-            pdf.save('transactions.pdf');
-          };
-          img.src = logoUrl;
-        });
+              pdf.text(
+                'Total Transactions:',
+                20,
+                pdf.internal.pageSize.getHeight() - 20
+              );
+
+              if (this.totalItems$) {
+                this.totalItems$.subscribe((total) => {
+                  pdf.text(
+                    `${total}`,
+                    70,
+                    pdf.internal.pageSize.getHeight() - 20
+                  );
+                });
+              }
+
+              pdf.save('transactions.pdf');
+            };
+            img.src = logoUrl;
+          });
       }
+
+      this.unSubscribe.next();
+      this.unSubscribe.complete();
     } catch (error) {
       console.error('Error downloading transactions PDF:', error);
     }
@@ -135,5 +142,9 @@ export class TransactionsComponent implements OnInit {
     console.log('button is clicked');
     this.transactionsservice.filtersForm.reset();
     this.store.dispatch(loadTransactions());
+  }
+  ngOnDestroy(): void {
+    this.unSubscribe.next();
+    this.unSubscribe.complete();
   }
 }
