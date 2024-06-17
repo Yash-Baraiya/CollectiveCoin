@@ -64,11 +64,11 @@
 .formbtn {
   outline: none;
   border: none;
-  font-family: inherit;
-  font-size: inherit;
   background-color: rgb(228, 18, 204);
   padding: 0.8rem 1.6rem;
   border-radius: 30px;
+  font-family: inherit;
+  font-size: inherit;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;

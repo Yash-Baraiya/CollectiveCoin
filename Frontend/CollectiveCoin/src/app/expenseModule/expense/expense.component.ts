@@ -99,7 +99,7 @@ export class ExpenseComponent implements OnInit, OnDestroy {
       );
       this.markAspaid.nativeElement.checked = true;
     } else {
-      alert('please fill the form as directed');
+      alert('Please fill the form as directed');
     }
   }
 

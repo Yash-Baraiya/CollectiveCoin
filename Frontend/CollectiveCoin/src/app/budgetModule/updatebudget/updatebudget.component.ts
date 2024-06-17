@@ -79,7 +79,7 @@ export class UpdatebudgetComponent implements OnInit, OnDestroy {
     return new Observable((obseraver) => {
       let bodyData = this.updateBudgetForm.value;
 
-      if (confirm('are you sure you want to update this Budget')) {
+      if (confirm('Are you sure you want to update this Budget')) {
         this.http
           .patch(`${environment.budgetApiUrl}/update-budget/${id}`, bodyData)
           .subscribe(
@@ -95,7 +95,7 @@ export class UpdatebudgetComponent implements OnInit, OnDestroy {
                 this.showMessage(error.error.message);
               } else {
                 this.showMessage(
-                  'somthing went wrong please try again after some time'
+                  'Somthing went wrong please try again after some time'
                 );
               }
             }
@@ -109,7 +109,7 @@ export class UpdatebudgetComponent implements OnInit, OnDestroy {
     if (this.updateBudgetForm.valid && this.budgetData) {
       this.Updatebudget(this.budgetId).subscribe(() => {});
     } else {
-      this.showMessage('please fill form as directed');
+      this.showMessage('Please fill form as directed');
     }
   }
   showMessage(message: any) {

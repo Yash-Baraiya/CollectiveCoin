@@ -222,7 +222,10 @@
             </div>
           </div>
         </div>
-        <li style="margin-left: 505px" *ngIf="(totalItems$ | async) > 4">
+        <li
+          [ngStyle]="{ 'margin-left': isEarning === true ? '505px' : '350px' }"
+          *ngIf="(totalItems$ | async) > 4"
+        >
           <pagination-controls
             (pageChange)="currentPage = $event"
           ></pagination-controls>

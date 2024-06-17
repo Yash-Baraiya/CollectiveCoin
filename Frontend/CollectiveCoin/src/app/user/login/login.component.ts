@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Inject, OnInit, Renderer2, inject } from '@angular/core';
+import { Component, Inject, OnInit, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginDataService } from '../../shared/services/login-data.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -82,6 +82,7 @@ export class LoginComponent implements OnInit {
       (resultData: any) => {
         if (resultData) {
           try {
+            console.log(resultData);
             this.loginDataServeice.setData(resultData);
 
             this.showMessage('Loggedin successfully');

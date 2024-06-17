@@ -4,6 +4,7 @@ interface resultData {
   messege: string;
   data?: data;
   token?: string;
+  refreshToken?: string;
 }
 
 interface data {

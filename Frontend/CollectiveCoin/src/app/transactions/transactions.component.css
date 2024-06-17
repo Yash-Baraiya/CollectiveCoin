@@ -351,9 +351,10 @@ h1 {
   display: flex;
   align-items: center;
   gap: 1rem;
-  width: 100%;
+  width: 97%;
   color: #222260;
   height: 100px;
+  margin-left: 12px;
 }
 
 .icon {

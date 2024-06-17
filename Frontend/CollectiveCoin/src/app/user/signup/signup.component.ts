@@ -85,7 +85,7 @@ export class SignupComponent implements OnInit {
     if (this.signupForm.valid) {
       this.register();
     } else {
-      alert('please fill the form as directed');
+      alert('Please fill the form as directed');
     }
   }
 

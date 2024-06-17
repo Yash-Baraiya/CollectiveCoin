@@ -48,7 +48,7 @@ export class ItemsComponent implements OnInit {
 
   deleteItem() {
     const id = this.item.id || this.item._id;
-    console.log('dele', this.deleteMethod);
+    console.log('delete', this.deleteMethod);
     if (this.deleteMethod) {
       if (this.deleteMethod === incomeActions.deleteIncome) {
         this.incomestore.dispatch(incomeActions.deleteIncome({ id }));

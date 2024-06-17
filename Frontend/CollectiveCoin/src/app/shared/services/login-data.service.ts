@@ -17,6 +17,7 @@ export class LoginDataService {
   isEarning: boolean;
   priority: number;
   email: string;
+  refreshToken: string;
 
   photoSubject = new BehaviorSubject<string>(null);
   nameSubject = new BehaviorSubject<string>(null);
@@ -39,6 +40,8 @@ export class LoginDataService {
     this.isEarning = this.data.data.user.isEarning;
     this.priority = this.data.data.user.priority;
     this.email = this.data.data.user.email;
+
+    this.refreshToken = this.data.refreshToken;
 
     this.photoSubject.next(this.photo);
     this.nameSubject.next(this.username);
