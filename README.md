@@ -1,3 +1,2 @@
 # CollectiveCoin
 Final Project
-asdfafd
