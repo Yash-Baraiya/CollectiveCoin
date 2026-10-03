@@ -11,6 +11,15 @@ jobs:
         - name: Checkout repo
           uses: actions/checkout@v4
 
+        - name: Authenticate to Google Cloud
+          uses: google-github-actions/auth@v2
+          with:
+            workload_identity_provider: projects/163934403637/locations/global/workloadIdentityPools/github-actions-pool/providers/github
+            service_account: github-actions@devops-practice-510512.iam.gserviceaccount.com
+        
+        - name: Authenticate Docker
+          run: gcloud auth configure-docker asia-south1-docker.pkg.dev --quiet
+
         - name: setup docker build
           uses: docker/setup-buildx-action@v3
 
@@ -19,13 +28,13 @@ jobs:
           with:
             context: ./Backend
             file: ./Backend/Dockerfile
-            push: false
-            tags: collectivecoin-backend:latest
+            push: true
+            tags: asia-south1-docker.pkg.dev/devops-practice-510512/collectivecoin/collectivecoin-backend:latest
 
         - name: building frontend
           uses: docker/build-push-action@v6
           with:
             context: ./Frontend/CollectiveCoin
             file: ./Frontend/CollectiveCoin/Dockerfile
-            push: false
-            tags: collectivecoin-frontend:latest
+            push: true
+            tags: asia-south1-docker.pkg.dev/devops-practice-510512/collectivecoin/collectivecoin-frontend:latest
