@@ -19,9 +19,11 @@ declare global {
 
 //method for creating and sending signup token to the user
 const signToken = (id: string) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET || "defaultSecret$Yash@123$", {
-    expiresIn: process.env.JWT_EXPIRES_IN,
-  });
+  return jwt.sign(
+    { id },
+    process.env.JWT_SECRET || "defaultSecret$Yash@123$",
+    { expiresIn: process.env.JWT_EXPIRES_IN || "7d" } as any
+  );
 };
 export const createSendToken = (user: any, statusCode: any, res: Response) => {
   const token = signToken(user._id);
@@ -324,7 +326,9 @@ export const forgotPassword = async (
   try {
     console.log("=> forgot password api called ");
     const email = req.body.email;
+     console.log("=> Looking for email:", email);
     const user = await User.findOne({ email: req.body.email });
+    console.log("=> Found user:", user);
     if (!user) {
       throw new Error("There is no user with email address.");
     }

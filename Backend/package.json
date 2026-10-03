@@ -46,6 +46,6 @@
     "@types/otp-generator": "^4.0.2",
     "@types/validator": "^13.11.9",
     "ts-node": "^10.9.2",
-    "typescript": "^7.0.2"
+    "typescript": "^5.3.3"
   }
 }
