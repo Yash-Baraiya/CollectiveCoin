@@ -2,7 +2,7 @@ name: Docker build
 on:
   push:
     branches:
-      - Collectivecoin
+      - CollectiveCoin
 
 jobs:
   docker-build: 
