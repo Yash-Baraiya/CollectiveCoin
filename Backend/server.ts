@@ -16,7 +16,7 @@ app.use(express.static("frontend/dist"));
 
 app.use(
   cors({
-    origin: "http://localhost:4200",
+    origin: ["http://localhost:4200", "https://collectivecoin-frontend-163934403637.europe-west1.run.app" ]
   })
 );
 
