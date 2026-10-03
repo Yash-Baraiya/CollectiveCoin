@@ -1,3 +1,5 @@
+import { Document } from "mongoose";
+
 export interface IncomeIn extends Document {
   title: string;
   amount: number;

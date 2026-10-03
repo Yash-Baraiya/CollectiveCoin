@@ -1,0 +1,16 @@
+services:
+      backend:
+          build:
+              context: ./backend
+              dockerfile: Dockerfile
+          ports:
+              - "8000:8000"
+          env_file:
+              - ./backend/config.env
+
+      frontend:
+          build:
+              context: ./frontend/collectivecoin
+              dockerfile: Dockerfile
+          ports: 
+                - "4200:80"
