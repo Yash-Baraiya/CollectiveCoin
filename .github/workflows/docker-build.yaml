@@ -17,15 +17,15 @@ jobs:
         - name: building backend
           uses: docker/build-push-action@v6
           with:
-            context: ./backend
-            file: ./backend/Dockerfile
+            context: ./Backend
+            file: ./Backend/Dockerfile
             push: false
             tags: collectivecoin-backend:latest
 
         - name: building frontend
           uses: docker/build-push-action@v6
           with:
-            context: ./frontend/collectivecoin
-            file: ./frontend/collectivecoin/Dockerfile
+            context: ./Frontend/CollectiveCoin
+            file: ./Frontend/CollectiveCoin/Dockerfile
             push: false
             tags: collectivecoin-frontend:latest
